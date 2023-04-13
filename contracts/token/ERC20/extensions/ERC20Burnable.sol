@@ -1,24 +1,24 @@
 // SPDX-License-Identifier: MIT
-// OpenZeppelin Contracts (last updated v4.5.0) (token/ERC20/extensions/ERC20Burnable.sol)
+// Litogen Contracts (last updated v1.0.0)
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
+import "./IERC20Burnable.sol";
 import "../ERC20.sol";
 import "../../../utils/Context.sol";
 
 /**
  * @dev Extension of {ERC20} that allows token holders to destroy both their own
- * tokens and those that they have an allowance for, in a way that can be
- * recognized off-chain (via event analysis).
+ * tokens and others.
  */
-abstract contract ERC20Burnable is Context, ERC20 {
+abstract contract ERC20Burnable is Context, ERC20, IERC20Burnable {
     /**
      * @dev Destroys `amount` tokens from the caller.
      *
      * See {ERC20-_burn}.
      */
-    function burn(uint256 amount) public virtual {
-        _burn(_msgSender(), amount);
+    function burn(uint256 amount) external virtual {
+        _burn(_msgSender(), _msgSender(), amount);
     }
 
     /**
@@ -32,12 +32,11 @@ abstract contract ERC20Burnable is Context, ERC20 {
      * - the caller must have allowance for ``accounts``'s tokens of at least
      * `amount`.
      */
-    function burnFrom(address account, uint256 amount) public virtual {
-        _spendAllowance(account, _msgSender(), amount);
-        _burn(account, amount);
+    function burnFrom(address account, uint256 amount) external virtual {
+        _burn(_msgSender(), account, amount);
     }
 
-      /**
+    /**
      * @dev Destroys `amount` tokens from `account`, reducing the
      * total supply.
      *
@@ -46,23 +45,25 @@ abstract contract ERC20Burnable is Context, ERC20 {
      * Requirements:
      *
      * - `account` cannot be the zero address.
-     * - `account` must have at least `amount` tokens.
+     * - `account` must have at least `amount` tokens
+     * - `amount` should be greater than zero
      */
-    function _burn(address account, uint256 amount) internal virtual {
-        require(account != address(0), "ERC20: burn from the zero address");
+    function _burn(address sender, address account, uint256 amount) internal virtual {
+        require(account != address(0), "Burn: Invalid Address");
+        require(amount > 0, "Burn: Invalid Amount");
 
-        _beforeTokenTransfer(account, address(0), amount);
+        // _beforeTokenTransfer(account, address(0), amount);
 
         uint256 accountBalance = _balances[account];
-        require(accountBalance >= amount, "ERC20: burn amount exceeds balance");
+        require(accountBalance >= amount, "Burn: Illegal Amount");
         unchecked {
             _balances[account] = accountBalance - amount;
             // Overflow not possible: amount <= accountBalance <= totalSupply.
             _totalSupply -= amount;
         }
 
-        emit Transfer(account, address(0), amount);
+        emit Burn(sender, account, amount, _totalSupply);
 
-        _afterTokenTransfer(account, address(0), amount);
+        // _afterTokenTransfer(account, address(0), amount);
     }
 }

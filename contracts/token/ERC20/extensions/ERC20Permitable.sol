@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
-// OpenZeppelin Contracts (last updated v4.8.0) (token/ERC20/extensions/draft-ERC20Permit.sol)
+// Litogen Contracts (last updated v1.0.0)
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
-import "./draft-IERC20Permit.sol";
+import "./IERC20Permitable.sol";
 import "../ERC20.sol";
 import "../../../utils/cryptography/ECDSA.sol";
 import "../../../utils/cryptography/EIP712.sol";
@@ -19,7 +19,7 @@ import "../../../utils/Counters.sol";
  *
  * _Available since v3.4._
  */
-abstract contract ERC20Permit is ERC20, IERC20Permit, EIP712 {
+abstract contract ERC20Permitable is ERC20, IERC20Permitable, EIP712 {
     using Counters for Counters.Counter;
 
     mapping(address => Counters.Counter) private _nonces;

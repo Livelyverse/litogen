@@ -30,4 +30,14 @@ interface IERC20Metadata is IERC20 {
      * @dev Returns the version of the token.
      */
     function version() external view returns (string memory);
+
+    /**
+     * @dev Returns the ACL of the token.
+     */
+    function acl() external view returns (address);
+
+    /**
+     * @dev Returns the Profile ID of the token.
+     */
+    function profileId() external view returns (bytes32);
 }

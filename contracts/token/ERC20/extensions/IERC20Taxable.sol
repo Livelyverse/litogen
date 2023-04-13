@@ -9,7 +9,7 @@ pragma solidity 0.8.19;
  * @dev
  *
  */
-interface IERC20Tax {
+interface IERC20Taxable {
   struct TaxWhitelistUpdateRequest {
     address account;
     bool isDeleted;
@@ -17,11 +17,15 @@ interface IERC20Tax {
 
   event TaxRateUpdated(address indexed sender, uint256 rate);
 
+  event TaxTreasuryUpdated(address indexed sender, address account);
+
   event TaxWhitelistUpdated(address indexed sender, address indexed account, bool isDeleted);
 
-  function updateTaxRate(uint256 taxRate) external returns (bool);
+  function taxUpdateRate(uint256 taxRate) external returns (bool);
 
-  function updateTaxWhitelist(TaxWhitelistUpdateRequest[] calldata request) external returns (bool);
+  function taxUpdateTreasury(address treasury) external returns (bool);
+
+  function taxUpdateWhitelist(TaxWhitelistUpdateRequest[] calldata request) external returns (bool);
 
   function taxRate() external view returns (uint256);
 

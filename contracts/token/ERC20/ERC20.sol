@@ -6,6 +6,9 @@ pragma solidity 0.8.19;
 import "./IERC20.sol";
 import "./extensions/IERC20Metadata.sol";
 import "../../utils/Context.sol";
+import "../../utils/Address.sol";
+import "../../utils/introspection/IERC165.sol";
+import "../../access/IProfileACL.sol";
 
 /**
  * @dev Implementation of the {IERC20} interface.
@@ -32,6 +35,8 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
     mapping(address => uint256) internal _balances;
     mapping(address => mapping(address => uint256)) internal _allowances;
     uint256 internal _totalSupply;
+    bytes32 internal _profileId;
+    address internal _acl;
     string private _name;
     string private _symbol;
     string private _version;
@@ -46,11 +51,25 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
      * All two of these values are immutable: they can only be set once during
      * construction.
      */
-    constructor(string memory name_, string memory symbol_, string memory version_, uint8 decimal_) {
+    constructor(
+        string memory name_, 
+        string memory symbol_, 
+        string memory version_, 
+        address acl_,
+        bytes32 profileId_, 
+        uint8 decimal_        
+    ) {
+        require(Address.isContract(acl_), "Invalid ACL");
+        if (!IERC165(acl_).supportsInterface(type(IProfileACL).interfaceId)) {
+            revert("Illegal ACL");
+        }
+
         _name = name_;
         _symbol = symbol_;
         _version = version_;
         _decimal = decimal_;
+        _acl = acl_;
+        _profileId = profileId_;
     }
 
     /**
@@ -73,6 +92,20 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
      */
     function version() public view virtual override returns (string memory) {
         return _version;
+    }
+
+    /**
+     * @dev Returns the ACL of the token.
+     */
+    function acl() external view returns (address) {
+        return _acl;
+    }
+
+    /**
+     * @dev Returns the Profile ID of the token.
+     */
+    function profileId() external view returns (bytes32) {
+        return _profileId;
     }
 
     /**
@@ -205,7 +238,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
     function decreaseAllowance(address spender, uint256 subtractedValue) public virtual returns (bool) {
         address owner = _msgSender();
         uint256 currentAllowance = allowance(owner, spender);
-        require(currentAllowance >= subtractedValue, "ERC20: decreased allowance below zero");
+        require(currentAllowance >= subtractedValue, "Illegal Allowance");
         unchecked {
             _approve(owner, spender, currentAllowance - subtractedValue);
         }
@@ -232,13 +265,12 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
         address to,
         uint256 amount
     ) internal virtual {
-        require(from != address(0), "ERC20: transfer from the zero address");
-        require(to != address(0), "ERC20: transfer to the zero address");
+        require(from != address(0) && to != address(0), "Invalid From/To Address");
 
         _beforeTokenTransfer(from, to, amount);
 
         uint256 fromBalance = _balances[from];
-        require(fromBalance >= amount, "ERC20: transfer amount exceeds balance");
+        require(fromBalance >= amount, "Illegal Amount");
         unchecked {
             _balances[from] = fromBalance - amount;
             // Overflow not possible: the sum of all balances is capped by totalSupply, and the sum is preserved by
@@ -250,59 +282,6 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
 
         _afterTokenTransfer(from, to, amount);
     }
-
-    /** @dev Creates `amount` tokens and assigns them to `account`, increasing
-     * the total supply.
-     *
-     * Emits a {Transfer} event with `from` set to the zero address.
-     *
-     * Requirements:
-     *
-     * - `account` cannot be the zero address.
-     */
-    function _mint(address account, uint256 amount) internal virtual {
-        require(account != address(0), "ERC20: mint to the zero address");
-
-        _beforeTokenTransfer(address(0), account, amount);
-
-        _totalSupply += amount;
-        unchecked {
-            // Overflow not possible: balance + amount is at most totalSupply + amount, which is checked above.
-            _balances[account] += amount;
-        }
-        emit Transfer(address(0), account, amount);
-
-        _afterTokenTransfer(address(0), account, amount);
-    }
-
-    // /**
-    //  * @dev Destroys `amount` tokens from `account`, reducing the
-    //  * total supply.
-    //  *
-    //  * Emits a {Transfer} event with `to` set to the zero address.
-    //  *
-    //  * Requirements:
-    //  *
-    //  * - `account` cannot be the zero address.
-    //  * - `account` must have at least `amount` tokens.
-    //  */
-    // function _burn(address account, uint256 amount) internal virtual {
-    //     require(account != address(0), "ERC20: burn from the zero address");
-
-    //     _beforeTokenTransfer(account, address(0), amount);
-
-    //     uint256 accountBalance = _balances[account];
-    //     require(accountBalance >= amount, "ERC20: burn amount exceeds balance");
-    //     unchecked {
-    //         _balances[account] = accountBalance - amount;
-    //         // Overflow not possible: amount <= accountBalance <= totalSupply.
-    //         _totalSupply -= amount;
-    //     }
-
-    //     emit Transfer(account, address(0), amount);
-
-    //     _afterTokenTransfer(account, address(0), amount);
-    // }
 
     /**
      * @dev Sets `amount` as the allowance of `spender` over the `owner` s tokens.
@@ -322,8 +301,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
         address spender,
         uint256 amount
     ) internal virtual {
-        require(owner != address(0), "ERC20: approve from the zero address");
-        require(spender != address(0), "ERC20: approve to the zero address");
+        require(owner != address(0) && spender != address(0), "Invalid Owner/Spender Address");
 
         _allowances[owner][spender] = amount;
         emit Approval(owner, spender, amount);
@@ -344,7 +322,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
     ) internal virtual {
         uint256 currentAllowance = allowance(owner, spender);
         if (currentAllowance != type(uint256).max) {
-            require(currentAllowance >= amount, "ERC20: insufficient allowance");
+            require(currentAllowance >= amount, "Illegal Allowance");
             unchecked {
                 _approve(owner, spender, currentAllowance - amount);
             }
@@ -390,4 +368,10 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
         address to,
         uint256 amount
     ) internal virtual {}
+
+
+    function _tokenPolicyInterceptor(bytes4 funcSelector) internal virtual {
+      IProfileACL.ProfileAuthorizationStatus status = IProfileACL(_acl).profileHasAccountAccess(_profileId, address(this), funcSelector, _msgSender());
+      if (status != IProfileACL.ProfileAuthorizationStatus.PERMITTED) revert IProfileACL.ProfileACLActionForbidden(status);
+    }
 }
