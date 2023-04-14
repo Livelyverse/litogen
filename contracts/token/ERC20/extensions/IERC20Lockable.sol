@@ -9,7 +9,7 @@ pragma solidity 0.8.19;
  * @dev
  *
  */
-interface IERC20Lock {
+interface IERC20Lockable {
   enum LockState {
     NONE,
     LOCKED,
@@ -38,6 +38,14 @@ interface IERC20Lock {
     LockState stat;
   }
 
+  struct AssetLock {
+    uint256 amount;
+    uint128 lockedAt;
+    uint128 claimedAt;
+    address source;
+    LockState status;
+  }
+
   event TokenLocked(
     bytes32 indexed id,
     address indexed sender,
@@ -58,11 +66,11 @@ interface IERC20Lock {
     string reason
   );
 
-  function lockToken(LockTokenRequest[] calldata lockRequest) external returns (bytes32[] memory);
+  function lockToken(LockTokenRequest[] calldata lockRequests) external;
 
-  function unlockToken(UnLockTokenRequest[] calldata unlockRequest) external returns (uint256);
+  function unlockToken(UnLockTokenRequest[] calldata unlockRequests) external;
 
-  function claimToken(bytes32[] calldata lockIds) external returns (uint256);
+  function claimToken(bytes32[] calldata lockIds) external;
 
   function lockInfo(bytes32 lockId, address account) external view returns (LockInfo memory);
 

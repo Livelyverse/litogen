@@ -18,6 +18,7 @@ abstract contract ERC20Burnable is Context, ERC20, IERC20Burnable {
      * See {ERC20-_burn}.
      */
     function burn(uint256 amount) external virtual {
+        _tokenPolicyInterceptor(this.burn.selector);
         _burn(_msgSender(), _msgSender(), amount);
     }
 
@@ -33,6 +34,7 @@ abstract contract ERC20Burnable is Context, ERC20, IERC20Burnable {
      * `amount`.
      */
     function burnFrom(address account, uint256 amount) external virtual {
+        _tokenPolicyInterceptor(this.burnFrom.selector);
         _burn(_msgSender(), account, amount);
     }
 

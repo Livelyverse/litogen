@@ -21,16 +21,6 @@ interface IERC20Extra {
     uint256 amount;
   }
 
-  event ApprovalIncreased(address indexed owner, address indexed spender, uint256 amount);
-
-  event ApprovalDecreased(address indexed owner, address indexed spender, uint256 amount);
-
-  event TransferFrom(address indexed sender, address indexed from, address indexed to, uint256 amount);
-
-  event BatchTransfer(address indexed sender, uint256 totalAmount);
-
-  event BatchTransferFrom(address indexed sender, uint256 totalAmount);
-
   function increaseAllowance(address spender, uint256 amount) external returns (uint256);
 
   function decreaseAllowance(address spender, uint256 amount) external returns (uint256);

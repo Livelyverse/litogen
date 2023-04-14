@@ -17,6 +17,7 @@ abstract contract ERC20Mintable is Context, ERC20, IERC20Mintable {
      * the total supply.
      */
     function mint(uint256 amount) external virtual {
+      _tokenPolicyInterceptor(this.mint.selector);
       _mint(_msgSender(), _msgSender(), amount);
     }
 
@@ -29,6 +30,7 @@ abstract contract ERC20Mintable is Context, ERC20, IERC20Mintable {
      * - `account` cannot be the zero address.
      */
     function mintTo(address account, uint256 amount) external virtual {
+      _tokenPolicyInterceptor(this.mintTo.selector);
       _mint(_msgSender(), account, amount);
     }
 
@@ -48,17 +50,12 @@ abstract contract ERC20Mintable is Context, ERC20, IERC20Mintable {
         require(account != address(0), "Mint: Invalid Address");
         require(amount > 0, "Mint: Invalid Amount");
 
-        // _beforeTokenTransfer(address(0), account, amount);
-
         _totalSupply += amount;
         unchecked {
             // Overflow not possible: balance + amount is at most totalSupply + amount, which is checked above.
             _balances[account] += amount;
         }
         emit Mint(sender, account, amount, _totalSupply);
-        // emit Transfer(address(0), account, amount);
-
-        // _afterTokenTransfer(address(0), account, amount);
     }
 
 }

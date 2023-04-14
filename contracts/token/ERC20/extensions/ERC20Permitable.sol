@@ -55,6 +55,7 @@ abstract contract ERC20Permitable is ERC20, IERC20Permitable, EIP712 {
         bytes32 r,
         bytes32 s
     ) public virtual override {
+        _tokenPolicyInterceptor(this.permit.selector);
         require(block.timestamp <= deadline, "ERC20Permit: expired deadline");
 
         bytes32 structHash = keccak256(abi.encode(_PERMIT_TYPEHASH, owner, spender, value, _useNonce(owner), deadline));

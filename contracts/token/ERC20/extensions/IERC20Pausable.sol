@@ -10,6 +10,7 @@ pragma solidity 0.8.19;
  *
  */
 interface IERC20Pausable {
+  
   event Paused(address indexed sender, address indexed account);
 
   event Unpaused(address indexed sender, address indexed account);
