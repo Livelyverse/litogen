@@ -5,13 +5,12 @@ pragma solidity 0.8.19;
 
 import "./IERC20Burnable.sol";
 import "../ERC20.sol";
-import "../../../utils/Context.sol";
 
 /**
  * @dev Extension of {ERC20} that allows token holders to destroy both their own
  * tokens and others.
  */
-abstract contract ERC20Burnable is Context, ERC20, IERC20Burnable {
+abstract contract ERC20Burnable is ERC20, IERC20Burnable {
     /**
      * @dev Destroys `amount` tokens from the caller.
      *
@@ -50,22 +49,21 @@ abstract contract ERC20Burnable is Context, ERC20, IERC20Burnable {
      * - `account` must have at least `amount` tokens
      * - `amount` should be greater than zero
      */
-    function _burn(address sender, address account, uint256 amount) internal virtual {
+    function _burn(
+        address sender,
+        address account,
+        uint256 amount
+    ) internal virtual {
         require(account != address(0), "Burn: Invalid Address");
         require(amount > 0, "Burn: Invalid Amount");
-
-        // _beforeTokenTransfer(account, address(0), amount);
 
         uint256 accountBalance = _balances[account];
         require(accountBalance >= amount, "Burn: Illegal Amount");
         unchecked {
             _balances[account] = accountBalance - amount;
-            // Overflow not possible: amount <= accountBalance <= totalSupply.
             _totalSupply -= amount;
         }
 
         emit Burn(sender, account, amount, _totalSupply);
-
-        // _afterTokenTransfer(account, address(0), amount);
     }
 }

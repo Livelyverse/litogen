@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// LivelyVerse Contracts (last updated v3.0.0)
+// Litogen Contracts (last updated v1.0.0)
 
 pragma solidity 0.8.19;
 
@@ -7,9 +7,9 @@ import "./IAsset.sol";
 import "./IERC20Asset.sol";
 import "../IERC20.sol";
 import "../../../access/IProfileACL.sol";
-import "../../../utils/Context.sol";
-import "../../../utils/Address.sol";
-import "../../../utils/introspection/ERC165.sol";
+import "@openzeppelin/contracts/utils/Context.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
+import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 
 
 /**

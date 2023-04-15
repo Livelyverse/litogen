@@ -5,13 +5,12 @@ pragma solidity 0.8.19;
 
 import "./IERC20Mintable.sol";
 import "../ERC20.sol";
-import "../../../utils/Context.sol";
 
 /**
  * @dev Extension of {ERC20} that allows token holders to mint both their own
  * tokens and others.
  */
-abstract contract ERC20Mintable is Context, ERC20, IERC20Mintable {
+abstract contract ERC20Mintable is ERC20, IERC20Mintable {
     /**
      * @dev Creates `amount` tokens and assigns them to `sender`, increasing
      * the total supply.
@@ -52,7 +51,6 @@ abstract contract ERC20Mintable is Context, ERC20, IERC20Mintable {
 
         _totalSupply += amount;
         unchecked {
-            // Overflow not possible: balance + amount is at most totalSupply + amount, which is checked above.
             _balances[account] += amount;
         }
         emit Mint(sender, account, amount, _totalSupply);

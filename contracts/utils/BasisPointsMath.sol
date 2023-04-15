@@ -3,7 +3,7 @@
 
 pragma solidity 0.8.19;
 
-import "./SafeMath.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 /**
  * @title Basis Points Math Library
@@ -11,7 +11,7 @@ import "./SafeMath.sol";
  * @dev
  *
  */
-library LBasisPointsMath {
+library BasisPointsMath {
   using SafeMath for uint256;
 
   uint256 private constant _BASIS_POINTS = 10000;

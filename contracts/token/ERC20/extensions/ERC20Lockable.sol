@@ -5,16 +5,18 @@ pragma solidity 0.8.19;
 
 import "./IERC20Lockable.sol";
 import "../ERC20.sol";
-import "../../../utils/Context.sol";
 
 /**
  * @dev Extension of {ERC20} that allows admin to lock tokens in the period of time for specific account
  */
-abstract contract ERC20Lockable is Context, ERC20, IERC20Lockable {
+abstract contract ERC20Lockable is ERC20, IERC20Lockable {
   
   mapping(address => uint256) internal _lockBalances;
   mapping(address => mapping(bytes32 => AssetLock)) internal _locks;
 
+  /**
+   * @dev lock number of tokens for specific account in the period of time
+   */
   function lockToken(LockTokenRequest[] calldata lockRequest) external {
     _tokenPolicyInterceptor(this.lockToken.selector);
     for (uint256 i = 0; i < lockRequest.length; i++) {
@@ -22,6 +24,9 @@ abstract contract ERC20Lockable is Context, ERC20, IERC20Lockable {
     }
   }
 
+  /**
+   * @dev deposite number of tokens by lock ID to specified account in lock info 
+   */
   function claimToken(bytes32[] calldata lockIds) external {
     _tokenPolicyInterceptor(this.claimToken.selector);
     for (uint256 i = 0; i < lockIds.length; i++) {
@@ -29,6 +34,9 @@ abstract contract ERC20Lockable is Context, ERC20, IERC20Lockable {
     }
   }
 
+  /**
+   * @dev unlock number of tokens by lock ID and deposite those to source account
+   */
   function unlockToken(UnLockTokenRequest[] calldata unlockRequest) external {
     _tokenPolicyInterceptor(this.unlockToken.selector);
     for (uint256 i = 0; i < unlockRequest.length; i++) {      
@@ -36,10 +44,16 @@ abstract contract ERC20Lockable is Context, ERC20, IERC20Lockable {
     }
   }
 
+  /**
+   * @dev get lock balance of account
+   */
   function lockBalanceOf(address account) external view returns (uint256) {
     return _lockBalances[account];
   }
 
+  /**
+   * @dev get lock information by account and lock ID
+   */
   function lockInfo(bytes32 lockId, address account) external view returns (LockInfo memory) {
     AssetLock storage lock = _locks[account][lockId];
     return

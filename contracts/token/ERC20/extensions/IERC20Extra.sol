@@ -25,7 +25,7 @@ interface IERC20Extra {
 
   function decreaseAllowance(address spender, uint256 amount) external returns (uint256);
 
-  function batchTransfer(BatchTransferRequest[] calldata request) external returns (bool);
+  function batchTransfer(BatchTransferRequest[] calldata request) external;
 
-  function batchTransferFrom(BatchTransferFromRequest[] calldata request) external returns (bool);
+  function batchTransferFrom(BatchTransferFromRequest[] calldata request) external;
 }
