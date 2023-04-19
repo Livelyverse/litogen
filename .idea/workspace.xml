@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="c0f95897-d344-4a4d-9d91-8fddc7839041" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/ERC20.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/token/ERC20/ERC20.sol" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/assets/ERC20Asset.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/token/ERC20/assets/ERC20Asset.sol" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/assets/ERC20AssetExtra.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/token/ERC20/assets/ERC20AssetExtra.sol" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/extensions/ERC20Pausable.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/token/ERC20/extensions/ERC20Pausable.sol" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/extensions/ERC20Taxable.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/token/ERC20/extensions/ERC20Taxable.sol" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/core/add-pausable.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/core/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/generator/core/api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/core/build-generic.ts" beforeDir="false" afterPath="$PROJECT_DIR$/generator/core/build-generic.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/core/common-options.ts" beforeDir="false" afterPath="$PROJECT_DIR$/generator/core/common-options.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/core/contract.ts" beforeDir="false" afterPath="$PROJECT_DIR$/generator/core/contract.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/core/custom.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/core/erc1155.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/core/erc20.ts" beforeDir="false" afterPath="$PROJECT_DIR$/generator/core/erc20.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/core/erc721.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/core/governor.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/core/kind.ts" beforeDir="false" afterPath="$PROJECT_DIR$/generator/core/kind.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/core/print.ts" beforeDir="false" afterPath="$PROJECT_DIR$/generator/core/print.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/core/set-access-control.ts" beforeDir="false" afterPath="$PROJECT_DIR$/generator/core/set-access-control.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/core/set-upgradeable.ts" beforeDir="false" afterPath="$PROJECT_DIR$/generator/core/set-upgradeable.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/core/utils/define-functions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/generator/core/utils/define-functions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/core/utils/format-lines.ts" beforeDir="false" afterPath="$PROJECT_DIR$/generator/core/utils/format-lines.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/generator/main.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2OXm7fpB9LYjVLHrX1FtMMA4Sf6" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/home/sina/Workspace/InnToken/livelyProject/src/litogen/wizard/main.ts",
+    "nodejs_package_manager_path": "yarn",
+    "ts.external.directory.path": "/home/sina/Workspace/InnToken/livelyProject/src/litogen/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="main.ts" type="NodeJSConfigurationType" nameIsGenerated="true" node-parameters="--require ts-node/register" path-to-js-file="$PROJECT_DIR$/generator/main.ts" working-dir="$PROJECT_DIR$">
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c0f95897-d344-4a4d-9d91-8fddc7839041" name="Changes" comment="" />
+      <created>1681715134256</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1681715134256</updated>
+      <workItem from="1681715135677" duration="40349000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/generator/core/print.ts</url>
+          <line>31</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/generator/core/erc20.ts</url>
+          <line>108</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

@@ -8,12 +8,12 @@ import "./IERC20AssetExtra.sol";
 import "../extensions/IERC20Extra.sol";
 
 /**
- * @title ERC20 Asset Lockable Contract
+ * @title ERC20 Asset Extra Contract
  * @author Sina Tadayon, https://github.com/SinaTadayon
  * @dev
  *
  */
-abstract contract ERCAssetExtra is ERC20Asset, IERC20AssetExtra {
+abstract contract ERC20AssetExtra is ERC20Asset, IERC20AssetExtra {
 
   constructor() {}
 

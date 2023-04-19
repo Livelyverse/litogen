@@ -15,10 +15,10 @@ export function sanitizeKind(kind: unknown): Kind {
 function isKind<T>(value: Kind | T): value is Kind {
   switch (value) {
     case 'ERC20':
-    case 'ERC1155':
-    case 'ERC721':
-    case 'Governor':
-    case 'Custom':
+    // case 'ERC1155':
+    // case 'ERC721':
+    // case 'Governor':
+    // case 'Custom':
       return true;
 
     default: {

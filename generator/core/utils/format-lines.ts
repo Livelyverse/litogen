@@ -5,7 +5,7 @@ export type Lines = string | typeof whitespace | Lines[];
 const whitespace = Symbol('whitespace');
 
 export function formatLines(...lines: Lines[]): string {
-  return formatLinesWithSpaces(4, ...lines);
+  return formatLinesWithSpaces(2, ...lines);
 }
 
 export function formatLinesWithSpaces(spacesPerIndent: number, ...lines: Lines[]): string {

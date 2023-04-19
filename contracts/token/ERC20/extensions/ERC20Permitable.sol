@@ -80,6 +80,18 @@ abstract contract ERC20Permitable is ERC20, IERC20Permitable, EIP712 {
     }
 
     /**
+     * @dev Returns true if this contract implements the interface defined by
+     * `interfaceId`. See the corresponding
+     * https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section]
+     * to learn more about how these ids are created.
+     *
+     * This function call must use less than 30 000 gas.
+     */
+    function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
+      return interfaceId == type(IERC20Permitable).interfaceId || super.supportsInterface(interfaceId);
+    }
+
+    /**
      * @dev "Consume a nonce": return the current value and increment. 
      */
     function _useNonce(address owner) internal virtual returns (uint256 current) {

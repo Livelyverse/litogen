@@ -17,7 +17,7 @@ import "../ERC20.sol";
 abstract contract ERC20Pausable is ERC20, IERC20Pausable {
   using EnumerableSet for EnumerableSet.AddressSet;
   
-  EnumerableSet.AddressSet internal pausedList;
+  EnumerableSet.AddressSet internal _pausedList;
   bool internal _isPaused;
 
   /**
@@ -71,8 +71,8 @@ abstract contract ERC20Pausable is ERC20, IERC20Pausable {
   function pause(address account) external {
     _tokenPolicyInterceptor(this.pause.selector);
     require(account != address(0), "Illegal Address");
-    require(!pausedList.contains(account), "Already Paused");
-    pausedList.add(account);
+    require(!_pausedList.contains(account), "Already Paused");
+    _pausedList.add(account);
     emit Paused(_msgSender(), account);
   }
 
@@ -82,8 +82,8 @@ abstract contract ERC20Pausable is ERC20, IERC20Pausable {
   function unpause(address account) external {
     _tokenPolicyInterceptor(this.unpause.selector);
     require(account != address(0), "Illegal Address");
-    require(pausedList.contains(account), "Not Found");
-    pausedList.remove(account);
+    require(_pausedList.contains(account), "Not Found");
+    _pausedList.remove(account);
     emit Unpaused(_msgSender(), account);
   }
 
@@ -105,22 +105,35 @@ abstract contract ERC20Pausable is ERC20, IERC20Pausable {
     emit UnpausedAll(_msgSender());
   }
 
-  /**
-   * @dev See {ERC20-_beforeTokenTransfer}.
-   *
-   * Requirements:
-   *
-   * - the contract must not be paused.
-   * - `from` must not be paused.
-   */
-  function _beforeTokenTransfer(
-      address from,
-      address to,
-      uint256 amount
-  ) internal virtual override {
-      super._beforeTokenTransfer(from, to, amount);
+  function isPaused(address account) external view returns (bool) {
+    return account != address(0) && _isAccountPaused(account);
+  }
 
-      require(!paused(), "Token Paused");
-      require(!pausedList.contains(from), "Account Paused");
+  function _isAccountPaused(address account) internal view returns (bool) {
+    return _pausedList.contains(account);
+  }
+
+  function isPausedAll() external view returns (bool) {
+    return _isPaused;
+  }
+
+  function pausedAccounts(uint256 offset) external view returns (address[] memory) {
+    address[] memory result = new address[](100);
+    for(uint256 i = 0; i + offset < _pausedList.length() && i < 100; i++) {
+      result[i] = _pausedList.at(i + offset);
+    }
+    return result;
+  }
+
+  /**
+   * @dev Returns true if this contract implements the interface defined by
+   * `interfaceId`. See the corresponding
+   * https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section]
+   * to learn more about how these ids are created.
+   *
+   * This function call must use less than 30 000 gas.
+   */
+  function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
+      return interfaceId == type(IERC20Pausable).interfaceId || super.supportsInterface(interfaceId);
   }
 }

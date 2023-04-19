@@ -38,6 +38,18 @@ abstract contract ERC20Burnable is ERC20, IERC20Burnable {
     }
 
     /**
+     * @dev Returns true if this contract implements the interface defined by
+     * `interfaceId`. See the corresponding
+     * https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section]
+     * to learn more about how these ids are created.
+     *
+     * This function call must use less than 30 000 gas.
+     */
+    function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
+        return interfaceId == type(IERC20Burnable).interfaceId || super.supportsInterface(interfaceId);
+    }
+
+    /**
      * @dev Destroys `amount` tokens from `account`, reducing the
      * total supply.
      *

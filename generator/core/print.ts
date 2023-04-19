@@ -23,7 +23,7 @@ export function printContract(contract: Contract, opts?: Options): string {
     ...spaceBetween(
       [
         `// SPDX-License-Identifier: ${contract.license}`,
-        `pragma solidity ^${SOLIDITY_VERSION};`,
+        `pragma solidity ${SOLIDITY_VERSION};`,
       ],
 
       contract.imports.map(p => `import "${helpers.transformImport(p)}";`),
@@ -219,7 +219,7 @@ function printFunction2(kindedName: string, args: string[], modifiers: string[],
 
   const braces = code.length > 0 ? '{' : '{}';
 
-  if (headingLength <= 72) {
+  if (headingLength <= 80) {
     fn.push([`${kindedName}(${args.join(', ')})`, ...modifiers, braces].join(' '));
   } else {
     fn.push(`${kindedName}(${args.join(', ')})`, modifiers, braces);

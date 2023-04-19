@@ -13,7 +13,7 @@ import "../extensions/IERC20Lockable.sol";
  * @dev
  *
  */
-abstract contract ERCAssetLockable is ERC20Asset, IERC20AssetLockable {
+abstract contract ERC20AssetLockable is ERC20Asset, IERC20AssetLockable {
 
   constructor() {}
 

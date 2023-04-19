@@ -76,6 +76,7 @@ export class ContractBuilder implements Contract {
 
   readonly using: Using[] = [];
   readonly natspecTags: NatspecTag[] = [];
+  readonly interfaces: string[] = [];
 
   readonly constructorArgs: FunctionArgument[] = [];
   readonly constructorCode: string[] = [];
@@ -104,6 +105,7 @@ export class ContractBuilder implements Contract {
     return [
       ...[...this.parentMap.values()].map(p => p.contract.path),
       ...this.using.map(u => u.library.path),
+      ...this.interfaces
     ];
   }
 
@@ -143,10 +145,10 @@ export class ContractBuilder implements Contract {
     this.natspecTags.push({ key, value });
   }
 
-  private addFunction(baseFn: BaseFunction): ContractFunction {
+  addFunction(baseFn: BaseFunction): ContractFunction {
     const signature = [baseFn.name, '(', ...baseFn.args.map(a => a.name), ')'].join('');
     const got = this.functionMap.get(signature);
-    if (got !== undefined) {
+    if (got) {
       return got;
     } else {
       const fn: ContractFunction = {
@@ -183,9 +185,9 @@ export class ContractBuilder implements Contract {
 
   setFunctionBody(code: string[], baseFn: BaseFunction, mutability?: FunctionMutability) {
     const fn = this.addFunction(baseFn);
-    if (fn.code.length > 0) {
-      throw new Error(`Function ${baseFn.name} has additional code`);
-    }
+    // if (fn.code.length > 0) {
+    //   throw new Error(`Function ${baseFn.name} has additional code`);
+    // }
     fn.code.push(...code);
     fn.final = true;
     if (mutability) {
@@ -196,6 +198,12 @@ export class ContractBuilder implements Contract {
   addVariable(code: string): boolean {
     const present = this.variableSet.has(code);
     this.variableSet.add(code);
+    return !present;
+  }
+
+  addImportInterface(interfacePath: string): boolean {
+    const present = this.imports.includes(interfacePath);
+    this.interfaces.push(interfacePath);
     return !present;
   }
 }

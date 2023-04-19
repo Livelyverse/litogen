@@ -21,10 +21,9 @@ abstract contract ERC20Taxable is ERC20, IERC20Taxable {
   uint256 internal _taxRate;
   address internal _taxTreasury;
 
-  constructor(uint256 taxRate_, address taxTreasury_) {
-    require(taxTreasury_ != address(0), "Invalid Address");
+  constructor(uint256 taxRate_) {
     _taxRate = taxRate_;
-    _taxTreasury = taxTreasury_;
+    _taxTreasury = _msgSender();
   }
 
   /**
@@ -85,33 +84,21 @@ abstract contract ERC20Taxable is ERC20, IERC20Taxable {
   }
 
   /**
-   * @dev Moves `amount` of tokens from `from` to `to`.
+   * @dev Returns true if this contract implements the interface defined by
+   * `interfaceId`. See the corresponding
+   * https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section]
+   * to learn more about how these ids are created.
    *
-   * This function is overrider _trasnfer of token to support take tax
-   *
-   * Emits a {Transfer} event.
-   *
-   * Requirements:
-   *
-   * - `from` cannot be the zero address.
-   * - `to` cannot be the zero address.
-   * - `from` must have a balance of at least `amount`.
+   * This function call must use less than 30 000 gas.
    */
-  function _transfer(
-      address from,
-      address to,
-      uint256 amount
-  ) internal override {
-    if (_taxRate > 0 && !_taxWhitelist.contains(_msgSender())) {
-      uint256 tax = amount.mulBP(_taxRate);
-      uint256 amountMinesTax = amount.sub(tax, "Illegal Amount");
-      super._transfer(from, _taxTreasury, tax);
-      super._transfer(from, to, amountMinesTax);
-    } else {
-      super._transfer(_msgSender(), to, amount);
-    }        
+  function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
+      return interfaceId == type(IERC20Taxable).interfaceId || super.supportsInterface(interfaceId);
   }
 
+  function _isAccountWhitelist(address account) internal view returns (bool) {
+    return _taxWhitelist.contains(account);
+  }
+ 
   /**
    * @dev Internal function to implement tax update whitelist.
    */

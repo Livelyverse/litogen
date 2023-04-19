@@ -7,7 +7,7 @@ import "./IERC20.sol";
 import "./extensions/IERC20Metadata.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
-import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
+import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "../../access/IProfileACL.sol";
 
 /**
@@ -17,12 +17,13 @@ import "../../access/IProfileACL.sol";
  * that a supply mechanism has to be added in a derived contract using {_mint}.
  *
  */
-contract ERC20 is Context, IERC20, IERC20Metadata {
+contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {    
+    address immutable internal _acl;
+
     mapping(address => uint256) internal _balances;
     mapping(address => mapping(address => uint256)) internal _allowances;
     uint256 internal _totalSupply;
     bytes32 internal _profileId;
-    address internal _acl;
     string private _name;
     string private _symbol;
     string private _version;
@@ -41,24 +42,22 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
         string memory name_, 
         string memory symbol_, 
         string memory version_, 
-        address acl_,
-        bytes32 profileId_, 
+        string memory profileName_,
         uint8 decimal_        
     ) {
-        require(Address.isContract(acl_), "Invalid ACL");
-        if (!IERC165(acl_).supportsInterface(type(IProfileACL).interfaceId)) {
-            revert("Illegal ACL");
-        }
+        // require(Address.isContract(acl_), "Invalid ACL");
+        // if (!IERC165(acl_).supportsInterface(type(IProfileACL).interfaceId)) {
+        //     revert("Illegal ACL");
+        // }
 
         _name = name_;
         _symbol = symbol_;
         _version = version_;
         _decimal = decimal_;
-        _acl = acl_;
-        _profileId = profileId_;
+        _profileId = keccak256(abi.encodePacked(profileName_));
 
-        // _totalSupply = amount;
-        // unchecked { _balances[account] = amount; }
+        // Lively Guard contract address in the Polygon network
+        _acl = 0xF5a6FEfBE1a23653fB8A72B1730ba447c73fb993;
     }
 
     /**
@@ -122,6 +121,18 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
     }
 
     /**
+     * @dev Returns true if this contract implements the interface defined by
+     * `interfaceId`. See the corresponding
+     * https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section]
+     * to learn more about how these ids are created.
+     *
+     * This function call must use less than 30 000 gas.
+     */
+    function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
+        return interfaceId == type(IERC20).interfaceId || super.supportsInterface(interfaceId);
+    }
+
+    /**
      * @dev See {IERC20-transfer}.
      *
      * Requirements:
@@ -130,6 +141,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
      * - the caller must have a balance of at least `amount`.
      */
     function transfer(address to, uint256 amount) public virtual override returns (bool) {
+        _tokenPolicyInterceptor(this.transfer.selector);
         address owner = _msgSender();
         _transfer(owner, to, amount);
         return true;
@@ -153,6 +165,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
      * - `spender` cannot be the zero address.
      */
     function approve(address spender, uint256 amount) public virtual override returns (bool) {
+        _tokenPolicyInterceptor(this.approve.selector);
         address owner = _msgSender();
         _approve(owner, spender, amount);
         return true;
@@ -179,6 +192,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
         address to,
         uint256 amount
     ) public virtual override returns (bool) {
+        _tokenPolicyInterceptor(this.transferFrom.selector);
         address spender = _msgSender();
         _spendAllowance(from, spender, amount);
         _transfer(from, to, amount);
