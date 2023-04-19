@@ -1,4 +1,4 @@
-import { toIdentifier } from './utils/to-identifier';
+import { identifier } from './utils/identifier';
 
 export interface Contract {
   name: string;
@@ -86,7 +86,7 @@ export class ContractBuilder implements Contract {
   private functionMap: Map<string, ContractFunction> = new Map();
 
   constructor(name: string) {
-    this.name = toIdentifier(name, true);
+    this.name = identifier(name, true);
   }
 
   get parents(): Parent[] {

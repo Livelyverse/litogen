@@ -1,4 +1,4 @@
-export function toIdentifier(str: string, capitalize = false): string {
+export function identifier(str: string, capitalize = false): string {
   return str
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // remove accents
     .replace(/^[^a-zA-Z$_]+/, '')

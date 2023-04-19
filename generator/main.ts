@@ -1,5 +1,5 @@
-import {ERC20AssetOptions, printERC20, printERC20Asset} from "./core/erc20";
-import {ERC20API} from "./core/api";
+import {ERC20AssetOptions, printERC20, printERC20Asset} from "./erc20";
+import {ERC20API} from "./litogenApi";
 
 function main() {
   console.log(ERC20API.print(

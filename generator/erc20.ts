@@ -1,7 +1,7 @@
 import {Contract, ContractBuilder, ContractFunction} from './contract';
-import { defineFunctions } from './utils/define-functions';
+import { defineFunctions } from './utils/defineFunctions';
 import { printContract } from './print';
-import {supportsInterface} from "./common-functions";
+import {supportsInterface} from "./commonFunctions";
 
 export type DistributeUnit = 'PERCENT' | 'DECIMAL'
 
