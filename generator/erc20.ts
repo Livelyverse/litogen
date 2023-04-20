@@ -184,8 +184,13 @@ function addBase(c: ContractBuilder, name: string, symbol: string, version: stri
       name: 'ERC20',
       path: '@livelyversenpm/litogen/contracts/token/ERC20/ERC20.sol',
     },
-    [name, symbol, version, profileName, decimal],
+    [name, symbol, version, profileName, { lit: 'acl_' }, decimal],
   );
+
+  c.addConstructorArgument({
+    name: 'acl_',
+    type: 'address'
+  })
 
   c.addOverride('ERC20', functions._beforeTokenTransfer);
   c.addOverride('ERC20', functions._transfer);
@@ -384,11 +389,16 @@ function assetAddBase(c: ContractBuilder, name: string, version: string, profile
       name: 'ERC20Asset',
       path: '@livelyversenpm/litogen/contracts/token/ERC20/assets/ERC20Asset.sol',
     },
-    [name, version, profileName, { lit: 'erc20Token_' } ],
+    [name, version, profileName, { lit: 'erc20Token_' }, { lit: 'acl_' } ],
   );
 
   c.addConstructorArgument({
     name: 'erc20Token_',
+    type: 'address'
+  })
+
+  c.addConstructorArgument({
+    name: 'acl_',
     type: 'address'
   })
 

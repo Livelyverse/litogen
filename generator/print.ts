@@ -1,11 +1,7 @@
-import 'array.prototype.flatmap/auto';
-
 import type { Contract, Parent, ContractFunction, FunctionArgument, Value, NatspecTag } from './contract';
 import { Options, Helpers, withHelpers } from './options';
-
 import { formatLines, spaceBetween, Lines } from './utils/formatLines';
 import { mapValues } from './utils/mapValues';
-// import SOLIDITY_VERSION from './solidity-version.json';
 
 const SOLIDITY_VERSION = "0.8.19"
 

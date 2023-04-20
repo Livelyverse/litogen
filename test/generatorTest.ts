@@ -1,7 +1,8 @@
-import {ERC20AssetOptions, printERC20, printERC20Asset} from "./erc20";
-import {ERC20API} from "./litogenApi";
+import {ERC20AssetOptions, printERC20, printERC20Asset} from "../generator/erc20";
+import {ERC20API} from "../generator/litogenApi";
+import {spaceBetween} from "../generator/utils/formatLines";
 
-function main() {
+function generatorTest() {
   console.log(ERC20API.print(
   {
     name: "TestToken",
@@ -30,10 +31,10 @@ function main() {
   }
   ));
 
-  // console.log(printERC20Asset({
-  //   lockable: true,
-  //   extra: true,
-  // } as ERC20AssetOptions));
+  console.log(printERC20Asset({
+    lockable: true,
+    extra: true,
+  } as ERC20AssetOptions));
 }
 
-main()
+generatorTest()

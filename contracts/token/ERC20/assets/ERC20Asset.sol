@@ -21,17 +21,27 @@ import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 contract ERC20Asset is Context, ERC165, IERC20Asset, IAsset {
   using Address for address;
 
-  address immutable internal _acl;
-
+  address internal _acl;
   bytes32 internal _profileId;
   address internal _erc20TokenId;
   string internal _assetName;
   string internal _assetVersion;
   AssetSafeModeStatus internal _assetSafeModeStatus;
 
-  constructor(string memory assetName_, string memory assetVersion_, string memory profileName_, address erc20Token_) {
+  constructor(string memory assetName_, string memory assetVersion_, string memory profileName_, address erc20Token_, address acl_) {
     require(Address.isContract(erc20Token_), "Invalid ERC20Token");
     if (!IERC165(erc20Token_).supportsInterface(type(IERC20).interfaceId)) revert("Illegal ERC20Token");
+
+    if(acl_ != address(0)) {
+      require(Address.isContract(acl_), "Invalid ACL");
+      if (!IERC165(acl_).supportsInterface(type(IProfileACL).interfaceId)) {
+        revert("Illegal ACL");            
+      }
+      _acl = acl_;
+    } else {
+      // Lively Guard contract address in the Polygon network
+      _acl = 0xF5a6FEfBE1a23653fB8A72B1730ba447c73fb993;
+    }
 
     _assetName = assetName_;
     _assetVersion = assetVersion_;
@@ -39,9 +49,6 @@ contract ERC20Asset is Context, ERC165, IERC20Asset, IAsset {
     _assetSafeModeStatus = AssetSafeModeStatus.ENABLED;
 
     _profileId = keccak256(abi.encodePacked(profileName_));
-
-    // Lively Guard contract address in the Polygon network
-    _acl = 0xF5a6FEfBE1a23653fB8A72B1730ba447c73fb993;
   }
 
   /**

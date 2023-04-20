@@ -18,16 +18,17 @@ import "../../access/IProfileACL.sol";
  *
  */
 contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {    
-    address immutable internal _acl;
 
     mapping(address => uint256) internal _balances;
     mapping(address => mapping(address => uint256)) internal _allowances;
     uint256 internal _totalSupply;
     bytes32 internal _profileId;
+    address internal _acl;
     string private _name;
     string private _symbol;
     string private _version;
     uint8 private _decimal;
+    
 
     /**
      * @dev Sets the values for {name} and {symbol}.
@@ -43,21 +44,25 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
         string memory symbol_, 
         string memory version_, 
         string memory profileName_,
+        address acl_,
         uint8 decimal_        
     ) {
-        // require(Address.isContract(acl_), "Invalid ACL");
-        // if (!IERC165(acl_).supportsInterface(type(IProfileACL).interfaceId)) {
-        //     revert("Illegal ACL");
-        // }
+        if(acl_ != address(0)) {
+          require(Address.isContract(acl_), "Invalid ACL");
+          if (!IERC165(acl_).supportsInterface(type(IProfileACL).interfaceId)) {
+            revert("Illegal ACL");            
+          }
+          _acl = acl_;
+        } else {
+          // Lively Guard contract address in the Polygon network
+          _acl = 0xF5a6FEfBE1a23653fB8A72B1730ba447c73fb993;
+        }
 
         _name = name_;
         _symbol = symbol_;
         _version = version_;
         _decimal = decimal_;
         _profileId = keccak256(abi.encodePacked(profileName_));
-
-        // Lively Guard contract address in the Polygon network
-        _acl = 0xF5a6FEfBE1a23653fB8A72B1730ba447c73fb993;
     }
 
     /**
