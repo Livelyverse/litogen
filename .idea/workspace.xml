@@ -3,14 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c0f95897-d344-4a4d-9d91-8fddc7839041" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/ERC20.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/token/ERC20/ERC20.sol" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/assets/ERC20Asset.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/token/ERC20/assets/ERC20Asset.sol" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/generator/erc20.ts" beforeDir="false" afterPath="$PROJECT_DIR$/generator/erc20.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/generator/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/generator/main.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/generator/print.ts" beforeDir="false" afterPath="$PROJECT_DIR$/generator/print.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/generator/utils/formatLines.ts" beforeDir="false" afterPath="$PROJECT_DIR$/generator/utils/formatLines.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,11 +40,12 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/test" />
       <recent name="$PROJECT_DIR$/generator" />
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="main.ts" type="NodeJSConfigurationType" nameIsGenerated="true" node-parameters="--require ts-node/register" path-to-js-file="$PROJECT_DIR$/generator/main.ts" working-dir="$PROJECT_DIR$">
+    <configuration name="generatorTest.ts" type="NodeJSConfigurationType" nameIsGenerated="true" node-parameters="--require ts-node/register" path-to-js-file="$PROJECT_DIR$/test/generatorTest.ts" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
   </component>
@@ -65,7 +58,7 @@
       <option name="presentableId" value="Default" />
       <updated>1681715134256</updated>
       <workItem from="1681715135677" duration="40349000" />
-      <workItem from="1681882801491" duration="32548000" />
+      <workItem from="1681882801491" duration="34250000" />
     </task>
     <servers />
   </component>
@@ -82,23 +75,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/generator/utils/formatLines.ts</url>
-          <line>5</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="35" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/generator/utils/formatLines.ts</url>
-          <line>9</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="43" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
