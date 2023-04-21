@@ -81,19 +81,19 @@ const config: HardhatUserConfig = {
     outDir: "./typechain/types",
     target: "ethers-v5",
     alwaysGenerateOverloads: true, // should overloads with full signatures like deposit(uint256) be generated always, even if there are no overloads?
-    externalArtifacts: ["externalArtifacts/*.json", "artifacts/@openzeppelin/*.json"], // optional array of glob patterns with external artifacts to process (for example external libs from node_modules)
+    externalArtifacts: ["externalArtifacts/*.json"], // optional array of glob patterns with external artifacts to process (for example external libs from node_modules)
   },
 
-  paths: {
-    cache: "build/cache",
-    sources: "src/contracts",
-    tests: "src/test",
-    artifacts: "build/artifacts",
-    deploy: "src/deploy",
-    deployments: "deployments",
-    imports: "src/imports",
-    root: ".",
-  },
+  // paths: {
+  //   cache: "build/cache",
+  //   sources: "src/contracts",
+  //   tests: "src/test",
+  //   artifacts: "build/artifacts",
+  //   deploy: "src/deploy",
+  //   deployments: "deployments",
+  //   imports: "src/imports",
+  //   root: ".",
+  // },
 };
 
 export default config;

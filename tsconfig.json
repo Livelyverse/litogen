@@ -9,11 +9,11 @@
     "resolveJsonModule": true
   },
   "include": [
-    "./src/contracts",
-    "./src/test",
+    "./contracts",
+    "./test",
     "./typechain/types",
-    "./src/scripts",
-    "./src/deploy"
+    "./scripts",
+    "./deploy"
   ],
   "files": ["./hardhat.config.ts"]
 }
