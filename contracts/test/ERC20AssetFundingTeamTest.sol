@@ -21,3 +21,4 @@ contract FundingTeam is ERC20Asset, ERC20AssetExtra, ERC20AssetLockable {
     return super.supportsInterface(interfaceId);
   }
 }
+
