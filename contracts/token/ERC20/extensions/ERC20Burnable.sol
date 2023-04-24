@@ -66,11 +66,11 @@ abstract contract ERC20Burnable is ERC20, IERC20Burnable {
         address account,
         uint256 amount
     ) internal virtual {
-        require(account != address(0), "Burn: Invalid Address");
-        require(amount > 0, "Burn: Invalid Amount");
+        require(account != address(0), "Invalid Address");
+        require(amount > 0, "Invalid Amount");
 
         uint256 accountBalance = _balances[account];
-        require(accountBalance >= amount, "Burn: Illegal Amount");
+        require(accountBalance >= amount, "Illegal Amount");
         unchecked {
             _balances[account] = accountBalance - amount;
             _totalSupply -= amount;

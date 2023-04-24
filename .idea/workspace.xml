@@ -2,7 +2,40 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c0f95897-d344-4a4d-9d91-8fddc7839041" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/contracts/test/ERC20AssetFundingTeamTest.sol" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/contracts/test/ERC20AssetPublicSalesTest.sol" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/ERC20TokenTest.test.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/access/IProfileACL.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/test.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/test/ERC20TokenTest.sol" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/test1.sol" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/ERC20.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/token/ERC20/ERC20.sol" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/ERC20.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/IERC20.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/assets/ERC20Asset.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/token/ERC20/assets/ERC20Asset.sol" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/assets/ERC20Asset.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/assets/ERC20AssetLockable.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/assets/IAsset.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/assets/IERC20Asset.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/assets/IERC20AssetLockable.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/extensions/ERC20Burnable.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/token/ERC20/extensions/ERC20Burnable.sol" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/extensions/ERC20Extra.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/token/ERC20/extensions/ERC20Extra.sol" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/extensions/ERC20Lockable.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/token/ERC20/extensions/ERC20Lockable.sol" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/extensions/ERC20Lockable.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/extensions/ERC20Mintable.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/token/ERC20/extensions/ERC20Mintable.sol" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/extensions/ERC20Pausable.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/token/ERC20/extensions/ERC20Pausable.sol" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/extensions/ERC20Permitable.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/token/ERC20/extensions/ERC20Permitable.sol" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/extensions/ERC20Taxable.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/token/ERC20/extensions/ERC20Taxable.sol" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/extensions/ERC20Taxable.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/extensions/IERC20Lockable.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/extensions/IERC20Metadata.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/extensions/IERC20Permitable.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/token/ERC20/extensions/IERC20Permitable.sol" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/extensions/IERC20Taxable.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/erc20.ts" beforeDir="false" afterPath="$PROJECT_DIR$/generator/erc20.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hardhat.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/hardhat.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/generatorTest.ts" beforeDir="false" afterPath="$PROJECT_DIR$/test/generator.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,22 +65,100 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/home/sina/Workspace/InnToken/livelyProject/src/business-launchpad",
+    "last_opened_file_path": "/home/sina/Workspace/InnToken/livelyProject/src/litogen/test",
+    "nodejs.mocha.mocha_node_package_dir": "/home/sina/Workspace/InnToken/livelyProject/src/litogen/node_modules/mocha",
     "nodejs_package_manager_path": "yarn",
     "ts.external.directory.path": "/home/sina/Workspace/InnToken/livelyProject/src/litogen/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/test" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/contracts/test" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$/test" />
       <recent name="$PROJECT_DIR$/generator" />
     </key>
   </component>
-  <component name="RunManager">
-    <configuration name="generatorTest.ts" type="NodeJSConfigurationType" nameIsGenerated="true" node-parameters="--require ts-node/register" path-to-js-file="$PROJECT_DIR$/test/generatorTest.ts" working-dir="$PROJECT_DIR$">
+  <component name="RunManager" selected="Mocha.Litogen Generator Tests.Should generate ERC20 success">
+    <configuration name="generator.test.ts" type="NodeJSConfigurationType" nameIsGenerated="true" node-parameters="--require ts-node/register" path-to-js-file="$PROJECT_DIR$/test/generator.test.ts" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
+    <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="build" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="clean" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="clean" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="test" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="test" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="Litogen Generator Tests" type="mocha-javascript-test-runner" temporary="true" nameIsGenerated="true">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <mocha-package>$PROJECT_DIR$/node_modules/mocha</mocha-package>
+      <working-directory>$PROJECT_DIR$</working-directory>
+      <pass-parent-env>true</pass-parent-env>
+      <ui>bdd</ui>
+      <extra-mocha-options>--require ts-node/register</extra-mocha-options>
+      <test-kind>SUITE</test-kind>
+      <test-file>$PROJECT_DIR$/test/generator.test.ts</test-file>
+      <test-names>
+        <name value="Litogen Generator Tests" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="Litogen Generator Tests.Should generate ERC20 success" type="mocha-javascript-test-runner" temporary="true" nameIsGenerated="true">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <mocha-package>$PROJECT_DIR$/node_modules/mocha</mocha-package>
+      <working-directory>$PROJECT_DIR$</working-directory>
+      <pass-parent-env>true</pass-parent-env>
+      <ui>bdd</ui>
+      <extra-mocha-options>--require ts-node/register</extra-mocha-options>
+      <test-kind>TEST</test-kind>
+      <test-file>$PROJECT_DIR$/test/generator.test.ts</test-file>
+      <test-names>
+        <name value="Litogen Generator Tests" />
+        <name value="Should generate ERC20 success" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Mocha.Litogen Generator Tests.Should generate ERC20 success" />
+        <item itemvalue="npm.test" />
+        <item itemvalue="Mocha.Litogen Generator Tests" />
+        <item itemvalue="npm.build" />
+        <item itemvalue="npm.clean" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -59,6 +170,9 @@
       <updated>1681715134256</updated>
       <workItem from="1681715135677" duration="40349000" />
       <workItem from="1681882801491" duration="34250000" />
+      <workItem from="1682059573567" duration="12730000" />
+      <workItem from="1682166670721" duration="14963000" />
+      <workItem from="1682311814730" duration="20382000" />
     </task>
     <servers />
   </component>

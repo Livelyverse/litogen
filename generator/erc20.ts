@@ -3,13 +3,12 @@ import { defineFunctions } from './utils/defineFunctions';
 import { printContract } from './print';
 import {supportsInterface} from "./commonFunctions";
 
-export type DistributeUnit = 'PERCENT' | 'DECIMAL'
+export type DistributeUnit = 'PERCENT' | 'NUMBER'
 
 export interface BaseOptions {
   name: string;
   profileName: string;
   license: string;
-  version?: string;
 }
 
 export interface DistributeAssets {
@@ -50,7 +49,6 @@ export const defaults: Required<ERC20Options> = {
   distribute: null,
   taxRate: 0,
   totalSupply: 0,
-  version: '1.0.0',
   extra: false,
   burnable: false,
   mintable: false,
@@ -64,7 +62,6 @@ export const defaults: Required<ERC20Options> = {
 export const assetDefaults: Required<ERC20AssetOptions> = {
   name: 'MyTestAsset',
   profileName: 'MyTestProfile',
-  version: '1.0.0',
   extra: false,
   lockable: false,
   license: 'MIT',
@@ -75,13 +72,12 @@ function withDefaults(opts: ERC20Options): Required<ERC20Options> {
     ...opts,
     name: opts.name ?? defaults.name,
     symbol: opts.symbol ?? defaults.symbol,
-    profileName: opts.name ?? defaults.profileName,
+    profileName: opts.profileName ?? defaults.profileName,
     license: opts.license ?? defaults.license,
     decimal: opts?.decimal && opts.decimal >= 0 ? opts.decimal : defaults.decimal,
     totalSupply: opts.totalSupply ?? defaults.totalSupply,
     taxRate: opts.taxRate ?? defaults.taxRate,
     distribute: opts.distribute ?? defaults.distribute,
-    version: opts.version ?? defaults.version,
     extra: opts.extra ?? defaults.extra,
     burnable: opts.burnable ?? defaults.burnable,
     mintable: opts.mintable ?? defaults.mintable,
@@ -96,9 +92,8 @@ function withAssetDefaults(opts: ERC20AssetOptions): Required<ERC20AssetOptions>
   return {
     ...opts,
     name: opts.name ?? assetDefaults.name,
-    profileName: opts.name ?? assetDefaults.profileName,
+    profileName: opts.profileName ?? assetDefaults.profileName,
     license: opts.license ?? assetDefaults.license,
-    version: opts.version ?? assetDefaults.version,
     extra: opts.extra ?? assetDefaults.extra,
     lockable: opts.lockable ?? assetDefaults.lockable,
   };
@@ -117,7 +112,7 @@ export function buildERC20Asset(opts: ERC20AssetOptions): Contract {
 
   const c = new ContractBuilder(allOpts.name);
 
-  assetAddBase(c, allOpts.name, allOpts.version, allOpts.profileName);
+  assetAddBase(c, allOpts.name, allOpts.profileName);
 
   if (allOpts.extra) {
     assetAddExtra(c);
@@ -137,7 +132,7 @@ export function buildERC20(opts: ERC20Options): Contract {
 
   const c = new ContractBuilder(allOpts.name);
 
-  addBase(c, allOpts.name, allOpts.symbol, allOpts.version, allOpts.profileName, allOpts.decimal);
+  addBase(c, allOpts.name, allOpts.symbol, allOpts.profileName, allOpts.decimal);
 
   if (allOpts.burnable) {
     addBurnable(c);
@@ -164,7 +159,7 @@ export function buildERC20(opts: ERC20Options): Contract {
   }
 
   if (allOpts.permitable) {
-    addPermitalble(c, allOpts.name, allOpts.version);
+    addPermitalble(c, allOpts.name);
   }
 
   if (allOpts.taxable) {
@@ -178,13 +173,13 @@ export function buildERC20(opts: ERC20Options): Contract {
   return c;
 }
 
-function addBase(c: ContractBuilder, name: string, symbol: string, version: string, profileName: string, decimal: number) {
+function addBase(c: ContractBuilder, name: string, symbol: string, profileName: string, decimal: number) {
   c.addParent(
     {
       name: 'ERC20',
       path: '@livelyversenpm/litogen/contracts/token/ERC20/ERC20.sol',
     },
-    [name, symbol, version, profileName, { lit: 'acl_' }, decimal],
+    [name, symbol, profileName, { lit: 'acl_' }, decimal],
   );
 
   c.addConstructorArgument({
@@ -247,11 +242,11 @@ function addLockable(c: ContractBuilder) {
   c.addOverride("ERC20Lockable", supportsInterface);
 }
 
-function addPermitalble(c: ContractBuilder, name: string, version: string) {
+function addPermitalble(c: ContractBuilder, name: string) {
   c.addParent({
     name: 'ERC20Permitable',
     path: '@livelyversenpm/litogen/contracts/token/ERC20/extensions/ERC20Permitable.sol',
-  }, [name, version]);
+  }, [name]);
   c.addOverride("ERC20Permitable", supportsInterface);
 }
 
@@ -281,7 +276,7 @@ function addTaxable(c: ContractBuilder, taxRate: number) {
     '  super._transfer(from, _taxTreasury, tax);',
     '  super._transfer(from, to, amountMinesTax);',
     '} else {',
-    '  super._transfer(_msgSender(), to, amount);',
+    '  super._transfer(from, to, amount);',
     '}'
   ], functions._transfer)
 }
@@ -300,15 +295,19 @@ function addDistribution(c: ContractBuilder, taxable: boolean, totalSupply: numb
 
   c.addImportInterface('@livelyversenpm/litogen/contracts/token/ERC20/assets/IAsset.sol');
   c.addVariable('mapping(string => uint256) internal _distributes;');
+  c.addVariable('bool public isDistributed;');
+  c.addConstructorCode('isDistributed = false;');
 
   if(taxable) {
     distributeFn = c.addFunction(functions.distributeTokenAndTaxTreasury);
     c.setFunctionBody([
       '_tokenPolicyInterceptor(this.distributeToken.selector);',
+      'require(!isDistributed, "Already Distributed");',
+      'isDistributed = true;',
       '_taxTreasury = taxTreasury;',
       'for (uint256 i = 0; i < assets.length; i++) {',
       '  if (!IERC165(assets[i]).supportsInterface(type(IAsset).interfaceId)) revert("Illegal IAsset");',
-      '  _transfer(_msgSender(), assets[i], _distributes[IAsset(assets[i]).assetName()]);',
+      '  super._transfer(_msgSender(), assets[i], _distributes[IAsset(assets[i]).assetName()]);',
       '}'
     ], distributeFn);
 
@@ -316,9 +315,11 @@ function addDistribution(c: ContractBuilder, taxable: boolean, totalSupply: numb
     distributeFn = c.addFunction(functions.distributeToken);
     c.setFunctionBody([
       '_tokenPolicyInterceptor(this.distributeToken.selector);',
+      'require(!isDistributed, "Already Distributed");',
+      'isDistributed = true;',
       'for (uint256 i = 0; i < assets.length; i++) {',
       '  if (!IERC165(assets[i]).supportsInterface(type(IAsset).interfaceId)) revert("Illegal IAsset");',
-      '  _transfer(_msgSender(), assets[i], _distributes[IAsset(assets[i]).assetName()]);',
+      '  super._transfer(_msgSender(), assets[i], _distributes[IAsset(assets[i]).assetName()]);',
       '}'
     ], distributeFn);
 
@@ -337,7 +338,7 @@ function addDistribution(c: ContractBuilder, taxable: boolean, totalSupply: numb
     totalDistribute += distribute.assets[distribute.assets.length - 1].amount;
     if(totalDistribute != 100) throw new Error("Illegal Token Percentage Distribution");
 
-  } else if(distribute.unit === 'DECIMAL') {
+  } else if(distribute.unit === 'NUMBER') {
     for (const asset of distribute.assets) {
       c.addConstructorCode(`_distributes["${asset.assetName}"] = ${asset.amount} * 10 ** ${decimal};`)
       totalDistribute += asset.amount;
@@ -383,13 +384,13 @@ const functions = defineFunctions({
 });
 
 /////////////////////////////////////////////////////////////////////////
-function assetAddBase(c: ContractBuilder, name: string, version: string, profileName: string) {
+function assetAddBase(c: ContractBuilder, name: string, profileName: string) {
   c.addParent(
     {
       name: 'ERC20Asset',
       path: '@livelyversenpm/litogen/contracts/token/ERC20/assets/ERC20Asset.sol',
     },
-    [name, version, profileName, { lit: 'erc20Token_' }, { lit: 'acl_' } ],
+    [name, profileName, { lit: 'erc20Token_' }, { lit: 'acl_' } ],
   );
 
   c.addConstructorArgument({

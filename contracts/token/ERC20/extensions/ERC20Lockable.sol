@@ -5,6 +5,7 @@ pragma solidity 0.8.19;
 
 import "./IERC20Lockable.sol";
 import "../ERC20.sol";
+import "hardhat/console.sol";
 
 /**
  * @dev Extension of {ERC20} that allows admin to lock tokens in the period of time for specific account
@@ -83,10 +84,10 @@ abstract contract ERC20Lockable is ERC20, IERC20Lockable {
       lockRequest.source != address(0) && 
       lockRequest.dest != address(0) && 
       lockRequest.source != lockRequest.dest,
-      "Illegal Source/Dest Address"
+      "Invalid Source/Dest Address"
     );
     require(lockRequest.claimAt > block.timestamp + 1 days, "Illegal Timestamp");
-    require(lockRequest.amount > 0, "Illegal amount");
+    require(lockRequest.amount > 0, "Invalid Amount");
 
     bytes32 lockId = keccak256(
       abi.encodePacked(lockRequest.source, lockRequest.dest, lockRequest.claimAt, lockRequest.amount)
@@ -94,6 +95,7 @@ abstract contract ERC20Lockable is ERC20, IERC20Lockable {
     require(_locks[lockRequest.dest][lockId].source == address(0), "Already Exists");
 
     uint256 srcBalance = _balances[lockRequest.source];
+    // console.log("src Balance address: %s, balance: %d, amount: %d", lockRequest.source, srcBalance, lockRequest.amount);
     require(srcBalance >= lockRequest.amount, "Illegal Balance");
     unchecked {
       _balances[lockRequest.source] = srcBalance - lockRequest.amount;
@@ -118,7 +120,7 @@ abstract contract ERC20Lockable is ERC20, IERC20Lockable {
   }
 
   function _claimToken(bytes32 lockId) internal {
-    require(lockId != bytes32(0), "Illegal LockId");
+    require(lockId != bytes32(0), "Invalid LockId");
     require(_locks[_msgSender()][lockId].source != address(0), "Not Found");
     require(_locks[_msgSender()][lockId].claimedAt < uint128(block.timestamp), "Illegal Claim");
 
@@ -134,7 +136,7 @@ abstract contract ERC20Lockable is ERC20, IERC20Lockable {
   }
 
   function _unlockToken(UnLockTokenRequest calldata unlockRequest) internal {
-    require(unlockRequest.lockId != bytes32(0), "Illegal LockId");
+    require(unlockRequest.lockId != bytes32(0), "Invalid LockId");
     require(_locks[unlockRequest.account][unlockRequest.lockId].source != address(0), "LockId Not Found");
     require(
       _locks[unlockRequest.account][unlockRequest.lockId].status == LockState.LOCKED,

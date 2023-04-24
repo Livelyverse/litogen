@@ -44,8 +44,9 @@ abstract contract ERC20Taxable is ERC20, IERC20Taxable {
    * @dev get tax whitelist accounts
    */
   function taxWhitelist(uint256 offset) external view returns (address[] memory) {
-    address[] memory result = new address[](100);
-    for(uint256 i = 0; i + offset < _taxWhitelist.length() && i < 100; i++) {
+    uint length = _taxWhitelist.length();
+    address[] memory result = new address[](length > 100 ? 100 : length);
+    for(uint256 i = 0; i + offset < result.length && i < 100; i++) {
       result[i] = _taxWhitelist.at(i + offset);
     }
     return result;
@@ -103,7 +104,7 @@ abstract contract ERC20Taxable is ERC20, IERC20Taxable {
    * @dev Internal function to implement tax update whitelist.
    */
   function _taxUpdateWhitelist(address account, bool isDeleted) internal returns (bool) {
-    require(account != address(0), "Illegal Address");
+    require(account != address(0), "Invalid Address");
     if (isDeleted) {
       require(_taxWhitelist.contains(account), "Not Found");
       _taxWhitelist.remove(account);

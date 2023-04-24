@@ -21,14 +21,16 @@ import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 contract ERC20Asset is Context, ERC165, IERC20Asset, IAsset {
   using Address for address;
 
+  string constant internal _LITOGEN_ASSET_VERSION = "1.0.0";
+
   address internal _acl;
   bytes32 internal _profileId;
   address internal _erc20TokenId;
   string internal _assetName;
-  string internal _assetVersion;
-  AssetSafeModeStatus internal _assetSafeModeStatus;
+  // string internal _assetVersion;
+  AssetSafeModeStatus internal _assetSafeModeStatus;  
 
-  constructor(string memory assetName_, string memory assetVersion_, string memory profileName_, address erc20Token_, address acl_) {
+  constructor(string memory assetName_, string memory profileName_, address erc20Token_, address acl_) {
     require(Address.isContract(erc20Token_), "Invalid ERC20Token");
     if (!IERC165(erc20Token_).supportsInterface(type(IERC20).interfaceId)) revert("Illegal ERC20Token");
 
@@ -44,9 +46,9 @@ contract ERC20Asset is Context, ERC165, IERC20Asset, IAsset {
     }
 
     _assetName = assetName_;
-    _assetVersion = assetVersion_;
+    // _assetVersion = assetVersion_;
     _erc20TokenId = erc20Token_;
-    _assetSafeModeStatus = AssetSafeModeStatus.ENABLED;
+    _assetSafeModeStatus = AssetSafeModeStatus.DISABLED;
 
     _profileId = keccak256(abi.encodePacked(profileName_));
   }
@@ -114,8 +116,8 @@ contract ERC20Asset is Context, ERC165, IERC20Asset, IAsset {
     return _assetName;
   }
 
-  function assetVersion() external view returns (string memory) {
-    return _assetVersion;
+  function assetVersion() external pure returns (string memory) {
+    return _LITOGEN_ASSET_VERSION;
   }
 
   function assetAccessControl() external view returns (address) {
@@ -136,7 +138,7 @@ contract ERC20Asset is Context, ERC165, IERC20Asset, IAsset {
         profileId: _profileId,
         balance: IERC20(_erc20TokenId).balanceOf(address(this)),
         name: _assetName,
-        version: _assetVersion,
+        version: _LITOGEN_ASSET_VERSION,
         token: _erc20TokenId,
         accessControl: _acl,
         atype: AssetType.ERC20,

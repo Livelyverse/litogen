@@ -37,8 +37,8 @@ abstract contract ERC20Permitable is ERC20, IERC20Permitable, EIP712 {
      * @dev Initializes the {EIP712} domain separator using the `name` parameter, and setting `version` to `"1"`.
      *
      * It's a good idea to use the same `name` that is defined as the ERC20 token name.
-     */
-    constructor(string memory name_, string memory version_) EIP712(name_, version_) {}
+     */     
+    constructor(string memory name_) EIP712(name_, _LITOGEN_VERSION) {}
 
     /**
      * @dev See {IERC20Permit-permit}.
@@ -48,19 +48,17 @@ abstract contract ERC20Permitable is ERC20, IERC20Permitable, EIP712 {
         address spender,
         uint256 value,
         uint256 deadline,
-        uint8 v,
-        bytes32 r,
-        bytes32 s
+        bytes calldata signature
     ) public virtual override {
         _tokenPolicyInterceptor(this.permit.selector);
-        require(block.timestamp <= deadline, "ERC20Permit: expired deadline");
+        require(block.timestamp <= deadline, "Expired deadline");
 
         bytes32 structHash = keccak256(abi.encode(_PERMIT_TYPE_HASH, owner, spender, value, _useNonce(owner), deadline));
 
         bytes32 hash = _hashTypedDataV4(structHash);
 
-        address signer = ECDSA.recover(hash, v, r, s);
-        require(signer == owner, "ERC20Permit: invalid signature");
+        address signer = ECDSA.recover(hash, signature);
+        require(signer == owner, "Invalid signature");
 
         _approve(owner, spender, value);
     }

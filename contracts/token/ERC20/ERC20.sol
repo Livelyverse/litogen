@@ -17,7 +17,9 @@ import "../../access/IProfileACL.sol";
  * that a supply mechanism has to be added in a derived contract using {_mint}.
  *
  */
-contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {    
+contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {  
+    string constant internal _LITOGEN_VERSION = "1.0.0";
+     
 
     mapping(address => uint256) internal _balances;
     mapping(address => mapping(address => uint256)) internal _allowances;
@@ -26,7 +28,6 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
     address internal _acl;
     string private _name;
     string private _symbol;
-    string private _version;
     uint8 private _decimal;
     
 
@@ -42,7 +43,7 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
     constructor(
         string memory name_, 
         string memory symbol_, 
-        string memory version_, 
+        // string memory version_, 
         string memory profileName_,
         address acl_,
         uint8 decimal_        
@@ -60,7 +61,7 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
 
         _name = name_;
         _symbol = symbol_;
-        _version = version_;
+        // _version = version_;
         _decimal = decimal_;
         _profileId = keccak256(abi.encodePacked(profileName_));
     }
@@ -81,10 +82,10 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
     }
 
     /**
-     * @dev Returns the version of the token.
+     * @dev Returns the version of the Litogen.
      */
     function version() public view virtual override returns (string memory) {
-        return _version;
+        return _LITOGEN_VERSION;
     }
 
     /**
@@ -326,6 +327,10 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
     ) internal virtual {}
 
 
+    /**
+     * @dev Hook that is called before any transactional function of token.
+     * it authoriaze transaction sender by Lively Guard
+     */
     function _tokenPolicyInterceptor(bytes4 funcSelector) internal virtual {
       IProfileACL.ProfileAuthorizationStatus status = IProfileACL(_acl).profileHasAccountAccess(_profileId, address(this), funcSelector, _msgSender());
       if (status != IProfileACL.ProfileAuthorizationStatus.PERMITTED) revert IProfileACL.ProfileACLActionForbidden(status);

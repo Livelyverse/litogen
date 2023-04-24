@@ -21,30 +21,6 @@ abstract contract ERC20Pausable is ERC20, IERC20Pausable {
   bool internal _isPaused;
 
   /**
-   * @dev Modifier to make a function callable only when the contract is not paused.
-   *
-   * Requirements:
-   *
-   * - The contract must not be paused.
-   */
-  modifier whenNotPaused() {
-    _requireNotPaused();
-    _;
-  }
-
-  /**
-   * @dev Modifier to make a function callable only when the contract is paused.
-   *
-   * Requirements:
-   *
-   * - The contract must be paused.
-   */
-  modifier whenPaused() {
-    _requirePaused();
-    _;
-  }
-
-  /**
    * @dev Returns true if the contract is paused, and false otherwise.
    */
   function paused() public view virtual returns (bool) {
@@ -52,25 +28,11 @@ abstract contract ERC20Pausable is ERC20, IERC20Pausable {
   }
 
   /**
-   * @dev Throws if the contract is paused.
-   */
-  function _requireNotPaused() internal view virtual {
-    require(!paused(), "Pausable: paused");
-  }
-
-  /**
-   * @dev Throws if the contract is not paused.
-   */
-  function _requirePaused() internal view virtual {
-    require(paused(), "Pausable: not paused");
-  }
-
-  /**
    * @dev freeze account which prevents to transfer tokens
    */
   function pause(address account) external {
     _tokenPolicyInterceptor(this.pause.selector);
-    require(account != address(0), "Illegal Address");
+    require(account != address(0), "Invalid Address");
     require(!_pausedList.contains(account), "Already Paused");
     _pausedList.add(account);
     emit Paused(_msgSender(), account);
@@ -81,7 +43,7 @@ abstract contract ERC20Pausable is ERC20, IERC20Pausable {
    */
   function unpause(address account) external {
     _tokenPolicyInterceptor(this.unpause.selector);
-    require(account != address(0), "Illegal Address");
+    require(account != address(0), "Invalid Address");
     require(_pausedList.contains(account), "Not Found");
     _pausedList.remove(account);
     emit Unpaused(_msgSender(), account);
@@ -118,8 +80,9 @@ abstract contract ERC20Pausable is ERC20, IERC20Pausable {
   }
 
   function pausedAccounts(uint256 offset) external view returns (address[] memory) {
-    address[] memory result = new address[](100);
-    for(uint256 i = 0; i + offset < _pausedList.length() && i < 100; i++) {
+    uint length = _pausedList.length();  
+    address[] memory result = new address[](length > 100 ? 100 : length);
+    for(uint256 i = 0; i + offset < result.length && i < 100; i++) {
       result[i] = _pausedList.at(i + offset);
     }
     return result;

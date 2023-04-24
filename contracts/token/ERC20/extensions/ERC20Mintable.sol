@@ -57,8 +57,8 @@ abstract contract ERC20Mintable is ERC20, IERC20Mintable {
    * - `amount` should be grater than zero
    */
   function _mint(address sender, address account, uint256 amount) internal virtual {
-      require(account != address(0), "Mint: Invalid Address");
-      require(amount > 0, "Mint: Invalid Amount");
+      require(account != address(0), "Invalid Address");
+      require(amount > 0, "Invalid Amount");
 
       _totalSupply += amount;
       unchecked {

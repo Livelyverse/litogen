@@ -35,19 +35,19 @@ abstract contract ERC20Extra is ERC20, IERC20Extra {
   }
 
   /**
-  * @dev Atomically decreases the allowance granted to `spender` by the caller.
-  *
-  * This is an alternative to {approve} that can be used as a mitigation for
-  * problems described in {IERC20-approve}.
-  *
-  * Emits an {Approval} event indicating the updated allowance.
-  *
-  * Requirements:
-  *
-  * - `spender` cannot be the zero address.
-  * - `spender` must have allowance for the caller of at least
-  * `subtractedValue`.
-  */
+   * @dev Atomically decreases the allowance granted to `spender` by the caller.
+   *
+   * This is an alternative to {approve} that can be used as a mitigation for
+   * problems described in {IERC20-approve}.
+   *
+   * Emits an {Approval} event indicating the updated allowance.
+   *
+   * Requirements:
+   * 
+   * - `spender` cannot be the zero address.
+   * - `spender` must have allowance for the caller of at least
+   * `subtractedValue`.
+   */
   function decreaseAllowance(
       address spender,
       uint256 amount
@@ -59,9 +59,9 @@ abstract contract ERC20Extra is ERC20, IERC20Extra {
   }
 
   /**
-  * @dev batch transfer tokens from sender to many recipients.
-  *
-  */
+   * @dev batch transfer tokens from sender to many recipients.
+   *
+   */
   function batchTransfer(BatchTransferRequest[] calldata requests) external {
     _tokenPolicyInterceptor(this.batchTransfer.selector);
     for (uint256 i = 0; i < requests.length; i++) {
@@ -70,12 +70,12 @@ abstract contract ERC20Extra is ERC20, IERC20Extra {
   }
 
   /**
-  * @dev batch transfer tokens from many senders to many recipients.
-  *
-  */
+   * @dev batch transfer tokens from many from addresses to many recipients by one sender
+   */
   function batchTransferFrom(BatchTransferFromRequest[] calldata requests) external {
     _tokenPolicyInterceptor(this.batchTransferFrom.selector);
     for (uint256 i = 0; i < requests.length; i++) {
+        _spendAllowance(requests[i].from, _msgSender(), requests[i].amount);
         _transfer(requests[i].from, requests[i].to, requests[i].amount);
     }
   }
