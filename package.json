@@ -1,6 +1,6 @@
 {
   "name": "@livelyversenpm/litogen",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Lively Token Generator",
   "main": "index.js",
   "scripts": {
@@ -114,7 +114,7 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "@livelyversenpm/litogen": "^1.0.1",
+    "@livelyversenpm/litogen": "^1.0.2",
     "@openzeppelin/contracts": "^4.8.2",
     "@openzeppelin/contracts-upgradeable": "^4.8.2"
   }

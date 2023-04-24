@@ -1,5 +1,6 @@
 hardhat.config.ts
 artifacts/
+contracts/test/
 cache/
 test/
 scripts/

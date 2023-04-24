@@ -4,7 +4,6 @@
     <list default="true" id="c0f95897-d344-4a4d-9d91-8fddc7839041" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.npmignore" beforeDir="false" afterPath="$PROJECT_DIR$/.npmignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/contracts/test/ERC20TokenTest.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/test/ERC20TokenTest.sol" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/ERC20.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/token/ERC20/ERC20.sol" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/IERC20.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/token/ERC20/IERC20.sol" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/assets/ERC20Asset.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/token/ERC20/assets/ERC20Asset.sol" afterDir="false" />
@@ -31,24 +30,8 @@
       <change beforePath="$PROJECT_DIR$/contracts/token/ERC20/extensions/IERC20Taxable.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/token/ERC20/extensions/IERC20Taxable.sol" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/contracts/utils/BasisPointsMath.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/utils/BasisPointsMath.sol" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/contracts/utils/EIP712.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/utils/EIP712.sol" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/export/abi/ERC20.json" beforeDir="false" afterPath="$PROJECT_DIR$/export/abi/ERC20.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/export/abi/ERC20Asset.json" beforeDir="false" afterPath="$PROJECT_DIR$/export/abi/ERC20Asset.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/export/abi/ERC20AssetExtra.json" beforeDir="false" afterPath="$PROJECT_DIR$/export/abi/ERC20AssetExtra.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/export/abi/ERC20AssetLockable.json" beforeDir="false" afterPath="$PROJECT_DIR$/export/abi/ERC20AssetLockable.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/export/abi/FundingTeam.json" beforeDir="false" afterPath="$PROJECT_DIR$/export/abi/FundingTeam.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/export/abi/PublicSales.json" beforeDir="false" afterPath="$PROJECT_DIR$/export/abi/PublicSales.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/export/abi/TestToken.json" beforeDir="false" afterPath="$PROJECT_DIR$/export/abi/TestToken.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/export/types/contracts/test/ERC20TokenTest.sol/TestToken.ts" beforeDir="false" afterPath="$PROJECT_DIR$/export/types/contracts/test/ERC20TokenTest.sol/TestToken.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/export/types/factories/contracts/test/ERC20AssetFundingTeamTest.sol/FundingTeam__factory.ts" beforeDir="false" afterPath="$PROJECT_DIR$/export/types/factories/contracts/test/ERC20AssetFundingTeamTest.sol/FundingTeam__factory.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/export/types/factories/contracts/test/ERC20AssetPublicSalesTest.sol/PublicSales__factory.ts" beforeDir="false" afterPath="$PROJECT_DIR$/export/types/factories/contracts/test/ERC20AssetPublicSalesTest.sol/PublicSales__factory.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/export/types/factories/contracts/test/ERC20TokenTest.sol/TestToken__factory.ts" beforeDir="false" afterPath="$PROJECT_DIR$/export/types/factories/contracts/test/ERC20TokenTest.sol/TestToken__factory.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/export/types/factories/contracts/token/ERC20/ERC20__factory.ts" beforeDir="false" afterPath="$PROJECT_DIR$/export/types/factories/contracts/token/ERC20/ERC20__factory.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/export/types/factories/contracts/token/ERC20/assets/ERC20AssetExtra__factory.ts" beforeDir="false" afterPath="$PROJECT_DIR$/export/types/factories/contracts/token/ERC20/assets/ERC20AssetExtra__factory.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/export/types/factories/contracts/token/ERC20/assets/ERC20AssetLockable__factory.ts" beforeDir="false" afterPath="$PROJECT_DIR$/export/types/factories/contracts/token/ERC20/assets/ERC20AssetLockable__factory.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/export/types/factories/contracts/token/ERC20/assets/ERC20Asset__factory.ts" beforeDir="false" afterPath="$PROJECT_DIR$/export/types/factories/contracts/token/ERC20/assets/ERC20Asset__factory.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/ERC20TokenTest.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/test/ERC20TokenTest.test.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -185,7 +168,7 @@
       <workItem from="1681882801491" duration="34250000" />
       <workItem from="1682059573567" duration="12730000" />
       <workItem from="1682166670721" duration="14963000" />
-      <workItem from="1682311814730" duration="22189000" />
+      <workItem from="1682311814730" duration="22979000" />
     </task>
     <servers />
   </component>
