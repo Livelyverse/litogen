@@ -13,11 +13,6 @@
       },
       {
         "internalType": "string",
-        "name": "version_",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
         "name": "profileName_",
         "type": "string"
       },

@@ -1,5 +1,5 @@
 {
-  "name": "litogen",
+  "name": "@livelyversenpm/litogen",
   "version": "1.0.0",
   "description": "Lively Token Generator",
   "main": "index.js",
@@ -70,6 +70,7 @@
   },
   "homepage": "https://github.com/Livelyverse/litogen#readme",
   "devDependencies": {
+    "@livelyversenpm/litogen": "^1.0.0",
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.4",
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers",
     "@nomiclabs/hardhat-etherscan": "^3.1.2",

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Litogen Contracts (last updated v1.0.0)
+// Litogen Contracts (last updated v1.0.1)
 
 pragma solidity 0.8.19;
 
@@ -18,7 +18,7 @@ import "../../access/IProfileACL.sol";
  *
  */
 contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {  
-    string constant internal _LITOGEN_VERSION = "1.0.0";
+    string constant internal _LITOGEN_VERSION = "1.0.1";
      
 
     mapping(address => uint256) internal _balances;

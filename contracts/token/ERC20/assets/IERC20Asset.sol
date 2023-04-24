@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// LivelyVerse Contracts (last updated v1.0.0)
+// LivelyVerse Contracts (last updated v1.0.1)
 
 pragma solidity 0.8.19;
 

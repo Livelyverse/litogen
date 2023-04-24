@@ -8,11 +8,6 @@
       },
       {
         "internalType": "string",
-        "name": "assetVersion_",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
         "name": "profileName_",
         "type": "string"
       },
@@ -245,7 +240,7 @@
         "type": "string"
       }
     ],
-    "stateMutability": "view",
+    "stateMutability": "pure",
     "type": "function"
   },
   {

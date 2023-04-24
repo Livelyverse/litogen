@@ -129,6 +129,7 @@ export interface TestTokenInterface extends utils.Interface {
     "distributeToken(address[],address)": FunctionFragment;
     "domainSeperator()": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
+    "isDistributed()": FunctionFragment;
     "isPaused(address)": FunctionFragment;
     "isPausedAll()": FunctionFragment;
     "lockBalanceOf(address)": FunctionFragment;
@@ -191,6 +192,8 @@ export interface TestTokenInterface extends utils.Interface {
       | "domainSeperator()"
       | "increaseAllowance"
       | "increaseAllowance(address,uint256)"
+      | "isDistributed"
+      | "isDistributed()"
       | "isPaused"
       | "isPaused(address)"
       | "isPausedAll"
@@ -355,6 +358,14 @@ export interface TestTokenInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "increaseAllowance(address,uint256)",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "isDistributed",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "isDistributed()",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "isPaused",
@@ -661,6 +672,14 @@ export interface TestTokenInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "increaseAllowance(address,uint256)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "isDistributed",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "isDistributed()",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "isPaused", data: BytesLike): Result;
@@ -1219,6 +1238,10 @@ export interface TestToken extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    isDistributed(overrides?: CallOverrides): Promise<[boolean]>;
+
+    "isDistributed()"(overrides?: CallOverrides): Promise<[boolean]>;
+
     isPaused(
       account: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -1614,6 +1637,10 @@ export interface TestToken extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  isDistributed(overrides?: CallOverrides): Promise<boolean>;
+
+  "isDistributed()"(overrides?: CallOverrides): Promise<boolean>;
+
   isPaused(
     account: PromiseOrValue<string>,
     overrides?: CallOverrides
@@ -2008,6 +2035,10 @@ export interface TestToken extends BaseContract {
       amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    isDistributed(overrides?: CallOverrides): Promise<boolean>;
+
+    "isDistributed()"(overrides?: CallOverrides): Promise<boolean>;
 
     isPaused(
       account: PromiseOrValue<string>,
@@ -2551,6 +2582,10 @@ export interface TestToken extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    isDistributed(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "isDistributed()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     isPaused(
       account: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -2948,6 +2983,10 @@ export interface TestToken extends BaseContract {
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
+
+    isDistributed(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "isDistributed()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     isPaused(
       account: PromiseOrValue<string>,

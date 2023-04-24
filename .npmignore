@@ -1,6 +1,8 @@
 hardhat.config.ts
-src/
-export/artifacts
+artifacts/
+cache/
+test/
+scripts/
 build
 deployments
 .idea/

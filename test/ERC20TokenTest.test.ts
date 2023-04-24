@@ -84,7 +84,7 @@ describe('Litogen Token and Assets Tests', function() {
     // then
     expect(await erc20TokenTest.name()).to.be.equal("TestToken");
     expect(await erc20TokenTest.symbol()).to.be.equal("Test");
-    expect(await erc20TokenTest.version()).to.be.equal("1.0.0");
+    expect(await erc20TokenTest.version()).to.be.equal("1.0.1");
     expect(await erc20TokenTest.decimals()).to.be.equal(9);
     expect(await erc20TokenTest.totalSupply()).to.be.equal(totalSupply);
     expect(await erc20TokenTest.profileId()).to.be.equal(ethers.utils.keccak256(ethers.utils.toUtf8Bytes("TestProfile")));
@@ -101,7 +101,7 @@ describe('Litogen Token and Assets Tests', function() {
     // then
     expect(await publicSaleAsset.assetName()).to.be.equal("publicSales");
     expect(await publicSaleAsset.assetType()).to.be.equal(AssetType.ERC20);
-    expect(await publicSaleAsset.assetVersion()).to.be.equal("1.0.0");
+    expect(await publicSaleAsset.assetVersion()).to.be.equal("1.0.1");
     expect(await publicSaleAsset.assetProfileId()).to.be.equal(ethers.utils.keccak256(ethers.utils.toUtf8Bytes("TestProfile")));
     expect(await publicSaleAsset.assetToken()).to.be.equal(erc20TokenTest.address);
     expect(await publicSaleAsset.assetAccessControl()).to.be.equal(livelyGuard.address);
@@ -111,7 +111,7 @@ describe('Litogen Token and Assets Tests', function() {
     // and
     const assetInfo: IAsset.AssetInfoStruct = await publicSaleAsset.assetInfo();
     expect(assetInfo.name).to.be.equal("publicSales");
-    expect(assetInfo.version).to.be.equal("1.0.0");
+    expect(assetInfo.version).to.be.equal("1.0.1");
     expect(assetInfo.atype).to.be.equal(AssetType.ERC20);
     expect(assetInfo.accessControl).to.be.equal(livelyGuard.address);
     expect(assetInfo.token).to.be.equal(erc20TokenTest.address);
@@ -130,7 +130,7 @@ describe('Litogen Token and Assets Tests', function() {
     // then
     expect(await fundingTeamAsset.assetName()).to.be.equal("fundingTeam");
     expect(await fundingTeamAsset.assetType()).to.be.equal(AssetType.ERC20);
-    expect(await fundingTeamAsset.assetVersion()).to.be.equal("1.0.0");
+    expect(await fundingTeamAsset.assetVersion()).to.be.equal("1.0.1");
     expect(await fundingTeamAsset.assetProfileId()).to.be.equal(ethers.utils.keccak256(ethers.utils.toUtf8Bytes("TestProfile")));
     expect(await fundingTeamAsset.assetToken()).to.be.equal(erc20TokenTest.address);
     expect(await fundingTeamAsset.assetAccessControl()).to.be.equal(livelyGuard.address);
@@ -140,7 +140,7 @@ describe('Litogen Token and Assets Tests', function() {
     // and
     const assetInfo: IAsset.AssetInfoStruct = await fundingTeamAsset.assetInfo();
     expect(assetInfo.name).to.be.equal("fundingTeam");
-    expect(assetInfo.version).to.be.equal("1.0.0");
+    expect(assetInfo.version).to.be.equal("1.0.1");
     expect(assetInfo.atype).to.be.equal(AssetType.ERC20);
     expect(assetInfo.accessControl).to.be.equal(livelyGuard.address);
     expect(assetInfo.token).to.be.equal(erc20TokenTest.address);
