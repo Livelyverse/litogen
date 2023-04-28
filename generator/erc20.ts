@@ -110,7 +110,7 @@ export function printERC20Asset(opts: ERC20AssetOptions = assetDefaults): string
 export function buildERC20Asset(opts: ERC20AssetOptions): Contract {
   const allOpts = withAssetDefaults(opts);
 
-  const c = new ContractBuilder(allOpts.name);
+  const c = new ContractBuilder(allOpts.name, allOpts.license);
 
   assetAddBase(c, allOpts.name, allOpts.profileName);
 
@@ -130,7 +130,7 @@ export function buildERC20Asset(opts: ERC20AssetOptions): Contract {
 export function buildERC20(opts: ERC20Options): Contract {
   const allOpts = withDefaults(opts);
 
-  const c = new ContractBuilder(allOpts.name);
+  const c = new ContractBuilder(allOpts.name, allOpts.license);
 
   addBase(c, allOpts.name, allOpts.symbol, allOpts.profileName, allOpts.decimal);
 

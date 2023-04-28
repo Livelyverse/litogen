@@ -566,15 +566,6 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@livelyversenpm/litogen@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@livelyversenpm/litogen/-/litogen-1.0.2.tgz#36efb4a0460e02a1f3b5cfdf1a28d2477080da34"
-  integrity sha512-2bGxv48VbEdfY5v3WRMu9Aw3h3MTo9J9/CVRP9nEjktYUzkNWSEkXG4P4Iv/pEHEx5gyLlUMwJWEMIK+4ljxgQ==
-  dependencies:
-    "@livelyversenpm/litogen" "^1.0.2"
-    "@openzeppelin/contracts" "^4.8.2"
-    "@openzeppelin/contracts-upgradeable" "^4.8.2"
-
 "@metamask/eth-sig-util@^4.0.0":
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/@metamask/eth-sig-util/-/eth-sig-util-4.0.1.tgz#3ad61f6ea9ad73ba5b19db780d40d9aae5157088"

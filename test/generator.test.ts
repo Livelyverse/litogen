@@ -18,7 +18,7 @@ describe('Litogen Generator Tests', function() {
         taxRate: 3,
         totalSupply: 10000,
         decimal: 9,
-        license: 'MIT',
+        license: 'APACHE',
         distribute: {
           unit: "NUMBER",
           assets: [

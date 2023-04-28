@@ -71,7 +71,7 @@ export interface NatspecTag {
 
 export class ContractBuilder implements Contract {
   readonly name: string;
-  license: string = 'MIT';
+  license: string;
   upgradeable = false;
 
   readonly using: Using[] = [];
@@ -85,8 +85,9 @@ export class ContractBuilder implements Contract {
   private parentMap: Map<string, Parent> = new Map<string, Parent>();
   private functionMap: Map<string, ContractFunction> = new Map();
 
-  constructor(name: string) {
+  constructor(name: string, license: string) {
     this.name = identifier(name, true);
+    this.license = identifier(license, true);
   }
 
   get parents(): Parent[] {
