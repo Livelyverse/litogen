@@ -35,12 +35,16 @@ export interface ERC20Interface extends utils.Interface {
     "balanceOf(address)": FunctionFragment;
     "decimals()": FunctionFragment;
     "name()": FunctionFragment;
-    "profileId()": FunctionFragment;
+    "owner()": FunctionFragment;
+    "profile()": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
+    "setProfile(string)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
     "totalSupply()": FunctionFragment;
     "transfer(address,uint256)": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
     "version()": FunctionFragment;
   };
 
@@ -58,8 +62,14 @@ export interface ERC20Interface extends utils.Interface {
       | "decimals()"
       | "name"
       | "name()"
-      | "profileId"
-      | "profileId()"
+      | "owner"
+      | "owner()"
+      | "profile"
+      | "profile()"
+      | "renounceOwnership"
+      | "renounceOwnership()"
+      | "setProfile"
+      | "setProfile(string)"
       | "supportsInterface"
       | "supportsInterface(bytes4)"
       | "symbol"
@@ -70,6 +80,8 @@ export interface ERC20Interface extends utils.Interface {
       | "transfer(address,uint256)"
       | "transferFrom"
       | "transferFrom(address,address,uint256)"
+      | "transferOwnership"
+      | "transferOwnership(address)"
       | "version"
       | "version()"
   ): FunctionFragment;
@@ -107,10 +119,25 @@ export interface ERC20Interface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "name()", values?: undefined): string;
-  encodeFunctionData(functionFragment: "profileId", values?: undefined): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(functionFragment: "owner()", values?: undefined): string;
+  encodeFunctionData(functionFragment: "profile", values?: undefined): string;
+  encodeFunctionData(functionFragment: "profile()", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "profileId()",
+    functionFragment: "renounceOwnership",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "renounceOwnership()",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setProfile",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setProfile(string)",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
@@ -154,6 +181,14 @@ export interface ERC20Interface extends utils.Interface {
       PromiseOrValue<BigNumberish>
     ]
   ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership(address)",
+    values: [PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(functionFragment: "version", values?: undefined): string;
   encodeFunctionData(functionFragment: "version()", values?: undefined): string;
 
@@ -178,9 +213,21 @@ export interface ERC20Interface extends utils.Interface {
   decodeFunctionResult(functionFragment: "decimals()", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name()", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "profileId", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner()", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "profile", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "profile()", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "profileId()",
+    functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceOwnership()",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "setProfile", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setProfile(string)",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -214,17 +261,35 @@ export interface ERC20Interface extends utils.Interface {
     functionFragment: "transferFrom(address,address,uint256)",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership(address)",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "version", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "version()", data: BytesLike): Result;
 
   events: {
     "Approval(address,address,uint256)": EventFragment;
+    "OwnershipTransferred(address,address)": EventFragment;
+    "ProfileUpdated(address,string,string)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(
     nameOrSignatureOrTopic: "Approval(address,address,uint256)"
+  ): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(
+    nameOrSignatureOrTopic: "OwnershipTransferred(address,address)"
+  ): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ProfileUpdated"): EventFragment;
+  getEvent(
+    nameOrSignatureOrTopic: "ProfileUpdated(address,string,string)"
   ): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
   getEvent(
@@ -243,6 +308,30 @@ export type ApprovalEvent = TypedEvent<
 >;
 
 export type ApprovalEventFilter = TypedEventFilter<ApprovalEvent>;
+
+export interface OwnershipTransferredEventObject {
+  previousOwner: string;
+  newOwner: string;
+}
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string],
+  OwnershipTransferredEventObject
+>;
+
+export type OwnershipTransferredEventFilter =
+  TypedEventFilter<OwnershipTransferredEvent>;
+
+export interface ProfileUpdatedEventObject {
+  sender: string;
+  oldProfile: string;
+  newProfile: string;
+}
+export type ProfileUpdatedEvent = TypedEvent<
+  [string, string, string],
+  ProfileUpdatedEventObject
+>;
+
+export type ProfileUpdatedEventFilter = TypedEventFilter<ProfileUpdatedEvent>;
 
 export interface TransferEventObject {
   from: string;
@@ -329,9 +418,31 @@ export interface ERC20 extends BaseContract {
 
     "name()"(overrides?: CallOverrides): Promise<[string]>;
 
-    profileId(overrides?: CallOverrides): Promise<[string]>;
+    owner(overrides?: CallOverrides): Promise<[string]>;
 
-    "profileId()"(overrides?: CallOverrides): Promise<[string]>;
+    "owner()"(overrides?: CallOverrides): Promise<[string]>;
+
+    profile(overrides?: CallOverrides): Promise<[string]>;
+
+    "profile()"(overrides?: CallOverrides): Promise<[string]>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    "renounceOwnership()"(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setProfile(
+      profileName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    "setProfile(string)"(
+      profileName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
@@ -374,6 +485,16 @@ export interface ERC20 extends BaseContract {
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    "transferOwnership(address)"(
+      newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -428,9 +549,31 @@ export interface ERC20 extends BaseContract {
 
   "name()"(overrides?: CallOverrides): Promise<string>;
 
-  profileId(overrides?: CallOverrides): Promise<string>;
+  owner(overrides?: CallOverrides): Promise<string>;
 
-  "profileId()"(overrides?: CallOverrides): Promise<string>;
+  "owner()"(overrides?: CallOverrides): Promise<string>;
+
+  profile(overrides?: CallOverrides): Promise<string>;
+
+  "profile()"(overrides?: CallOverrides): Promise<string>;
+
+  renounceOwnership(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  "renounceOwnership()"(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setProfile(
+    profileName: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  "setProfile(string)"(
+    profileName: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   supportsInterface(
     interfaceId: PromiseOrValue<BytesLike>,
@@ -473,6 +616,16 @@ export interface ERC20 extends BaseContract {
     from: PromiseOrValue<string>,
     to: PromiseOrValue<string>,
     amount: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  transferOwnership(
+    newOwner: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  "transferOwnership(address)"(
+    newOwner: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -527,9 +680,27 @@ export interface ERC20 extends BaseContract {
 
     "name()"(overrides?: CallOverrides): Promise<string>;
 
-    profileId(overrides?: CallOverrides): Promise<string>;
+    owner(overrides?: CallOverrides): Promise<string>;
 
-    "profileId()"(overrides?: CallOverrides): Promise<string>;
+    "owner()"(overrides?: CallOverrides): Promise<string>;
+
+    profile(overrides?: CallOverrides): Promise<string>;
+
+    "profile()"(overrides?: CallOverrides): Promise<string>;
+
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    "renounceOwnership()"(overrides?: CallOverrides): Promise<void>;
+
+    setProfile(
+      profileName: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "setProfile(string)"(
+      profileName: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
@@ -575,6 +746,16 @@ export interface ERC20 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "transferOwnership(address)"(
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     version(overrides?: CallOverrides): Promise<string>;
 
     "version()"(overrides?: CallOverrides): Promise<string>;
@@ -591,6 +772,26 @@ export interface ERC20 extends BaseContract {
       spender?: PromiseOrValue<string> | null,
       value?: null
     ): ApprovalEventFilter;
+
+    "OwnershipTransferred(address,address)"(
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
+    ): OwnershipTransferredEventFilter;
+    OwnershipTransferred(
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
+    ): OwnershipTransferredEventFilter;
+
+    "ProfileUpdated(address,string,string)"(
+      sender?: PromiseOrValue<string> | null,
+      oldProfile?: PromiseOrValue<string> | null,
+      newProfile?: PromiseOrValue<string> | null
+    ): ProfileUpdatedEventFilter;
+    ProfileUpdated(
+      sender?: PromiseOrValue<string> | null,
+      oldProfile?: PromiseOrValue<string> | null,
+      newProfile?: PromiseOrValue<string> | null
+    ): ProfileUpdatedEventFilter;
 
     "Transfer(address,address,uint256)"(
       from?: PromiseOrValue<string> | null,
@@ -651,9 +852,31 @@ export interface ERC20 extends BaseContract {
 
     "name()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    profileId(overrides?: CallOverrides): Promise<BigNumber>;
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "profileId()"(overrides?: CallOverrides): Promise<BigNumber>;
+    "owner()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    profile(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "profile()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    "renounceOwnership()"(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setProfile(
+      profileName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    "setProfile(string)"(
+      profileName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
@@ -696,6 +919,16 @@ export interface ERC20 extends BaseContract {
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    "transferOwnership(address)"(
+      newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -751,9 +984,31 @@ export interface ERC20 extends BaseContract {
 
     "name()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    profileId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "profileId()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    "owner()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    profile(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "profile()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "renounceOwnership()"(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setProfile(
+      profileName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "setProfile(string)"(
+      profileName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
@@ -796,6 +1051,16 @@ export interface ERC20 extends BaseContract {
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "transferOwnership(address)"(
+      newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

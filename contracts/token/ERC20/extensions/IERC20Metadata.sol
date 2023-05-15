@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Litogen Contracts (last updated v1.0.2)
+// Litogen Contracts (last updated v1.1.0)
 
 pragma solidity 0.8.19;
 
@@ -11,6 +11,9 @@ import "../IERC20.sol";
  *
  */
 interface IERC20Metadata is IERC20 {
+
+    event ProfileUpdated(address indexed sender, string indexed oldProfile, string indexed newProfile);
+
     /**
      * @dev Returns the name of the token.
      */
@@ -39,5 +42,10 @@ interface IERC20Metadata is IERC20 {
     /**
      * @dev Returns the Profile ID of the token.
      */
-    function profileId() external view returns (bytes32);
+    function profile() external view returns (string memory);
+
+    /**
+     * @dev Change the Profile of the token.
+     */
+    function setProfile(string memory profile) external;
 }

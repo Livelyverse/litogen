@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export { IProfileACL__factory } from "./IProfileACL__factory";
+export { Ownable__factory } from "./Ownable__factory";

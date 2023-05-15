@@ -5,7 +5,6 @@ pragma solidity 0.8.19;
 
 import "./IERC20Lockable.sol";
 import "../ERC20.sol";
-import "hardhat/console.sol";
 
 /**
  * @dev Extension of {ERC20} that allows admin to lock tokens in the period of time for specific account
@@ -19,7 +18,7 @@ abstract contract ERC20Lockable is ERC20, IERC20Lockable {
    * @dev lock number of tokens for specific account in the period of time
    */
   function lockToken(LockTokenRequest[] calldata lockRequest) external {
-    _tokenPolicyInterceptor(this.lockToken.selector);
+    _policyInterceptor(this.lockToken.selector);
     for (uint256 i = 0; i < lockRequest.length; i++) {
       _lockToken(lockRequest[i]);
     }
@@ -29,7 +28,7 @@ abstract contract ERC20Lockable is ERC20, IERC20Lockable {
    * @dev deposite number of tokens by lock ID to specified account in lock info 
    */
   function claimToken(bytes32[] calldata lockIds) external {
-    _tokenPolicyInterceptor(this.claimToken.selector);
+    _policyInterceptor(this.claimToken.selector);
     for (uint256 i = 0; i < lockIds.length; i++) {
       _claimToken(lockIds[i]);
     }
@@ -39,7 +38,7 @@ abstract contract ERC20Lockable is ERC20, IERC20Lockable {
    * @dev unlock number of tokens by lock ID and deposite those to source account
    */
   function unlockToken(UnLockTokenRequest[] calldata unlockRequest) external {
-    _tokenPolicyInterceptor(this.unlockToken.selector);
+    _policyInterceptor(this.unlockToken.selector);
     for (uint256 i = 0; i < unlockRequest.length; i++) {      
       _unlockToken(unlockRequest[i]);
     }
@@ -95,7 +94,6 @@ abstract contract ERC20Lockable is ERC20, IERC20Lockable {
     require(_locks[lockRequest.dest][lockId].source == address(0), "Already Exists");
 
     uint256 srcBalance = _balances[lockRequest.source];
-    // console.log("src Balance address: %s, balance: %d, amount: %d", lockRequest.source, srcBalance, lockRequest.amount);
     require(srcBalance >= lockRequest.amount, "Illegal Balance");
     unchecked {
       _balances[lockRequest.source] = srcBalance - lockRequest.amount;
@@ -161,5 +159,16 @@ abstract contract ERC20Lockable is ERC20, IERC20Lockable {
       lockAmount,
       unlockRequest.reason
     );    
+  }
+
+  /**
+   * @dev Hook that is called before any transactional function of token.
+   * it authoriaze transaction sender by Liguard
+   */
+  function _policyInterceptor(bytes4 funcSelector) internal override virtual {
+      super._policyInterceptor(funcSelector);
+      if(_owner != address(0) && funcSelector == this.unlockToken.selector) {
+         _checkOwner();
+      }
   }
 }

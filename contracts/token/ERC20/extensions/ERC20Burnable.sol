@@ -17,7 +17,7 @@ abstract contract ERC20Burnable is ERC20, IERC20Burnable {
      * See {ERC20-_burn}.
      */
     function burn(uint256 amount) external virtual {
-        _tokenPolicyInterceptor(this.burn.selector);
+        _policyInterceptor(this.burn.selector);
         _burn(_msgSender(), _msgSender(), amount);
     }
 
@@ -33,7 +33,7 @@ abstract contract ERC20Burnable is ERC20, IERC20Burnable {
      * `amount`.
      */
     function burnFrom(address account, uint256 amount) external virtual {
-        _tokenPolicyInterceptor(this.burnFrom.selector);
+        _policyInterceptor(this.burnFrom.selector);
         _burn(_msgSender(), account, amount);
     }
 
@@ -77,5 +77,16 @@ abstract contract ERC20Burnable is ERC20, IERC20Burnable {
         }
 
         emit Burn(sender, account, amount, _totalSupply);
+    }
+
+     /**
+     * @dev Hook that is called before any transactional function of token.
+     * it authoriaze transaction sender by Liguard
+     */
+    function _policyInterceptor(bytes4 funcSelector) internal override virtual {
+        super._policyInterceptor(funcSelector);
+        if(_owner != address(0) && funcSelector == this.burnFrom.selector || funcSelector == this.burn.selector) {
+           _checkOwner();
+        }
     }
 }

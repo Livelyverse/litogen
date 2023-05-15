@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Litogen Contracts (last updated v1.0.3)
+// Litogen Contracts (last updated v1.1.0)
 
 pragma solidity 0.8.19;
 
@@ -7,6 +7,7 @@ import "./IAsset.sol";
 import "./IERC20Asset.sol";
 import "../IERC20.sol";
 import "../../../access/IProfileACL.sol";
+import "../../../access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
@@ -18,39 +19,27 @@ import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
  * @dev
  *
  */
-contract ERC20Asset is Context, ERC165, IERC20Asset, IAsset {
+contract ERC20Asset is Ownable, ERC165, IERC20Asset, IAsset {
   using Address for address;
 
-  string constant internal _LITOGEN_ASSET_VERSION = "1.0.3";
+  string constant internal _LITOGEN_ASSET_VERSION = "1.1.0";
 
   address internal _acl;
-  bytes32 internal _profileId;
+  string internal _profileName;
   address internal _erc20TokenId;
   string internal _assetName;
-  // string internal _assetVersion;
   AssetSafeModeStatus internal _assetSafeModeStatus;  
 
-  constructor(string memory assetName_, string memory profileName_, address erc20Token_, address acl_) {
+  constructor(string memory assetName_, string memory profileName_, address erc20Token_) {
+    require(bytes(assetName_).length >= 4, "Invalid Name");
     require(Address.isContract(erc20Token_), "Invalid ERC20Token");
     if (!IERC165(erc20Token_).supportsInterface(type(IERC20).interfaceId)) revert("Illegal ERC20Token");
 
-    if(acl_ != address(0)) {
-      require(Address.isContract(acl_), "Invalid ACL");
-      if (!IERC165(acl_).supportsInterface(type(IProfileACL).interfaceId)) {
-        revert("Illegal ACL");            
-      }
-      _acl = acl_;
-    } else {
-      // Lively Guard contract address in the Polygon network
-      _acl = 0xF5a6FEfBE1a23653fB8A72B1730ba447c73fb993;
-    }
-
     _assetName = assetName_;
-    // _assetVersion = assetVersion_;
     _erc20TokenId = erc20Token_;
     _assetSafeModeStatus = AssetSafeModeStatus.DISABLED;
 
-    _profileId = keccak256(abi.encodePacked(profileName_));
+    _profileName = profileName_;
   }
 
   /**
@@ -62,6 +51,13 @@ contract ERC20Asset is Context, ERC165, IERC20Asset, IAsset {
       interfaceId == type(IERC20Asset).interfaceId ||
       super.supportsInterface(interfaceId);
   }
+
+  function assetSetProfile(string memory profileName) external {
+    _policyInterceptor(this.assetSetProfile.selector);
+    emit AssetProfileUpdated(_msgSender(), _profileName, profileName);
+    _profileName = profileName;
+  }
+
 
   function tokenTransfer(address to, uint256 amount) external returns (bool) {
     _policyInterceptor(this.tokenTransfer.selector);
@@ -84,7 +80,7 @@ contract ERC20Asset is Context, ERC165, IERC20Asset, IAsset {
 
   function assetSetSafeMode(AssetSafeModeStatus status) public override returns (bool) {
     IProfileACL.ProfileAuthorizationStatus aclStatus = IProfileACL(_acl).profileHasAccountAccess(
-      _profileId,
+      keccak256(abi.encodePacked(_profileName)),
       address(this),
       this.assetSetSafeMode.selector,
       _msgSender()
@@ -124,8 +120,8 @@ contract ERC20Asset is Context, ERC165, IERC20Asset, IAsset {
     return _acl;
   }
 
-  function assetProfileId() external view returns (bytes32) {
-    return _profileId;
+  function assetProfile() external view returns (string memory) {
+    return _profileName;
   }
 
   function assetBalance() external view returns (uint256) {
@@ -135,12 +131,13 @@ contract ERC20Asset is Context, ERC165, IERC20Asset, IAsset {
   function assetInfo() external view returns (AssetInfo memory) {
     return
       AssetInfo({
-        profileId: _profileId,
         balance: IERC20(_erc20TokenId).balanceOf(address(this)),
+        profile: _profileName,
         name: _assetName,
         version: _LITOGEN_ASSET_VERSION,
         token: _erc20TokenId,
         accessControl: _acl,
+        owner: _owner,
         atype: AssetType.ERC20,
         status: _assetSafeModeStatus
       });
@@ -156,14 +153,38 @@ contract ERC20Asset is Context, ERC165, IERC20Asset, IAsset {
     return address(this).balance;
   }
 
-  function _policyInterceptor(bytes4 funcSelector) internal {
-    require(_assetSafeModeStatus == AssetSafeModeStatus.DISABLED, "SafeMode: Rejected");
-    IProfileACL.ProfileAuthorizationStatus aclStatus = IProfileACL(_acl).profileHasAccountAccess(
-      _profileId,
-      address(this),
-      funcSelector,
-      _msgSender()
-    );
-    if (aclStatus != IProfileACL.ProfileAuthorizationStatus.PERMITTED) revert IProfileACL.ProfileACLActionForbidden(aclStatus);
+  /**
+   * @dev Hook that is called before any transactional function of token.
+   * it authoriaze transaction sender by Liguard or by ownable 
+   */
+  function _policyInterceptor(bytes4 funcSelector) internal virtual {
+    if(_acl != address(0)) { 
+      IProfileACL.ProfileAuthorizationStatus status = IProfileACL(_acl).profileHasAccountAccess(keccak256(abi.encodePacked(_profileName)), address(this), funcSelector, _msgSender());
+      if (status != IProfileACL.ProfileAuthorizationStatus.PERMITTED) revert IProfileACL.ProfileACLActionForbidden(status);
+    } else if(funcSelector == this.transferOwnership.selector){
+      _checkOwner();
+    }
+  }
+
+  /**
+   * @dev Transfers ownership of the contract to a new account (`newOwner`).
+   * Internal function without access restriction.
+   */
+  function _transferOwnership(address newOwner) internal override virtual {        
+     _policyInterceptor(this.transferOwnership.selector);
+    address oldOwner = _owner;
+    address oldAcl = _acl;
+    if (Address.isContract(newOwner)) {
+      if (!IERC165(newOwner).supportsInterface(type(IProfileACL).interfaceId)) {
+        revert("Illegal ACL");                    
+      }
+      _acl = newOwner;
+      _owner = address(0);  
+    } else {        
+      _owner = newOwner;
+      _acl = address(0);
+    }         
+    
+    emit OwnershipTransferred(oldOwner != address(0) ? oldOwner : oldAcl, newOwner);
   }
 }

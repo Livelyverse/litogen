@@ -16,7 +16,7 @@ abstract contract ERC20Mintable is ERC20, IERC20Mintable {
    * the total supply.
    */
   function mint(uint256 amount) external virtual {
-    _tokenPolicyInterceptor(this.mint.selector);
+    _policyInterceptor(this.mint.selector);
     _mint(_msgSender(), _msgSender(), amount);
   }
 
@@ -29,7 +29,7 @@ abstract contract ERC20Mintable is ERC20, IERC20Mintable {
    * - `account` cannot be the zero address.
    */
   function mintTo(address account, uint256 amount) external virtual {
-    _tokenPolicyInterceptor(this.mintTo.selector);
+    _policyInterceptor(this.mintTo.selector);
     _mint(_msgSender(), account, amount);
   }
 
@@ -67,4 +67,14 @@ abstract contract ERC20Mintable is ERC20, IERC20Mintable {
       emit Mint(sender, account, amount, _totalSupply);
   }
 
+  /**
+   * @dev Hook that is called before any transactional function of token.
+   * it authoriaze transaction sender by Liguard
+   */
+  function _policyInterceptor(bytes4 funcSelector) internal override virtual {
+    super._policyInterceptor(funcSelector);
+    if(_owner != address(0) && funcSelector == this.mint.selector || funcSelector == this.mintTo.selector) {
+       _checkOwner();
+    }
+  }
 }

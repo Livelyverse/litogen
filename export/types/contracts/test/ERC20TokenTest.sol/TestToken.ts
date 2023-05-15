@@ -139,12 +139,15 @@ export interface TestTokenInterface extends utils.Interface {
     "mintTo(address,uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "nonces(address)": FunctionFragment;
+    "owner()": FunctionFragment;
     "pause(address)": FunctionFragment;
     "pauseAll()": FunctionFragment;
     "paused()": FunctionFragment;
     "pausedAccounts(uint256)": FunctionFragment;
     "permit(address,address,uint256,uint256,bytes)": FunctionFragment;
-    "profileId()": FunctionFragment;
+    "profile()": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
+    "setProfile(string)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
     "taxRate()": FunctionFragment;
@@ -156,6 +159,7 @@ export interface TestTokenInterface extends utils.Interface {
     "totalSupply()": FunctionFragment;
     "transfer(address,uint256)": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
     "unlockToken((bytes32,address,string)[])": FunctionFragment;
     "unpause(address)": FunctionFragment;
     "unpauseAll()": FunctionFragment;
@@ -212,6 +216,8 @@ export interface TestTokenInterface extends utils.Interface {
       | "name()"
       | "nonces"
       | "nonces(address)"
+      | "owner"
+      | "owner()"
       | "pause"
       | "pause(address)"
       | "pauseAll"
@@ -222,8 +228,12 @@ export interface TestTokenInterface extends utils.Interface {
       | "pausedAccounts(uint256)"
       | "permit"
       | "permit(address,address,uint256,uint256,bytes)"
-      | "profileId"
-      | "profileId()"
+      | "profile"
+      | "profile()"
+      | "renounceOwnership"
+      | "renounceOwnership()"
+      | "setProfile"
+      | "setProfile(string)"
       | "supportsInterface"
       | "supportsInterface(bytes4)"
       | "symbol"
@@ -246,6 +256,8 @@ export interface TestTokenInterface extends utils.Interface {
       | "transfer(address,uint256)"
       | "transferFrom"
       | "transferFrom(address,address,uint256)"
+      | "transferOwnership"
+      | "transferOwnership(address)"
       | "unlockToken"
       | "unlockToken((bytes32,address,string)[])"
       | "unpause"
@@ -433,6 +445,8 @@ export interface TestTokenInterface extends utils.Interface {
     functionFragment: "nonces(address)",
     values: [PromiseOrValue<string>]
   ): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(functionFragment: "owner()", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "pause",
     values: [PromiseOrValue<string>]
@@ -476,10 +490,23 @@ export interface TestTokenInterface extends utils.Interface {
       PromiseOrValue<BytesLike>
     ]
   ): string;
-  encodeFunctionData(functionFragment: "profileId", values?: undefined): string;
+  encodeFunctionData(functionFragment: "profile", values?: undefined): string;
+  encodeFunctionData(functionFragment: "profile()", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "profileId()",
+    functionFragment: "renounceOwnership",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "renounceOwnership()",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setProfile",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setProfile(string)",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
@@ -564,6 +591,14 @@ export interface TestTokenInterface extends utils.Interface {
       PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>
     ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership(address)",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "unlockToken",
@@ -730,6 +765,8 @@ export interface TestTokenInterface extends utils.Interface {
     functionFragment: "nonces(address)",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner()", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "pause", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "pause(address)",
@@ -752,9 +789,19 @@ export interface TestTokenInterface extends utils.Interface {
     functionFragment: "permit(address,address,uint256,uint256,bytes)",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "profileId", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "profile", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "profile()", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "profileId()",
+    functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceOwnership()",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "setProfile", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setProfile(string)",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -831,6 +878,14 @@ export interface TestTokenInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership(address)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "unlockToken",
     data: BytesLike
   ): Result;
@@ -855,8 +910,10 @@ export interface TestTokenInterface extends utils.Interface {
     "Approval(address,address,uint256)": EventFragment;
     "Burn(address,address,uint256,uint256)": EventFragment;
     "Mint(address,address,uint256,uint256)": EventFragment;
+    "OwnershipTransferred(address,address)": EventFragment;
     "Paused(address,address)": EventFragment;
     "PausedAll(address)": EventFragment;
+    "ProfileUpdated(address,string,string)": EventFragment;
     "TaxRateUpdated(address,uint256)": EventFragment;
     "TaxTreasuryUpdated(address,address)": EventFragment;
     "TaxWhitelistUpdated(address,address,bool)": EventFragment;
@@ -880,10 +937,18 @@ export interface TestTokenInterface extends utils.Interface {
   getEvent(
     nameOrSignatureOrTopic: "Mint(address,address,uint256,uint256)"
   ): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(
+    nameOrSignatureOrTopic: "OwnershipTransferred(address,address)"
+  ): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Paused(address,address)"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PausedAll"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PausedAll(address)"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ProfileUpdated"): EventFragment;
+  getEvent(
+    nameOrSignatureOrTopic: "ProfileUpdated(address,string,string)"
+  ): EventFragment;
   getEvent(nameOrSignatureOrTopic: "TaxRateUpdated"): EventFragment;
   getEvent(
     nameOrSignatureOrTopic: "TaxRateUpdated(address,uint256)"
@@ -956,6 +1021,18 @@ export type MintEvent = TypedEvent<
 
 export type MintEventFilter = TypedEventFilter<MintEvent>;
 
+export interface OwnershipTransferredEventObject {
+  previousOwner: string;
+  newOwner: string;
+}
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string],
+  OwnershipTransferredEventObject
+>;
+
+export type OwnershipTransferredEventFilter =
+  TypedEventFilter<OwnershipTransferredEvent>;
+
 export interface PausedEventObject {
   sender: string;
   account: string;
@@ -970,6 +1047,18 @@ export interface PausedAllEventObject {
 export type PausedAllEvent = TypedEvent<[string], PausedAllEventObject>;
 
 export type PausedAllEventFilter = TypedEventFilter<PausedAllEvent>;
+
+export interface ProfileUpdatedEventObject {
+  sender: string;
+  oldProfile: string;
+  newProfile: string;
+}
+export type ProfileUpdatedEvent = TypedEvent<
+  [string, string, string],
+  ProfileUpdatedEventObject
+>;
+
+export type ProfileUpdatedEventFilter = TypedEventFilter<ProfileUpdatedEvent>;
 
 export interface TaxRateUpdatedEventObject {
   sender: string;
@@ -1324,6 +1413,10 @@ export interface TestToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    owner(overrides?: CallOverrides): Promise<[string]>;
+
+    "owner()"(overrides?: CallOverrides): Promise<[string]>;
+
     pause(
       account: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1374,9 +1467,27 @@ export interface TestToken extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    profileId(overrides?: CallOverrides): Promise<[string]>;
+    profile(overrides?: CallOverrides): Promise<[string]>;
 
-    "profileId()"(overrides?: CallOverrides): Promise<[string]>;
+    "profile()"(overrides?: CallOverrides): Promise<[string]>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    "renounceOwnership()"(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setProfile(
+      profileName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    "setProfile(string)"(
+      profileName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
@@ -1467,6 +1578,16 @@ export interface TestToken extends BaseContract {
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    "transferOwnership(address)"(
+      newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -1723,6 +1844,10 @@ export interface TestToken extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  owner(overrides?: CallOverrides): Promise<string>;
+
+  "owner()"(overrides?: CallOverrides): Promise<string>;
+
   pause(
     account: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1773,9 +1898,27 @@ export interface TestToken extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  profileId(overrides?: CallOverrides): Promise<string>;
+  profile(overrides?: CallOverrides): Promise<string>;
 
-  "profileId()"(overrides?: CallOverrides): Promise<string>;
+  "profile()"(overrides?: CallOverrides): Promise<string>;
+
+  renounceOwnership(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  "renounceOwnership()"(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setProfile(
+    profileName: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  "setProfile(string)"(
+    profileName: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   supportsInterface(
     interfaceId: PromiseOrValue<BytesLike>,
@@ -1866,6 +2009,16 @@ export interface TestToken extends BaseContract {
     from: PromiseOrValue<string>,
     to: PromiseOrValue<string>,
     amount: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  transferOwnership(
+    newOwner: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  "transferOwnership(address)"(
+    newOwner: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -2122,6 +2275,10 @@ export interface TestToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    owner(overrides?: CallOverrides): Promise<string>;
+
+    "owner()"(overrides?: CallOverrides): Promise<string>;
+
     pause(
       account: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -2168,9 +2325,23 @@ export interface TestToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    profileId(overrides?: CallOverrides): Promise<string>;
+    profile(overrides?: CallOverrides): Promise<string>;
 
-    "profileId()"(overrides?: CallOverrides): Promise<string>;
+    "profile()"(overrides?: CallOverrides): Promise<string>;
+
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    "renounceOwnership()"(overrides?: CallOverrides): Promise<void>;
+
+    setProfile(
+      profileName: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "setProfile(string)"(
+      profileName: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
@@ -2264,6 +2435,16 @@ export interface TestToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "transferOwnership(address)"(
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     unlockToken(
       unlockRequest: IERC20Lockable.UnLockTokenRequestStruct[],
       overrides?: CallOverrides
@@ -2331,6 +2512,15 @@ export interface TestToken extends BaseContract {
       totalSupply?: null
     ): MintEventFilter;
 
+    "OwnershipTransferred(address,address)"(
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
+    ): OwnershipTransferredEventFilter;
+    OwnershipTransferred(
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
+    ): OwnershipTransferredEventFilter;
+
     "Paused(address,address)"(
       sender?: PromiseOrValue<string> | null,
       account?: PromiseOrValue<string> | null
@@ -2344,6 +2534,17 @@ export interface TestToken extends BaseContract {
       sender?: PromiseOrValue<string> | null
     ): PausedAllEventFilter;
     PausedAll(sender?: PromiseOrValue<string> | null): PausedAllEventFilter;
+
+    "ProfileUpdated(address,string,string)"(
+      sender?: PromiseOrValue<string> | null,
+      oldProfile?: PromiseOrValue<string> | null,
+      newProfile?: PromiseOrValue<string> | null
+    ): ProfileUpdatedEventFilter;
+    ProfileUpdated(
+      sender?: PromiseOrValue<string> | null,
+      oldProfile?: PromiseOrValue<string> | null,
+      newProfile?: PromiseOrValue<string> | null
+    ): ProfileUpdatedEventFilter;
 
     "TaxRateUpdated(address,uint256)"(
       sender?: PromiseOrValue<string> | null,
@@ -2668,6 +2869,10 @@ export interface TestToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "owner()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     pause(
       account: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -2718,9 +2923,27 @@ export interface TestToken extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    profileId(overrides?: CallOverrides): Promise<BigNumber>;
+    profile(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "profileId()"(overrides?: CallOverrides): Promise<BigNumber>;
+    "profile()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    "renounceOwnership()"(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setProfile(
+      profileName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    "setProfile(string)"(
+      profileName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
@@ -2811,6 +3034,16 @@ export interface TestToken extends BaseContract {
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    "transferOwnership(address)"(
+      newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -3070,6 +3303,10 @@ export interface TestToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "owner()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     pause(
       account: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -3120,9 +3357,27 @@ export interface TestToken extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    profileId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    profile(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "profileId()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    "profile()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "renounceOwnership()"(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setProfile(
+      profileName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "setProfile(string)"(
+      profileName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
@@ -3213,6 +3468,16 @@ export interface TestToken extends BaseContract {
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "transferOwnership(address)"(
+      newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

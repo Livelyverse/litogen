@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: APACHE
 pragma solidity 0.8.19;
 
 import "../token/ERC20/ERC20.sol";
@@ -20,8 +20,8 @@ contract TestToken is ERC20, ERC20Burnable, ERC20Mintable, ERC20Pausable, ERC20E
   mapping(string => uint256) internal _distributes;
   bool public isDistributed;
 
-  constructor(address acl_)
-    ERC20("TestToken", "Test", "TestProfile", acl_, 9)
+  constructor()
+    ERC20("TestToken", "Test", "TestProfile", 9)
     ERC20Permitable("TestToken")
     ERC20Taxable(3)
   {
@@ -52,8 +52,16 @@ contract TestToken is ERC20, ERC20Burnable, ERC20Mintable, ERC20Pausable, ERC20E
     }
   }
 
+  function _policyInterceptor(bytes4 funcSelector)
+    internal
+    override(ERC20, ERC20Burnable, ERC20Mintable, ERC20Pausable, ERC20Lockable, ERC20Taxable)
+  {
+    super._policyInterceptor(funcSelector);
+    if(funcSelector == this.distributeToken.selector) { _checkOwner(); }
+  }
+
   function distributeToken(address[] calldata assets, address taxTreasury) public {
-    _tokenPolicyInterceptor(this.distributeToken.selector);
+    _policyInterceptor(this.distributeToken.selector);
     require(!isDistributed, "Already Distributed");
     isDistributed = true;
     _taxTreasury = taxTreasury;

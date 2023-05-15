@@ -6,8 +6,8 @@ import "../token/ERC20/assets/ERC20AssetExtra.sol";
 import "../token/ERC20/assets/ERC20AssetLockable.sol";
 
 contract PublicSales is ERC20Asset, ERC20AssetExtra, ERC20AssetLockable {
-  constructor(address erc20Token_, address acl_)
-    ERC20Asset("publicSales", "TestProfile", erc20Token_, acl_)
+  constructor(address erc20Token_)
+    ERC20Asset("publicSales", "TestProfile", erc20Token_)
   {}
 
   // The following functions are overrides required by Solidity.

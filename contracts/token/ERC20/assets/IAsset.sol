@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Litogen Contracts (last updated v1.0.2)
+// Litogen Contracts (last updated v1.1.0)
 
 pragma solidity 0.8.19;
 
@@ -24,18 +24,21 @@ interface IAsset {
   }
 
   struct AssetInfo {
-    bytes32 profileId;
     uint256 balance;
+    string profile;
     string name;
     string version;
     address token;
     address accessControl;
+    address owner;
     AssetType atype;
     AssetSafeModeStatus status;
   }
 
   event AssetSafeModeUpdated(address indexed sender, address indexed assetId, AssetSafeModeStatus status);
 
+  event AssetProfileUpdated(address indexed sender, string indexed oldProfile, string indexed newProfile);
+      
   function assetSetSafeMode(AssetSafeModeStatus status) external returns (bool);
 
   function assetSafeMode() external view returns (AssetSafeModeStatus);
@@ -50,9 +53,11 @@ interface IAsset {
 
   function assetAccessControl() external view returns (address);
 
-  function assetProfileId() external view returns (bytes32);
+  function assetProfile() external view returns (string memory);
 
   function assetBalance() external view returns (uint256);
 
   function assetInfo() external view returns (AssetInfo memory);
+
+  function assetSetProfile(string memory profile) external;
 }

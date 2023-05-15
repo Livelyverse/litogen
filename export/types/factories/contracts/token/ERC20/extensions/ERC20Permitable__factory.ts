@@ -52,6 +52,50 @@ const _abi = [
       {
         indexed: true,
         internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "string",
+        name: "oldProfile",
+        type: "string",
+      },
+      {
+        indexed: true,
+        internalType: "string",
+        name: "newProfile",
+        type: "string",
+      },
+    ],
+    name: "ProfileUpdated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
         name: "from",
         type: "address",
       },
@@ -210,6 +254,19 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "owner",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "address",
@@ -244,15 +301,35 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "profileId",
+    name: "profile",
     outputs: [
       {
-        internalType: "bytes32",
+        internalType: "string",
         name: "",
-        type: "bytes32",
+        type: "string",
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "profileName",
+        type: "string",
+      },
+    ],
+    name: "setProfile",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -350,6 +427,19 @@ const _abi = [
         type: "bool",
       },
     ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "transferOwnership",
+    outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },

@@ -29,19 +29,21 @@ import type {
 
 export declare namespace IAsset {
   export type AssetInfoStruct = {
-    profileId: PromiseOrValue<BytesLike>;
     balance: PromiseOrValue<BigNumberish>;
+    profile: PromiseOrValue<string>;
     name: PromiseOrValue<string>;
     version: PromiseOrValue<string>;
     token: PromiseOrValue<string>;
     accessControl: PromiseOrValue<string>;
+    owner: PromiseOrValue<string>;
     atype: PromiseOrValue<BigNumberish>;
     status: PromiseOrValue<BigNumberish>;
   };
 
   export type AssetInfoStructOutput = [
-    string,
     BigNumber,
+    string,
+    string,
     string,
     string,
     string,
@@ -49,12 +51,13 @@ export declare namespace IAsset {
     number,
     number
   ] & {
-    profileId: string;
     balance: BigNumber;
+    profile: string;
     name: string;
     version: string;
     token: string;
     accessControl: string;
+    owner: string;
     atype: number;
     status: number;
   };
@@ -66,8 +69,9 @@ export interface IAssetInterface extends utils.Interface {
     "assetBalance()": FunctionFragment;
     "assetInfo()": FunctionFragment;
     "assetName()": FunctionFragment;
-    "assetProfileId()": FunctionFragment;
+    "assetProfile()": FunctionFragment;
     "assetSafeMode()": FunctionFragment;
+    "assetSetProfile(string)": FunctionFragment;
     "assetSetSafeMode(uint8)": FunctionFragment;
     "assetToken()": FunctionFragment;
     "assetType()": FunctionFragment;
@@ -84,10 +88,12 @@ export interface IAssetInterface extends utils.Interface {
       | "assetInfo()"
       | "assetName"
       | "assetName()"
-      | "assetProfileId"
-      | "assetProfileId()"
+      | "assetProfile"
+      | "assetProfile()"
       | "assetSafeMode"
       | "assetSafeMode()"
+      | "assetSetProfile"
+      | "assetSetProfile(string)"
       | "assetSetSafeMode"
       | "assetSetSafeMode(uint8)"
       | "assetToken"
@@ -125,11 +131,11 @@ export interface IAssetInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "assetProfileId",
+    functionFragment: "assetProfile",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "assetProfileId()",
+    functionFragment: "assetProfile()",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -139,6 +145,14 @@ export interface IAssetInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "assetSafeMode()",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "assetSetProfile",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "assetSetProfile(string)",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "assetSetSafeMode",
@@ -197,11 +211,11 @@ export interface IAssetInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "assetProfileId",
+    functionFragment: "assetProfile",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "assetProfileId()",
+    functionFragment: "assetProfile()",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -210,6 +224,14 @@ export interface IAssetInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "assetSafeMode()",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "assetSetProfile",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "assetSetProfile(string)",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -240,14 +262,32 @@ export interface IAssetInterface extends utils.Interface {
   ): Result;
 
   events: {
+    "AssetProfileUpdated(address,string,string)": EventFragment;
     "AssetSafeModeUpdated(address,address,uint8)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "AssetProfileUpdated"): EventFragment;
+  getEvent(
+    nameOrSignatureOrTopic: "AssetProfileUpdated(address,string,string)"
+  ): EventFragment;
   getEvent(nameOrSignatureOrTopic: "AssetSafeModeUpdated"): EventFragment;
   getEvent(
     nameOrSignatureOrTopic: "AssetSafeModeUpdated(address,address,uint8)"
   ): EventFragment;
 }
+
+export interface AssetProfileUpdatedEventObject {
+  sender: string;
+  oldProfile: string;
+  newProfile: string;
+}
+export type AssetProfileUpdatedEvent = TypedEvent<
+  [string, string, string],
+  AssetProfileUpdatedEventObject
+>;
+
+export type AssetProfileUpdatedEventFilter =
+  TypedEventFilter<AssetProfileUpdatedEvent>;
 
 export interface AssetSafeModeUpdatedEventObject {
   sender: string;
@@ -309,13 +349,23 @@ export interface IAsset extends BaseContract {
 
     "assetName()"(overrides?: CallOverrides): Promise<[string]>;
 
-    assetProfileId(overrides?: CallOverrides): Promise<[string]>;
+    assetProfile(overrides?: CallOverrides): Promise<[string]>;
 
-    "assetProfileId()"(overrides?: CallOverrides): Promise<[string]>;
+    "assetProfile()"(overrides?: CallOverrides): Promise<[string]>;
 
     assetSafeMode(overrides?: CallOverrides): Promise<[number]>;
 
     "assetSafeMode()"(overrides?: CallOverrides): Promise<[number]>;
+
+    assetSetProfile(
+      profile: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    "assetSetProfile(string)"(
+      profile: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     assetSetSafeMode(
       status: PromiseOrValue<BigNumberish>,
@@ -358,13 +408,23 @@ export interface IAsset extends BaseContract {
 
   "assetName()"(overrides?: CallOverrides): Promise<string>;
 
-  assetProfileId(overrides?: CallOverrides): Promise<string>;
+  assetProfile(overrides?: CallOverrides): Promise<string>;
 
-  "assetProfileId()"(overrides?: CallOverrides): Promise<string>;
+  "assetProfile()"(overrides?: CallOverrides): Promise<string>;
 
   assetSafeMode(overrides?: CallOverrides): Promise<number>;
 
   "assetSafeMode()"(overrides?: CallOverrides): Promise<number>;
+
+  assetSetProfile(
+    profile: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  "assetSetProfile(string)"(
+    profile: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   assetSetSafeMode(
     status: PromiseOrValue<BigNumberish>,
@@ -407,13 +467,23 @@ export interface IAsset extends BaseContract {
 
     "assetName()"(overrides?: CallOverrides): Promise<string>;
 
-    assetProfileId(overrides?: CallOverrides): Promise<string>;
+    assetProfile(overrides?: CallOverrides): Promise<string>;
 
-    "assetProfileId()"(overrides?: CallOverrides): Promise<string>;
+    "assetProfile()"(overrides?: CallOverrides): Promise<string>;
 
     assetSafeMode(overrides?: CallOverrides): Promise<number>;
 
     "assetSafeMode()"(overrides?: CallOverrides): Promise<number>;
+
+    assetSetProfile(
+      profile: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "assetSetProfile(string)"(
+      profile: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     assetSetSafeMode(
       status: PromiseOrValue<BigNumberish>,
@@ -439,6 +509,17 @@ export interface IAsset extends BaseContract {
   };
 
   filters: {
+    "AssetProfileUpdated(address,string,string)"(
+      sender?: PromiseOrValue<string> | null,
+      oldProfile?: PromiseOrValue<string> | null,
+      newProfile?: PromiseOrValue<string> | null
+    ): AssetProfileUpdatedEventFilter;
+    AssetProfileUpdated(
+      sender?: PromiseOrValue<string> | null,
+      oldProfile?: PromiseOrValue<string> | null,
+      newProfile?: PromiseOrValue<string> | null
+    ): AssetProfileUpdatedEventFilter;
+
     "AssetSafeModeUpdated(address,address,uint8)"(
       sender?: PromiseOrValue<string> | null,
       assetId?: PromiseOrValue<string> | null,
@@ -468,13 +549,23 @@ export interface IAsset extends BaseContract {
 
     "assetName()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    assetProfileId(overrides?: CallOverrides): Promise<BigNumber>;
+    assetProfile(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "assetProfileId()"(overrides?: CallOverrides): Promise<BigNumber>;
+    "assetProfile()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     assetSafeMode(overrides?: CallOverrides): Promise<BigNumber>;
 
     "assetSafeMode()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    assetSetProfile(
+      profile: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    "assetSetProfile(string)"(
+      profile: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     assetSetSafeMode(
       status: PromiseOrValue<BigNumberish>,
@@ -520,15 +611,23 @@ export interface IAsset extends BaseContract {
 
     "assetName()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    assetProfileId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    assetProfile(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "assetProfileId()"(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    "assetProfile()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     assetSafeMode(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "assetSafeMode()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    assetSetProfile(
+      profile: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "assetSetProfile(string)"(
+      profile: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     assetSetSafeMode(
       status: PromiseOrValue<BigNumberish>,

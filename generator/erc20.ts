@@ -1,7 +1,7 @@
 import {Contract, ContractBuilder, ContractFunction} from './contract';
 import { defineFunctions } from './utils/defineFunctions';
 import { printContract } from './print';
-import {supportsInterface} from "./commonFunctions";
+import {policyInterceptor, supportsInterface} from "./commonFunctions";
 
 export type DistributeUnit = 'PERCENT' | 'NUMBER'
 
@@ -42,9 +42,9 @@ export interface ERC20AssetOptions extends BaseOptions {
 }
 
 export const defaults: Required<ERC20Options> = {
-  name: 'MyTestToken',
-  symbol: 'MTT',
-  profileName: 'MyTestProfile',
+  name: '',
+  symbol: '',
+  profileName: '',
   decimal: 18,
   distribute: null,
   taxRate: 0,
@@ -60,18 +60,19 @@ export const defaults: Required<ERC20Options> = {
 } as const;
 
 export const assetDefaults: Required<ERC20AssetOptions> = {
-  name: 'MyTestAsset',
-  profileName: 'MyTestProfile',
+  name: '',
+  profileName: '',
   extra: false,
   lockable: false,
   license: 'MIT',
 } as const;
 
 function withDefaults(opts: ERC20Options): Required<ERC20Options> {
+
   return {
     ...opts,
-    name: opts.name ?? defaults.name,
-    symbol: opts.symbol ?? defaults.symbol,
+    name: opts.name,
+    symbol: opts.symbol,
     profileName: opts.profileName ?? defaults.profileName,
     license: opts.license ?? defaults.license,
     decimal: opts?.decimal && opts.decimal >= 0 ? opts.decimal : defaults.decimal,
@@ -91,7 +92,7 @@ function withDefaults(opts: ERC20Options): Required<ERC20Options> {
 function withAssetDefaults(opts: ERC20AssetOptions): Required<ERC20AssetOptions> {
   return {
     ...opts,
-    name: opts.name ?? assetDefaults.name,
+    name: opts.name,
     profileName: opts.profileName ?? assetDefaults.profileName,
     license: opts.license ?? assetDefaults.license,
     extra: opts.extra ?? assetDefaults.extra,
@@ -108,6 +109,7 @@ export function printERC20Asset(opts: ERC20AssetOptions = assetDefaults): string
 }
 
 export function buildERC20Asset(opts: ERC20AssetOptions): Contract {
+  if(!opts || !opts.name || opts.name.length < 4) throw new Error("Invalid Asset Name");
   const allOpts = withAssetDefaults(opts);
 
   const c = new ContractBuilder(allOpts.name, allOpts.license);
@@ -128,6 +130,9 @@ export function buildERC20Asset(opts: ERC20AssetOptions): Contract {
 }
 
 export function buildERC20(opts: ERC20Options): Contract {
+  if(!opts || !opts.name || opts.name.length < 4) throw new Error("Invalid Token Name");
+  if(!opts || !opts.symbol || opts.symbol.length < 3) throw new Error("Invalid Token Symbol");
+
   const allOpts = withDefaults(opts);
 
   const c = new ContractBuilder(allOpts.name, allOpts.license);
@@ -179,18 +184,23 @@ function addBase(c: ContractBuilder, name: string, symbol: string, profileName: 
       name: 'ERC20',
       path: '@livelyversenpm/litogen/contracts/token/ERC20/ERC20.sol',
     },
-    [name, symbol, profileName, { lit: 'acl_' }, decimal],
+    [name, symbol, profileName, decimal],
   );
 
-  c.addConstructorArgument({
-    name: 'acl_',
-    type: 'address'
-  })
+  // c.addConstructorArgument({
+  //   name: 'acl_',
+  //   type: 'address'
+  // })
 
   c.addOverride('ERC20', functions._beforeTokenTransfer);
   c.addOverride('ERC20', functions._transfer);
   c.addOverride('ERC20', supportsInterface);
+  c.addOverride('ERC20', policyInterceptor);
 
+  c.setFunctionBody([
+    'super._policyInterceptor(funcSelector);',
+    'if(funcSelector == this.distributeToken.selector) { _checkOwner(); }',
+  ], policyInterceptor)
 }
 
 function addBurnable(c: ContractBuilder) {
@@ -200,6 +210,7 @@ function addBurnable(c: ContractBuilder) {
   });
 
   c.addOverride("ERC20Burnable", supportsInterface);
+  c.addOverride("ERC20Burnable", policyInterceptor);
 }
 
 function addMintable(c: ContractBuilder) {
@@ -209,6 +220,7 @@ function addMintable(c: ContractBuilder) {
   });
 
   c.addOverride("ERC20Mintable", supportsInterface);
+  c.addOverride("ERC20Mintable", policyInterceptor);
 }
 
 function addPausable(c: ContractBuilder) {
@@ -218,6 +230,7 @@ function addPausable(c: ContractBuilder) {
   });
 
   c.addOverride("ERC20Pausable", supportsInterface);
+  c.addOverride("ERC20Pausable", policyInterceptor);
 
   c.setFunctionBody([
     'require(!_isPaused, "Token Paused");',
@@ -240,6 +253,7 @@ function addLockable(c: ContractBuilder) {
     path: '@livelyversenpm/litogen/contracts/token/ERC20/extensions/ERC20Lockable.sol',
   });
   c.addOverride("ERC20Lockable", supportsInterface);
+  c.addOverride("ERC20Lockable", policyInterceptor);
 }
 
 function addPermitalble(c: ContractBuilder, name: string) {
@@ -258,6 +272,7 @@ function addTaxable(c: ContractBuilder, taxRate: number) {
   }, [taxRate]);
 
   c.addOverride("ERC20Taxable", supportsInterface);
+  c.addOverride("ERC20Taxable", policyInterceptor);
 
   c.addUsing({
     name: 'SafeMath',
@@ -301,7 +316,7 @@ function addDistribution(c: ContractBuilder, taxable: boolean, totalSupply: numb
   if(taxable) {
     distributeFn = c.addFunction(functions.distributeTokenAndTaxTreasury);
     c.setFunctionBody([
-      '_tokenPolicyInterceptor(this.distributeToken.selector);',
+      '_policyInterceptor(this.distributeToken.selector);',
       'require(!isDistributed, "Already Distributed");',
       'isDistributed = true;',
       '_taxTreasury = taxTreasury;',
@@ -314,7 +329,7 @@ function addDistribution(c: ContractBuilder, taxable: boolean, totalSupply: numb
   } else {
     distributeFn = c.addFunction(functions.distributeToken);
     c.setFunctionBody([
-      '_tokenPolicyInterceptor(this.distributeToken.selector);',
+      '_policyInterceptor(this.distributeToken.selector);',
       'require(!isDistributed, "Already Distributed");',
       'isDistributed = true;',
       'for (uint256 i = 0; i < assets.length; i++) {',
@@ -390,7 +405,7 @@ function assetAddBase(c: ContractBuilder, name: string, profileName: string) {
       name: 'ERC20Asset',
       path: '@livelyversenpm/litogen/contracts/token/ERC20/assets/ERC20Asset.sol',
     },
-    [name, profileName, { lit: 'erc20Token_' }, { lit: 'acl_' } ],
+    [name, profileName, { lit: 'erc20Token_' }],
   );
 
   c.addConstructorArgument({
@@ -398,10 +413,10 @@ function assetAddBase(c: ContractBuilder, name: string, profileName: string) {
     type: 'address'
   })
 
-  c.addConstructorArgument({
-    name: 'acl_',
-    type: 'address'
-  })
+  // c.addConstructorArgument({
+  //   name: 'acl_',
+  //   type: 'address'
+  // })
 
   c.addOverride('ERC20Asset', supportsInterface)
 }

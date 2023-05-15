@@ -31,7 +31,7 @@ abstract contract ERC20Pausable is ERC20, IERC20Pausable {
    * @dev freeze account which prevents to transfer tokens
    */
   function pause(address account) external {
-    _tokenPolicyInterceptor(this.pause.selector);
+    _policyInterceptor(this.pause.selector);
     require(account != address(0), "Invalid Address");
     require(!_pausedList.contains(account), "Already Paused");
     _pausedList.add(account);
@@ -42,7 +42,7 @@ abstract contract ERC20Pausable is ERC20, IERC20Pausable {
    * @dev unfreeze account which permits to transfer tokens
    */
   function unpause(address account) external {
-    _tokenPolicyInterceptor(this.unpause.selector);
+    _policyInterceptor(this.unpause.selector);
     require(account != address(0), "Invalid Address");
     require(_pausedList.contains(account), "Not Found");
     _pausedList.remove(account);
@@ -53,7 +53,7 @@ abstract contract ERC20Pausable is ERC20, IERC20Pausable {
    * @dev Triggers stopped state.
    */
   function pauseAll() external {
-    _tokenPolicyInterceptor(this.pauseAll.selector);
+    _policyInterceptor(this.pauseAll.selector);
     _isPaused = true;
     emit PausedAll(_msgSender());
   }
@@ -62,7 +62,7 @@ abstract contract ERC20Pausable is ERC20, IERC20Pausable {
    * @dev Returns to normal state.
    */    
   function unpauseAll() external {
-    _tokenPolicyInterceptor(this.unpauseAll.selector);
+    _policyInterceptor(this.unpauseAll.selector);
     _isPaused = false;
     emit UnpausedAll(_msgSender());
   }
@@ -98,5 +98,21 @@ abstract contract ERC20Pausable is ERC20, IERC20Pausable {
    */
   function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
       return interfaceId == type(IERC20Pausable).interfaceId || super.supportsInterface(interfaceId);
+  }
+
+  /**
+   * @dev Hook that is called before any transactional function of token.
+   * it authoriaze transaction sender by Liguard
+   */
+  function _policyInterceptor(bytes4 funcSelector) internal override virtual {
+    super._policyInterceptor(funcSelector);
+    if(_owner != address(0) &&
+      (funcSelector == this.pause.selector || 
+      funcSelector == this.unpause.selector || 
+      funcSelector == this.pauseAll.selector || 
+      funcSelector == this.unpauseAll.selector) 
+    ) {
+       _checkOwner();
+    }
   }
 }

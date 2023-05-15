@@ -29,19 +29,21 @@ import type {
 
 export declare namespace IAsset {
   export type AssetInfoStruct = {
-    profileId: PromiseOrValue<BytesLike>;
     balance: PromiseOrValue<BigNumberish>;
+    profile: PromiseOrValue<string>;
     name: PromiseOrValue<string>;
     version: PromiseOrValue<string>;
     token: PromiseOrValue<string>;
     accessControl: PromiseOrValue<string>;
+    owner: PromiseOrValue<string>;
     atype: PromiseOrValue<BigNumberish>;
     status: PromiseOrValue<BigNumberish>;
   };
 
   export type AssetInfoStructOutput = [
-    string,
     BigNumber,
+    string,
+    string,
     string,
     string,
     string,
@@ -49,12 +51,13 @@ export declare namespace IAsset {
     number,
     number
   ] & {
-    profileId: string;
     balance: BigNumber;
+    profile: string;
     name: string;
     version: string;
     token: string;
     accessControl: string;
+    owner: string;
     atype: number;
     status: number;
   };
@@ -90,13 +93,16 @@ export interface ERC20AssetExtraInterface extends utils.Interface {
     "assetBalance()": FunctionFragment;
     "assetInfo()": FunctionFragment;
     "assetName()": FunctionFragment;
-    "assetProfileId()": FunctionFragment;
+    "assetProfile()": FunctionFragment;
     "assetSafeMode()": FunctionFragment;
+    "assetSetProfile(string)": FunctionFragment;
     "assetSetSafeMode(uint8)": FunctionFragment;
     "assetToken()": FunctionFragment;
     "assetType()": FunctionFragment;
     "assetVersion()": FunctionFragment;
     "balance()": FunctionFragment;
+    "owner()": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "tokenApprove(address,uint256)": FunctionFragment;
     "tokenBatchTransfer((address,uint256)[])": FunctionFragment;
@@ -105,6 +111,7 @@ export interface ERC20AssetExtraInterface extends utils.Interface {
     "tokenIncreaseAllowance(address,uint256)": FunctionFragment;
     "tokenTransfer(address,uint256)": FunctionFragment;
     "tokenTransferFrom(address,address,uint256)": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
     "withdrawBalance(address)": FunctionFragment;
   };
 
@@ -118,10 +125,12 @@ export interface ERC20AssetExtraInterface extends utils.Interface {
       | "assetInfo()"
       | "assetName"
       | "assetName()"
-      | "assetProfileId"
-      | "assetProfileId()"
+      | "assetProfile"
+      | "assetProfile()"
       | "assetSafeMode"
       | "assetSafeMode()"
+      | "assetSetProfile"
+      | "assetSetProfile(string)"
       | "assetSetSafeMode"
       | "assetSetSafeMode(uint8)"
       | "assetToken"
@@ -132,6 +141,10 @@ export interface ERC20AssetExtraInterface extends utils.Interface {
       | "assetVersion()"
       | "balance"
       | "balance()"
+      | "owner"
+      | "owner()"
+      | "renounceOwnership"
+      | "renounceOwnership()"
       | "supportsInterface"
       | "supportsInterface(bytes4)"
       | "tokenApprove"
@@ -148,6 +161,8 @@ export interface ERC20AssetExtraInterface extends utils.Interface {
       | "tokenTransfer(address,uint256)"
       | "tokenTransferFrom"
       | "tokenTransferFrom(address,address,uint256)"
+      | "transferOwnership"
+      | "transferOwnership(address)"
       | "withdrawBalance"
       | "withdrawBalance(address)"
   ): FunctionFragment;
@@ -179,11 +194,11 @@ export interface ERC20AssetExtraInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "assetProfileId",
+    functionFragment: "assetProfile",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "assetProfileId()",
+    functionFragment: "assetProfile()",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -193,6 +208,14 @@ export interface ERC20AssetExtraInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "assetSafeMode()",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "assetSetProfile",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "assetSetProfile(string)",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "assetSetSafeMode",
@@ -225,6 +248,16 @@ export interface ERC20AssetExtraInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "balance", values?: undefined): string;
   encodeFunctionData(functionFragment: "balance()", values?: undefined): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(functionFragment: "owner()", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "renounceOwnership",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "renounceOwnership()",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [PromiseOrValue<BytesLike>]
@@ -296,6 +329,14 @@ export interface ERC20AssetExtraInterface extends utils.Interface {
       PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>
     ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership(address)",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "withdrawBalance",
@@ -333,11 +374,11 @@ export interface ERC20AssetExtraInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "assetProfileId",
+    functionFragment: "assetProfile",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "assetProfileId()",
+    functionFragment: "assetProfile()",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -346,6 +387,14 @@ export interface ERC20AssetExtraInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "assetSafeMode()",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "assetSetProfile",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "assetSetProfile(string)",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -376,6 +425,16 @@ export interface ERC20AssetExtraInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "balance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balance()", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner()", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceOwnership()",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
@@ -441,6 +500,14 @@ export interface ERC20AssetExtraInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership(address)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "withdrawBalance",
     data: BytesLike
   ): Result;
@@ -450,14 +517,37 @@ export interface ERC20AssetExtraInterface extends utils.Interface {
   ): Result;
 
   events: {
+    "AssetProfileUpdated(address,string,string)": EventFragment;
     "AssetSafeModeUpdated(address,address,uint8)": EventFragment;
+    "OwnershipTransferred(address,address)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "AssetProfileUpdated"): EventFragment;
+  getEvent(
+    nameOrSignatureOrTopic: "AssetProfileUpdated(address,string,string)"
+  ): EventFragment;
   getEvent(nameOrSignatureOrTopic: "AssetSafeModeUpdated"): EventFragment;
   getEvent(
     nameOrSignatureOrTopic: "AssetSafeModeUpdated(address,address,uint8)"
   ): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(
+    nameOrSignatureOrTopic: "OwnershipTransferred(address,address)"
+  ): EventFragment;
 }
+
+export interface AssetProfileUpdatedEventObject {
+  sender: string;
+  oldProfile: string;
+  newProfile: string;
+}
+export type AssetProfileUpdatedEvent = TypedEvent<
+  [string, string, string],
+  AssetProfileUpdatedEventObject
+>;
+
+export type AssetProfileUpdatedEventFilter =
+  TypedEventFilter<AssetProfileUpdatedEvent>;
 
 export interface AssetSafeModeUpdatedEventObject {
   sender: string;
@@ -471,6 +561,18 @@ export type AssetSafeModeUpdatedEvent = TypedEvent<
 
 export type AssetSafeModeUpdatedEventFilter =
   TypedEventFilter<AssetSafeModeUpdatedEvent>;
+
+export interface OwnershipTransferredEventObject {
+  previousOwner: string;
+  newOwner: string;
+}
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string],
+  OwnershipTransferredEventObject
+>;
+
+export type OwnershipTransferredEventFilter =
+  TypedEventFilter<OwnershipTransferredEvent>;
 
 export interface ERC20AssetExtra extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -519,13 +621,23 @@ export interface ERC20AssetExtra extends BaseContract {
 
     "assetName()"(overrides?: CallOverrides): Promise<[string]>;
 
-    assetProfileId(overrides?: CallOverrides): Promise<[string]>;
+    assetProfile(overrides?: CallOverrides): Promise<[string]>;
 
-    "assetProfileId()"(overrides?: CallOverrides): Promise<[string]>;
+    "assetProfile()"(overrides?: CallOverrides): Promise<[string]>;
 
     assetSafeMode(overrides?: CallOverrides): Promise<[number]>;
 
     "assetSafeMode()"(overrides?: CallOverrides): Promise<[number]>;
+
+    assetSetProfile(
+      profileName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    "assetSetProfile(string)"(
+      profileName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     assetSetSafeMode(
       status: PromiseOrValue<BigNumberish>,
@@ -552,6 +664,18 @@ export interface ERC20AssetExtra extends BaseContract {
     balance(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     "balance()"(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    owner(overrides?: CallOverrides): Promise<[string]>;
+
+    "owner()"(overrides?: CallOverrides): Promise<[string]>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    "renounceOwnership()"(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
@@ -645,6 +769,16 @@ export interface ERC20AssetExtra extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    "transferOwnership(address)"(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     withdrawBalance(
       recepient: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -674,13 +808,23 @@ export interface ERC20AssetExtra extends BaseContract {
 
   "assetName()"(overrides?: CallOverrides): Promise<string>;
 
-  assetProfileId(overrides?: CallOverrides): Promise<string>;
+  assetProfile(overrides?: CallOverrides): Promise<string>;
 
-  "assetProfileId()"(overrides?: CallOverrides): Promise<string>;
+  "assetProfile()"(overrides?: CallOverrides): Promise<string>;
 
   assetSafeMode(overrides?: CallOverrides): Promise<number>;
 
   "assetSafeMode()"(overrides?: CallOverrides): Promise<number>;
+
+  assetSetProfile(
+    profileName: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  "assetSetProfile(string)"(
+    profileName: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   assetSetSafeMode(
     status: PromiseOrValue<BigNumberish>,
@@ -707,6 +851,18 @@ export interface ERC20AssetExtra extends BaseContract {
   balance(overrides?: CallOverrides): Promise<BigNumber>;
 
   "balance()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+  owner(overrides?: CallOverrides): Promise<string>;
+
+  "owner()"(overrides?: CallOverrides): Promise<string>;
+
+  renounceOwnership(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  "renounceOwnership()"(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   supportsInterface(
     interfaceId: PromiseOrValue<BytesLike>,
@@ -800,6 +956,16 @@ export interface ERC20AssetExtra extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  transferOwnership(
+    newOwner: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  "transferOwnership(address)"(
+    newOwner: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   withdrawBalance(
     recepient: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -829,13 +995,23 @@ export interface ERC20AssetExtra extends BaseContract {
 
     "assetName()"(overrides?: CallOverrides): Promise<string>;
 
-    assetProfileId(overrides?: CallOverrides): Promise<string>;
+    assetProfile(overrides?: CallOverrides): Promise<string>;
 
-    "assetProfileId()"(overrides?: CallOverrides): Promise<string>;
+    "assetProfile()"(overrides?: CallOverrides): Promise<string>;
 
     assetSafeMode(overrides?: CallOverrides): Promise<number>;
 
     "assetSafeMode()"(overrides?: CallOverrides): Promise<number>;
+
+    assetSetProfile(
+      profileName: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "assetSetProfile(string)"(
+      profileName: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     assetSetSafeMode(
       status: PromiseOrValue<BigNumberish>,
@@ -863,6 +1039,14 @@ export interface ERC20AssetExtra extends BaseContract {
 
     "balance()"(overrides?: CallOverrides): Promise<BigNumber>;
 
+    owner(overrides?: CallOverrides): Promise<string>;
+
+    "owner()"(overrides?: CallOverrides): Promise<string>;
+
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    "renounceOwnership()"(overrides?: CallOverrides): Promise<void>;
+
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -955,6 +1139,16 @@ export interface ERC20AssetExtra extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "transferOwnership(address)"(
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     withdrawBalance(
       recepient: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -967,6 +1161,17 @@ export interface ERC20AssetExtra extends BaseContract {
   };
 
   filters: {
+    "AssetProfileUpdated(address,string,string)"(
+      sender?: PromiseOrValue<string> | null,
+      oldProfile?: PromiseOrValue<string> | null,
+      newProfile?: PromiseOrValue<string> | null
+    ): AssetProfileUpdatedEventFilter;
+    AssetProfileUpdated(
+      sender?: PromiseOrValue<string> | null,
+      oldProfile?: PromiseOrValue<string> | null,
+      newProfile?: PromiseOrValue<string> | null
+    ): AssetProfileUpdatedEventFilter;
+
     "AssetSafeModeUpdated(address,address,uint8)"(
       sender?: PromiseOrValue<string> | null,
       assetId?: PromiseOrValue<string> | null,
@@ -977,6 +1182,15 @@ export interface ERC20AssetExtra extends BaseContract {
       assetId?: PromiseOrValue<string> | null,
       status?: null
     ): AssetSafeModeUpdatedEventFilter;
+
+    "OwnershipTransferred(address,address)"(
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
+    ): OwnershipTransferredEventFilter;
+    OwnershipTransferred(
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
+    ): OwnershipTransferredEventFilter;
   };
 
   estimateGas: {
@@ -996,13 +1210,23 @@ export interface ERC20AssetExtra extends BaseContract {
 
     "assetName()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    assetProfileId(overrides?: CallOverrides): Promise<BigNumber>;
+    assetProfile(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "assetProfileId()"(overrides?: CallOverrides): Promise<BigNumber>;
+    "assetProfile()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     assetSafeMode(overrides?: CallOverrides): Promise<BigNumber>;
 
     "assetSafeMode()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    assetSetProfile(
+      profileName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    "assetSetProfile(string)"(
+      profileName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     assetSetSafeMode(
       status: PromiseOrValue<BigNumberish>,
@@ -1030,6 +1254,18 @@ export interface ERC20AssetExtra extends BaseContract {
 
     "balance()"(overrides?: CallOverrides): Promise<BigNumber>;
 
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "owner()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    "renounceOwnership()"(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -1119,6 +1355,16 @@ export interface ERC20AssetExtra extends BaseContract {
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    "transferOwnership(address)"(
+      newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1154,15 +1400,23 @@ export interface ERC20AssetExtra extends BaseContract {
 
     "assetName()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    assetProfileId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    assetProfile(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "assetProfileId()"(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    "assetProfile()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     assetSafeMode(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "assetSafeMode()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    assetSetProfile(
+      profileName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "assetSetProfile(string)"(
+      profileName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     assetSetSafeMode(
       status: PromiseOrValue<BigNumberish>,
@@ -1189,6 +1443,18 @@ export interface ERC20AssetExtra extends BaseContract {
     balance(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "balance()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "owner()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "renounceOwnership()"(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
@@ -1279,6 +1545,16 @@ export interface ERC20AssetExtra extends BaseContract {
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "transferOwnership(address)"(
+      newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

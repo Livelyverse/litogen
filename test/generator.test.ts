@@ -5,8 +5,8 @@ describe('Litogen Generator Tests', function() {
   it('Should generate ERC20 success', () => {
     console.log(ERC20API.print(
       {
-        name: "TestToken",
-        symbol: 'Test',
+        name: "Test",
+        symbol: 'TTT',
         profileName: "TestProfile",
         burnable: true,
         pausable: true,
