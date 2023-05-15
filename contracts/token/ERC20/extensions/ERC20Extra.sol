@@ -27,7 +27,7 @@ abstract contract ERC20Extra is ERC20, IERC20Extra {
       address spender,
       uint256 amount
   ) external returns (uint256) {
-      _tokenPolicyInterceptor(this.increaseAllowance.selector);
+      _policyInterceptor(this.increaseAllowance.selector);
       address owner = _msgSender();
       uint256 currentAllowance = _allowances[owner][spender] + amount;
       _approve(owner, spender, currentAllowance);
@@ -52,7 +52,7 @@ abstract contract ERC20Extra is ERC20, IERC20Extra {
       address spender,
       uint256 amount
   ) external returns (uint256) {
-      _tokenPolicyInterceptor(this.decreaseAllowance.selector);
+      _policyInterceptor(this.decreaseAllowance.selector);
       address owner = _msgSender();
       _spendAllowance(owner, spender, amount);
       return _allowances[owner][spender];
@@ -63,7 +63,7 @@ abstract contract ERC20Extra is ERC20, IERC20Extra {
    *
    */
   function batchTransfer(BatchTransferRequest[] calldata requests) external {
-    _tokenPolicyInterceptor(this.batchTransfer.selector);
+    _policyInterceptor(this.batchTransfer.selector);
     for (uint256 i = 0; i < requests.length; i++) {
         _transfer(_msgSender(), requests[i].to, requests[i].amount);
     }
@@ -73,7 +73,7 @@ abstract contract ERC20Extra is ERC20, IERC20Extra {
    * @dev batch transfer tokens from many from addresses to many recipients by one sender
    */
   function batchTransferFrom(BatchTransferFromRequest[] calldata requests) external {
-    _tokenPolicyInterceptor(this.batchTransferFrom.selector);
+    _policyInterceptor(this.batchTransferFrom.selector);
     for (uint256 i = 0; i < requests.length; i++) {
         _spendAllowance(requests[i].from, _msgSender(), requests[i].amount);
         _transfer(requests[i].from, requests[i].to, requests[i].amount);

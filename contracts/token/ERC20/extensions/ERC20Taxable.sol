@@ -56,7 +56,7 @@ abstract contract ERC20Taxable is ERC20, IERC20Taxable {
    * @dev update tax rate
    */
   function taxUpdateRate(uint256 rate) external returns (bool) {
-    _tokenPolicyInterceptor(this.taxUpdateRate.selector);
+    _policyInterceptor(this.taxUpdateRate.selector);
     _taxRate = rate;
     emit TaxRateUpdated(_msgSender(), rate);
     return true;
@@ -66,7 +66,7 @@ abstract contract ERC20Taxable is ERC20, IERC20Taxable {
    * @dev update tax treasury
    */
   function taxUpdateTreasury(address treasury) external returns (bool) {
-    _tokenPolicyInterceptor(this.taxUpdateRate.selector);
+    _policyInterceptor(this.taxUpdateRate.selector);
     require(treasury != address(0), "Invalid Address");
     _taxTreasury = treasury;
     emit TaxTreasuryUpdated(_msgSender(), _taxTreasury);
@@ -77,7 +77,7 @@ abstract contract ERC20Taxable is ERC20, IERC20Taxable {
    * @dev update tax whitelist accounts
    */
   function taxUpdateWhitelist(TaxWhitelistUpdateRequest[] calldata request) external returns (bool) {
-    _tokenPolicyInterceptor(this.taxUpdateWhitelist.selector);
+    _policyInterceptor(this.taxUpdateWhitelist.selector);
     for (uint256 i = 0; i < request.length; i++) {
       _taxUpdateWhitelist(request[i].account, request[i].isDeleted);
     }
@@ -114,6 +114,21 @@ abstract contract ERC20Taxable is ERC20, IERC20Taxable {
     }
     emit TaxWhitelistUpdated(_msgSender(), account, isDeleted);
     return true;
+  }
+
+  /**
+   * @dev Hook that is called before any transactional function of token.
+   * it authoriaze transaction sender by Liguard
+   */
+  function _policyInterceptor(bytes4 funcSelector) internal override virtual {
+    super._policyInterceptor(funcSelector);
+    if(_owner != address(0) &&
+      (funcSelector == this.taxUpdateRate.selector || 
+      funcSelector == this.taxUpdateTreasury.selector || 
+      funcSelector == this.taxUpdateWhitelist.selector)
+    ) {
+       _checkOwner();
+    }
   }
 
 }

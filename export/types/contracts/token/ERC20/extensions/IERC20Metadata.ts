@@ -35,7 +35,8 @@ export interface IERC20MetadataInterface extends utils.Interface {
     "balanceOf(address)": FunctionFragment;
     "decimals()": FunctionFragment;
     "name()": FunctionFragment;
-    "profileId()": FunctionFragment;
+    "profile()": FunctionFragment;
+    "setProfile(string)": FunctionFragment;
     "symbol()": FunctionFragment;
     "totalSupply()": FunctionFragment;
     "transfer(address,uint256)": FunctionFragment;
@@ -57,8 +58,10 @@ export interface IERC20MetadataInterface extends utils.Interface {
       | "decimals()"
       | "name"
       | "name()"
-      | "profileId"
-      | "profileId()"
+      | "profile"
+      | "profile()"
+      | "setProfile"
+      | "setProfile(string)"
       | "symbol"
       | "symbol()"
       | "totalSupply"
@@ -104,10 +107,15 @@ export interface IERC20MetadataInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "name()", values?: undefined): string;
-  encodeFunctionData(functionFragment: "profileId", values?: undefined): string;
+  encodeFunctionData(functionFragment: "profile", values?: undefined): string;
+  encodeFunctionData(functionFragment: "profile()", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "profileId()",
-    values?: undefined
+    functionFragment: "setProfile",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setProfile(string)",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(functionFragment: "symbol()", values?: undefined): string;
@@ -167,9 +175,11 @@ export interface IERC20MetadataInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "decimals()", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name()", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "profileId", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "profile", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "profile()", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setProfile", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "profileId()",
+    functionFragment: "setProfile(string)",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
@@ -200,12 +210,17 @@ export interface IERC20MetadataInterface extends utils.Interface {
 
   events: {
     "Approval(address,address,uint256)": EventFragment;
+    "ProfileUpdated(address,string,string)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(
     nameOrSignatureOrTopic: "Approval(address,address,uint256)"
+  ): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ProfileUpdated"): EventFragment;
+  getEvent(
+    nameOrSignatureOrTopic: "ProfileUpdated(address,string,string)"
   ): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
   getEvent(
@@ -224,6 +239,18 @@ export type ApprovalEvent = TypedEvent<
 >;
 
 export type ApprovalEventFilter = TypedEventFilter<ApprovalEvent>;
+
+export interface ProfileUpdatedEventObject {
+  sender: string;
+  oldProfile: string;
+  newProfile: string;
+}
+export type ProfileUpdatedEvent = TypedEvent<
+  [string, string, string],
+  ProfileUpdatedEventObject
+>;
+
+export type ProfileUpdatedEventFilter = TypedEventFilter<ProfileUpdatedEvent>;
 
 export interface TransferEventObject {
   from: string;
@@ -310,9 +337,19 @@ export interface IERC20Metadata extends BaseContract {
 
     "name()"(overrides?: CallOverrides): Promise<[string]>;
 
-    profileId(overrides?: CallOverrides): Promise<[string]>;
+    profile(overrides?: CallOverrides): Promise<[string]>;
 
-    "profileId()"(overrides?: CallOverrides): Promise<[string]>;
+    "profile()"(overrides?: CallOverrides): Promise<[string]>;
+
+    setProfile(
+      profile: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    "setProfile(string)"(
+      profile: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     symbol(overrides?: CallOverrides): Promise<[string]>;
 
@@ -399,9 +436,19 @@ export interface IERC20Metadata extends BaseContract {
 
   "name()"(overrides?: CallOverrides): Promise<string>;
 
-  profileId(overrides?: CallOverrides): Promise<string>;
+  profile(overrides?: CallOverrides): Promise<string>;
 
-  "profileId()"(overrides?: CallOverrides): Promise<string>;
+  "profile()"(overrides?: CallOverrides): Promise<string>;
+
+  setProfile(
+    profile: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  "setProfile(string)"(
+    profile: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   symbol(overrides?: CallOverrides): Promise<string>;
 
@@ -488,9 +535,19 @@ export interface IERC20Metadata extends BaseContract {
 
     "name()"(overrides?: CallOverrides): Promise<string>;
 
-    profileId(overrides?: CallOverrides): Promise<string>;
+    profile(overrides?: CallOverrides): Promise<string>;
 
-    "profileId()"(overrides?: CallOverrides): Promise<string>;
+    "profile()"(overrides?: CallOverrides): Promise<string>;
+
+    setProfile(
+      profile: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "setProfile(string)"(
+      profile: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     symbol(overrides?: CallOverrides): Promise<string>;
 
@@ -542,6 +599,17 @@ export interface IERC20Metadata extends BaseContract {
       spender?: PromiseOrValue<string> | null,
       value?: null
     ): ApprovalEventFilter;
+
+    "ProfileUpdated(address,string,string)"(
+      sender?: PromiseOrValue<string> | null,
+      oldProfile?: PromiseOrValue<string> | null,
+      newProfile?: PromiseOrValue<string> | null
+    ): ProfileUpdatedEventFilter;
+    ProfileUpdated(
+      sender?: PromiseOrValue<string> | null,
+      oldProfile?: PromiseOrValue<string> | null,
+      newProfile?: PromiseOrValue<string> | null
+    ): ProfileUpdatedEventFilter;
 
     "Transfer(address,address,uint256)"(
       from?: PromiseOrValue<string> | null,
@@ -602,9 +670,19 @@ export interface IERC20Metadata extends BaseContract {
 
     "name()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    profileId(overrides?: CallOverrides): Promise<BigNumber>;
+    profile(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "profileId()"(overrides?: CallOverrides): Promise<BigNumber>;
+    "profile()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    setProfile(
+      profile: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    "setProfile(string)"(
+      profile: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -692,9 +770,19 @@ export interface IERC20Metadata extends BaseContract {
 
     "name()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    profileId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    profile(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "profileId()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    "profile()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    setProfile(
+      profile: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "setProfile(string)"(
+      profile: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

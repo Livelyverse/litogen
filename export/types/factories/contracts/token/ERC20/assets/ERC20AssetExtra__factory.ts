@@ -32,6 +32,31 @@ const _abi = [
       },
       {
         indexed: true,
+        internalType: "string",
+        name: "oldProfile",
+        type: "string",
+      },
+      {
+        indexed: true,
+        internalType: "string",
+        name: "newProfile",
+        type: "string",
+      },
+    ],
+    name: "AssetProfileUpdated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+      {
+        indexed: true,
         internalType: "address",
         name: "assetId",
         type: "address",
@@ -44,6 +69,25 @@ const _abi = [
       },
     ],
     name: "AssetSafeModeUpdated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
     type: "event",
   },
   {
@@ -83,14 +127,14 @@ const _abi = [
       {
         components: [
           {
-            internalType: "bytes32",
-            name: "profileId",
-            type: "bytes32",
-          },
-          {
             internalType: "uint256",
             name: "balance",
             type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "profile",
+            type: "string",
           },
           {
             internalType: "string",
@@ -110,6 +154,11 @@ const _abi = [
           {
             internalType: "address",
             name: "accessControl",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "owner",
             type: "address",
           },
           {
@@ -146,12 +195,12 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "assetProfileId",
+    name: "assetProfile",
     outputs: [
       {
-        internalType: "bytes32",
+        internalType: "string",
         name: "",
-        type: "bytes32",
+        type: "string",
       },
     ],
     stateMutability: "view",
@@ -168,6 +217,19 @@ const _abi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "profileName",
+        type: "string",
+      },
+    ],
+    name: "assetSetProfile",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -239,6 +301,26 @@ const _abi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -425,6 +507,19 @@ const _abi = [
         type: "bool",
       },
     ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "transferOwnership",
+    outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },

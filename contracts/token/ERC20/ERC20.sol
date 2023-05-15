@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
-// Litogen Contracts (last updated v1.0.3)
+// Litogen Contracts (last updated v1.1.0)
 
 pragma solidity 0.8.19;
 
 import "./IERC20.sol";
 import "./extensions/IERC20Metadata.sol";
-import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
+import "../../access/Ownable.sol";
 import "../../access/IProfileACL.sol";
 
 /**
@@ -17,15 +17,15 @@ import "../../access/IProfileACL.sol";
  * that a supply mechanism has to be added in a derived contract using {_mint}.
  *
  */
-contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {  
-    string constant internal _LITOGEN_VERSION = "1.0.3";
+contract ERC20 is Ownable, ERC165, IERC20, IERC20Metadata {  
+    string constant internal _LITOGEN_VERSION = "1.1.0";
      
 
     mapping(address => uint256) internal _balances;
     mapping(address => mapping(address => uint256)) internal _allowances;
     uint256 internal _totalSupply;
-    bytes32 internal _profileId;
     address internal _acl;
+    string internal _profileName;
     string private _name;
     string private _symbol;
     uint8 private _decimal;
@@ -43,27 +43,16 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
     constructor(
         string memory name_, 
         string memory symbol_, 
-        // string memory version_, 
         string memory profileName_,
-        address acl_,
         uint8 decimal_        
     ) {
-        if(acl_ != address(0)) {
-          require(Address.isContract(acl_), "Invalid ACL");
-          if (!IERC165(acl_).supportsInterface(type(IProfileACL).interfaceId)) {
-            revert("Illegal ACL");            
-          }
-          _acl = acl_;
-        } else {
-          // Lively Guard contract address in the Polygon network
-          _acl = 0xF5a6FEfBE1a23653fB8A72B1730ba447c73fb993;
-        }
-
+        require(bytes(name_).length >= 4, "Invalid Name");
+        require(bytes(symbol_).length >= 3, "Invalid Symbol");
+     
         _name = name_;
         _symbol = symbol_;
-        // _version = version_;
         _decimal = decimal_;
-        _profileId = keccak256(abi.encodePacked(profileName_));
+        _profileName = profileName_;
     }
 
     /**
@@ -98,8 +87,8 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
     /**
      * @dev Returns the Profile ID of the token.
      */
-    function profileId() external view returns (bytes32) {
-        return _profileId;
+    function profile() external view returns (string memory) {
+        return _profileName;
     }
 
     /**
@@ -139,6 +128,15 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
     }
 
     /**
+     * @dev Change the Profile of the token.
+     */
+    function setProfile(string memory profileName) external {
+        _policyInterceptor(this.setProfile.selector);
+        emit ProfileUpdated(_msgSender(), _profileName, profileName);
+        _profileName = profileName;
+    }
+
+    /**
      * @dev See {IERC20-transfer}.
      *
      * Requirements:
@@ -147,7 +145,7 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
      * - the caller must have a balance of at least `amount`.
      */
     function transfer(address to, uint256 amount) public virtual override returns (bool) {
-        _tokenPolicyInterceptor(this.transfer.selector);
+        _policyInterceptor(this.transfer.selector);
         address owner = _msgSender();
         _transfer(owner, to, amount);
         return true;
@@ -171,7 +169,7 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
      * - `spender` cannot be the zero address.
      */
     function approve(address spender, uint256 amount) public virtual override returns (bool) {
-        _tokenPolicyInterceptor(this.approve.selector);
+        _policyInterceptor(this.approve.selector);
         address owner = _msgSender();
         _approve(owner, spender, amount);
         return true;
@@ -198,7 +196,7 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
         address to,
         uint256 amount
     ) public virtual override returns (bool) {
-        _tokenPolicyInterceptor(this.transferFrom.selector);
+        _policyInterceptor(this.transferFrom.selector);
         address spender = _msgSender();
         _spendAllowance(from, spender, amount);
         _transfer(from, to, amount);
@@ -329,10 +327,36 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
 
     /**
      * @dev Hook that is called before any transactional function of token.
-     * it authoriaze transaction sender by Lively Guard
+     * it authoriaze transaction sender by Liguard
      */
-    function _tokenPolicyInterceptor(bytes4 funcSelector) internal virtual {
-      IProfileACL.ProfileAuthorizationStatus status = IProfileACL(_acl).profileHasAccountAccess(_profileId, address(this), funcSelector, _msgSender());
-      if (status != IProfileACL.ProfileAuthorizationStatus.PERMITTED) revert IProfileACL.ProfileACLActionForbidden(status);
+    function _policyInterceptor(bytes4 funcSelector) internal virtual {
+      if(_acl != address(0)) { 
+        IProfileACL.ProfileAuthorizationStatus status = IProfileACL(_acl).profileHasAccountAccess(keccak256(abi.encodePacked(_profileName)), address(this), funcSelector, _msgSender());
+        if (status != IProfileACL.ProfileAuthorizationStatus.PERMITTED) revert IProfileACL.ProfileACLActionForbidden(status);
+      } else if(funcSelector == this.setProfile.selector || funcSelector == this.transferOwnership.selector){
+        _checkOwner();
+      }
+    }
+
+    /**
+     * @dev Transfers ownership of the contract to a new account (`newOwner`).
+     * Internal function without access restriction.
+     */
+    function _transferOwnership(address newOwner) internal override virtual {        
+       _policyInterceptor(this.transferOwnership.selector);
+      address oldOwner = _owner;
+      address oldAcl = _acl;
+      if (Address.isContract(newOwner)) {
+        if (!IERC165(newOwner).supportsInterface(type(IProfileACL).interfaceId)) {
+          revert("Illegal ACL");                    
+        }
+        _acl = newOwner;
+        _owner = address(0);  
+      } else {        
+        _owner = newOwner;
+        _acl = address(0);
+      }         
+      
+      emit OwnershipTransferred(oldOwner != address(0) ? oldOwner : oldAcl, newOwner);
     }
 }

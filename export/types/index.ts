@@ -12,6 +12,8 @@ export type { IERC165 } from "./@openzeppelin/contracts/utils/introspection/IERC
 export { IERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/IERC165__factory";
 export type { IProfileACL } from "./contracts/access/IProfileACL";
 export { IProfileACL__factory } from "./factories/contracts/access/IProfileACL__factory";
+export type { Ownable } from "./contracts/access/Ownable";
+export { Ownable__factory } from "./factories/contracts/access/Ownable__factory";
 export type { FundingTeam } from "./contracts/test/ERC20AssetFundingTeamTest.sol/FundingTeam";
 export { FundingTeam__factory } from "./factories/contracts/test/ERC20AssetFundingTeamTest.sol/FundingTeam__factory";
 export type { PublicSales } from "./contracts/test/ERC20AssetPublicSalesTest.sol/PublicSales";

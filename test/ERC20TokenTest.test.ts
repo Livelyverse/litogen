@@ -71,7 +71,7 @@ describe('Litogen Token and Assets Tests', function() {
     const profileACL = await deployments.getArtifact("IACLTest");
     livelyGuard = await deployMockContract(admin, profileACL.abi);
     await livelyGuard.mock.supportsInterface.returns(true);
-
+    await livelyGuard.mock.profileHasAccountAccess.returns(0);
   });
 
   it("Should ERC20TokenTest deploy success", async () => {
@@ -79,16 +79,17 @@ describe('Litogen Token and Assets Tests', function() {
     const tokenFactory = new TestToken__factory(admin);
 
     // when
-    erc20TokenTest = await tokenFactory.connect(admin).deploy(livelyGuard.address)
+    erc20TokenTest = await tokenFactory.connect(admin).deploy()
 
     // then
     expect(await erc20TokenTest.name()).to.be.equal("TestToken");
     expect(await erc20TokenTest.symbol()).to.be.equal("Test");
-    expect(await erc20TokenTest.version()).to.be.equal("1.0.2");
+    expect(await erc20TokenTest.version()).to.be.equal("1.1.0");
     expect(await erc20TokenTest.decimals()).to.be.equal(9);
     expect(await erc20TokenTest.totalSupply()).to.be.equal(totalSupply);
-    expect(await erc20TokenTest.profileId()).to.be.equal(ethers.utils.keccak256(ethers.utils.toUtf8Bytes("TestProfile")));
-    expect(await erc20TokenTest.acl()).to.be.equal(livelyGuard.address);
+    expect(await erc20TokenTest.profile()).to.be.equal("TestProfile");
+    expect(await erc20TokenTest.acl()).to.be.equal(ethers.constants.AddressZero);
+    expect(await erc20TokenTest.owner()).to.be.equal(adminWallet.address);
   })
 
   it("Should PublicSaleAsset deploy success", async () => {
@@ -96,28 +97,30 @@ describe('Litogen Token and Assets Tests', function() {
     const assetFactory = new PublicSales__factory(admin);
 
     // when
-    publicSaleAsset = await assetFactory.deploy(erc20TokenTest.address, livelyGuard.address)
+    publicSaleAsset = await assetFactory.deploy(erc20TokenTest.address)
 
     // then
     expect(await publicSaleAsset.assetName()).to.be.equal("publicSales");
     expect(await publicSaleAsset.assetType()).to.be.equal(AssetType.ERC20);
-    expect(await publicSaleAsset.assetVersion()).to.be.equal("1.0.2");
-    expect(await publicSaleAsset.assetProfileId()).to.be.equal(ethers.utils.keccak256(ethers.utils.toUtf8Bytes("TestProfile")));
+    expect(await publicSaleAsset.assetVersion()).to.be.equal("1.1.0");
+    expect(await publicSaleAsset.assetProfile()).to.be.equal("TestProfile");
     expect(await publicSaleAsset.assetToken()).to.be.equal(erc20TokenTest.address);
-    expect(await publicSaleAsset.assetAccessControl()).to.be.equal(livelyGuard.address);
+    expect(await publicSaleAsset.assetAccessControl()).to.be.equal(ethers.constants.AddressZero);
+    expect(await publicSaleAsset.owner()).to.be.equal(adminWallet.address);
     expect(await publicSaleAsset.assetSafeMode()).to.be.equal(AssetSafeModeStatus.DISABLED);
     expect(await publicSaleAsset.assetBalance()).to.be.equal(0);
 
     // and
     const assetInfo: IAsset.AssetInfoStruct = await publicSaleAsset.assetInfo();
     expect(assetInfo.name).to.be.equal("publicSales");
-    expect(assetInfo.version).to.be.equal("1.0.2");
+    expect(assetInfo.version).to.be.equal("1.1.0");
     expect(assetInfo.atype).to.be.equal(AssetType.ERC20);
-    expect(assetInfo.accessControl).to.be.equal(livelyGuard.address);
+    expect(assetInfo.accessControl).to.be.equal(ethers.constants.AddressZero);
+    expect(assetInfo.owner).to.be.equal(adminWallet.address);
     expect(assetInfo.token).to.be.equal(erc20TokenTest.address);
     expect(assetInfo.status).to.be.equal(AssetSafeModeStatus.DISABLED);
     expect(assetInfo.balance).to.be.equal(0);
-    expect(assetInfo.profileId).to.be.equal(ethers.utils.keccak256(ethers.utils.toUtf8Bytes("TestProfile")));
+    expect(assetInfo.profile).to.be.equal("TestProfile");
   })
 
   it("Should FundingTeamAsset deploy success", async () => {
@@ -125,33 +128,33 @@ describe('Litogen Token and Assets Tests', function() {
     const assetFactory = new FundingTeam__factory(admin);
 
     // when
-    fundingTeamAsset = await assetFactory.deploy(erc20TokenTest.address, livelyGuard.address)
+    fundingTeamAsset = await assetFactory.deploy(erc20TokenTest.address)
 
     // then
     expect(await fundingTeamAsset.assetName()).to.be.equal("fundingTeam");
     expect(await fundingTeamAsset.assetType()).to.be.equal(AssetType.ERC20);
-    expect(await fundingTeamAsset.assetVersion()).to.be.equal("1.0.2");
-    expect(await fundingTeamAsset.assetProfileId()).to.be.equal(ethers.utils.keccak256(ethers.utils.toUtf8Bytes("TestProfile")));
+    expect(await fundingTeamAsset.assetVersion()).to.be.equal("1.1.0");
+    expect(await fundingTeamAsset.assetProfile()).to.be.equal("TestProfile");
     expect(await fundingTeamAsset.assetToken()).to.be.equal(erc20TokenTest.address);
-    expect(await fundingTeamAsset.assetAccessControl()).to.be.equal(livelyGuard.address);
+    expect(await publicSaleAsset.assetAccessControl()).to.be.equal(ethers.constants.AddressZero);
+    expect(await publicSaleAsset.owner()).to.be.equal(adminWallet.address);
     expect(await fundingTeamAsset.assetSafeMode()).to.be.equal(AssetSafeModeStatus.DISABLED);
     expect(await fundingTeamAsset.assetBalance()).to.be.equal(0);
 
     // and
     const assetInfo: IAsset.AssetInfoStruct = await fundingTeamAsset.assetInfo();
     expect(assetInfo.name).to.be.equal("fundingTeam");
-    expect(assetInfo.version).to.be.equal("1.0.2");
+    expect(assetInfo.version).to.be.equal("1.1.0");
     expect(assetInfo.atype).to.be.equal(AssetType.ERC20);
-    expect(assetInfo.accessControl).to.be.equal(livelyGuard.address);
+    expect(assetInfo.accessControl).to.be.equal(ethers.constants.AddressZero);
+    expect(assetInfo.owner).to.be.equal(adminWallet.address);
     expect(assetInfo.token).to.be.equal(erc20TokenTest.address);
     expect(assetInfo.status).to.be.equal(AssetSafeModeStatus.DISABLED);
     expect(assetInfo.balance).to.be.equal(0);
-    expect(assetInfo.profileId).to.be.equal(ethers.utils.keccak256(ethers.utils.toUtf8Bytes("TestProfile")));
+    expect(assetInfo.profile).to.be.equal("TestProfile");
   })
 
   it("Should Distribute ERC20 token success", async() => {
-    // given
-    await livelyGuard.mock.profileHasAccountAccess.returns(0);
 
     // when
     await expect(erc20TokenTest.connect(admin).distributeToken([publicSaleAsset.address, fundingTeamAsset.address], treasuryWallet.address))
@@ -1086,6 +1089,55 @@ describe('Litogen Token and Assets Tests', function() {
     expect(<LockState>status1).to.be.equal(LockState.UNLOCKED);
   });
 
+  it("Should unlock token from user1 by publicSaleAsset without acl failed", async () => {
+    // given
+    const unlockRequests: IERC20Lockable.UnLockTokenRequestStruct[] = [
+      {
+        lockId: user1LockIds[1],
+        account: userWallet1.address,
+        reason: "Rollback2",
+      },
+    ];
+
+    // when
+    await expect(publicSaleAsset.connect(admin).unlockToken(unlockRequests))
+      .to.revertedWith("Unlock Not Supported")
+  });
+
+  it("Should transferOwnership from owner to Liguard in erc20token success", async() => {
+    // given
+    const aclBefore = await erc20TokenTest.acl();
+    const ownerBefore = await erc20TokenTest.owner();
+
+    // when
+    await expect(erc20TokenTest.connect(admin).transferOwnership(livelyGuard.address))
+      .to.emit(erc20TokenTest, "OwnershipTransferred")
+      .withArgs(adminWallet.address, livelyGuard.address);
+
+    // then
+    expect(aclBefore).to.be.equal(ethers.constants.AddressZero);
+    expect(ownerBefore).to.be.equal(adminWallet.address);
+    expect(await erc20TokenTest.acl()).to.be.equal(livelyGuard.address);
+    expect(await erc20TokenTest.owner()).to.be.equal(ethers.constants.AddressZero);
+  })
+
+  it("Should transferOwnership from owner to Liguard in publicSaleAsset success", async() => {
+    // given
+    const aclBefore = await publicSaleAsset.assetAccessControl();
+    const ownerBefore = await publicSaleAsset.owner();
+
+    // when
+    await expect(publicSaleAsset.connect(admin).transferOwnership(livelyGuard.address))
+      .to.emit(publicSaleAsset, "OwnershipTransferred")
+      .withArgs(adminWallet.address, livelyGuard.address);
+
+    // then
+    expect(aclBefore).to.be.equal(ethers.constants.AddressZero);
+    expect(ownerBefore).to.be.equal(adminWallet.address);
+    expect(await publicSaleAsset.assetAccessControl()).to.be.equal(livelyGuard.address);
+    expect(await publicSaleAsset.owner()).to.be.equal(ethers.constants.AddressZero);
+  })
+
   it("Should unlock token from user1 by publicSaleAsset success", async () => {
     // given
     const publicSaleAssetBalanceBefore = await erc20TokenTest.balanceOf(publicSaleAsset.address);
@@ -1124,6 +1176,39 @@ describe('Litogen Token and Assets Tests', function() {
     expect(<LockState>status2).to.be.equal(LockState.UNLOCKED);
   });
 
+  it("Should transferOwnership from Liguard to owner in erc20token success", async() => {
+    // given
+    const aclBefore = await erc20TokenTest.acl();
+    const ownerBefore = await erc20TokenTest.owner();
+
+    // when
+    await expect(erc20TokenTest.connect(admin).transferOwnership(userWallet1.address))
+      .to.emit(erc20TokenTest, "OwnershipTransferred")
+      .withArgs(livelyGuard.address, userWallet1.address);
+
+    // then
+    expect(aclBefore).to.be.equal(livelyGuard.address);
+    expect(ownerBefore).to.be.equal(ethers.constants.AddressZero);
+    expect(await erc20TokenTest.acl()).to.be.equal(ethers.constants.AddressZero);
+    expect(await erc20TokenTest.owner()).to.be.equal(userWallet1.address);
+  })
+
+  it("Should transferOwnership from Liguard to owner in publicSaleAsset success", async() => {
+    // given
+    const aclBefore = await publicSaleAsset.assetAccessControl();
+    const ownerBefore = await publicSaleAsset.owner();
+
+    // when
+    await expect(publicSaleAsset.connect(admin).transferOwnership(userWallet2.address))
+      .to.emit(publicSaleAsset, "OwnershipTransferred")
+      .withArgs(livelyGuard.address, userWallet2.address);
+
+    // then
+    expect(aclBefore).to.be.equal(livelyGuard.address);
+    expect(ownerBefore).to.be.equal(ethers.constants.AddressZero);
+    expect(await publicSaleAsset.assetAccessControl()).to.be.equal(ethers.constants.AddressZero);
+    expect(await publicSaleAsset.owner()).to.be.equal(userWallet2.address);
+  })
 });
 
 export async function generatePermitDomainSignatureByWaffleProvider(

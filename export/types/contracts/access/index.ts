@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { IProfileACL } from "./IProfileACL";
+export type { Ownable } from "./Ownable";

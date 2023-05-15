@@ -9,3 +9,13 @@ export const supportsInterface: BaseFunction = {
   returns: ['bool'],
   mutability: 'view',
 };
+
+export const policyInterceptor: BaseFunction = {
+  name: '_policyInterceptor',
+  kind: 'internal',
+  args: [
+    { name: 'funcSelector', type: 'bytes4' },
+  ],
+  returns: [],
+};
+
