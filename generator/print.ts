@@ -34,7 +34,7 @@ export function printContract(contract: Contract, opts?: Options): string {
           printConstructor(contract, helpers),
           ...fns.code,
           ...fns.modifiers,
-          hasOverrides ? [`// The following functions are overrides required by Solidity.`] : [],
+          // hasOverrides ? [`// The following functions are overrides required by Solidity.`] : [],
           ...fns.override,
         ),
 
