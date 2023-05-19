@@ -196,11 +196,6 @@ function addBase(c: ContractBuilder, name: string, symbol: string, profileName: 
   c.addOverride('ERC20', functions._transfer);
   c.addOverride('ERC20', supportsInterface);
   c.addOverride('ERC20', policyInterceptor);
-
-  c.setFunctionBody([
-    'super._policyInterceptor(funcSelector);',
-    'if(funcSelector == this.distributeToken.selector) { _checkOwner(); }',
-  ], policyInterceptor)
 }
 
 function addBurnable(c: ContractBuilder) {
@@ -360,6 +355,11 @@ function addDistribution(c: ContractBuilder, taxable: boolean, totalSupply: numb
     }
     if(totalDistribute != totalSupply) throw new Error("Illegal Token Amount Distribution");
   }
+
+  c.setFunctionBody([
+    'super._policyInterceptor(funcSelector);',
+    'if(funcSelector == this.distributeToken.selector) { _checkOwner(); }',
+  ], policyInterceptor)
 }
 
 const functions = defineFunctions({

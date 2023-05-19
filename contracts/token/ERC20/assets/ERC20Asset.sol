@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Litogen Contracts (last updated v1.1.1)
+// Litogen Contracts (last updated v1.1.3)
 
 pragma solidity 0.8.19;
 
@@ -22,7 +22,7 @@ import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 contract ERC20Asset is Ownable, ERC165, IERC20Asset, IAsset {
   using Address for address;
 
-  string constant internal _LITOGEN_ASSET_VERSION = "1.1.1-Litogen";
+  string constant internal _LITOGEN_ASSET_VERSION = "1.1.3-Litogen";
 
   address internal _acl;
   string internal _profileName;
