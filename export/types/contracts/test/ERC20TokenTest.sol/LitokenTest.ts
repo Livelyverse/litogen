@@ -113,11 +113,12 @@ export declare namespace IERC20Taxable {
   };
 }
 
-export interface TestTokenInterface extends utils.Interface {
+export interface LitokenTestInterface extends utils.Interface {
   functions: {
     "acl()": FunctionFragment;
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
+    "balance()": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "batchTransfer((address,uint256)[])": FunctionFragment;
     "batchTransferFrom((address,address,uint256)[])": FunctionFragment;
@@ -164,6 +165,7 @@ export interface TestTokenInterface extends utils.Interface {
     "unpause(address)": FunctionFragment;
     "unpauseAll()": FunctionFragment;
     "version()": FunctionFragment;
+    "withdrawBalance(address)": FunctionFragment;
   };
 
   getFunction(
@@ -174,6 +176,8 @@ export interface TestTokenInterface extends utils.Interface {
       | "allowance(address,address)"
       | "approve"
       | "approve(address,uint256)"
+      | "balance"
+      | "balance()"
       | "balanceOf"
       | "balanceOf(address)"
       | "batchTransfer"
@@ -266,6 +270,8 @@ export interface TestTokenInterface extends utils.Interface {
       | "unpauseAll()"
       | "version"
       | "version()"
+      | "withdrawBalance"
+      | "withdrawBalance(address)"
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "acl", values?: undefined): string;
@@ -286,6 +292,8 @@ export interface TestTokenInterface extends utils.Interface {
     functionFragment: "approve(address,uint256)",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
+  encodeFunctionData(functionFragment: "balance", values?: undefined): string;
+  encodeFunctionData(functionFragment: "balance()", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "balanceOf",
     values: [PromiseOrValue<string>]
@@ -626,6 +634,14 @@ export interface TestTokenInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "version", values?: undefined): string;
   encodeFunctionData(functionFragment: "version()", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "withdrawBalance",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "withdrawBalance(address)",
+    values: [PromiseOrValue<string>]
+  ): string;
 
   decodeFunctionResult(functionFragment: "acl", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "acl()", data: BytesLike): Result;
@@ -639,6 +655,8 @@ export interface TestTokenInterface extends utils.Interface {
     functionFragment: "approve(address,uint256)",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "balance", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "balance()", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "balanceOf(address)",
@@ -905,6 +923,14 @@ export interface TestTokenInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "version", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "version()", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "withdrawBalance",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "withdrawBalance(address)",
+    data: BytesLike
+  ): Result;
 
   events: {
     "Approval(address,address,uint256)": EventFragment;
@@ -1166,12 +1192,12 @@ export type UnpausedAllEvent = TypedEvent<[string], UnpausedAllEventObject>;
 
 export type UnpausedAllEventFilter = TypedEventFilter<UnpausedAllEvent>;
 
-export interface TestToken extends BaseContract {
+export interface LitokenTest extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: TestTokenInterface;
+  interface: LitokenTestInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -1220,6 +1246,10 @@ export interface TestToken extends BaseContract {
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    balance(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    "balance()"(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     balanceOf(
       account: PromiseOrValue<string>,
@@ -1622,6 +1652,16 @@ export interface TestToken extends BaseContract {
     version(overrides?: CallOverrides): Promise<[string]>;
 
     "version()"(overrides?: CallOverrides): Promise<[string]>;
+
+    withdrawBalance(
+      recepient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    "withdrawBalance(address)"(
+      recepient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
   };
 
   acl(overrides?: CallOverrides): Promise<string>;
@@ -1651,6 +1691,10 @@ export interface TestToken extends BaseContract {
     amount: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
+
+  balance(overrides?: CallOverrides): Promise<BigNumber>;
+
+  "balance()"(overrides?: CallOverrides): Promise<BigNumber>;
 
   balanceOf(
     account: PromiseOrValue<string>,
@@ -2054,6 +2098,16 @@ export interface TestToken extends BaseContract {
 
   "version()"(overrides?: CallOverrides): Promise<string>;
 
+  withdrawBalance(
+    recepient: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  "withdrawBalance(address)"(
+    recepient: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
     acl(overrides?: CallOverrides): Promise<string>;
 
@@ -2082,6 +2136,10 @@ export interface TestToken extends BaseContract {
       amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    balance(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "balance()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     balanceOf(
       account: PromiseOrValue<string>,
@@ -2472,6 +2530,16 @@ export interface TestToken extends BaseContract {
     version(overrides?: CallOverrides): Promise<string>;
 
     "version()"(overrides?: CallOverrides): Promise<string>;
+
+    withdrawBalance(
+      recepient: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "withdrawBalance(address)"(
+      recepient: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
   filters: {
@@ -2676,6 +2744,10 @@ export interface TestToken extends BaseContract {
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
+
+    balance(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "balance()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     balanceOf(
       account: PromiseOrValue<string>,
@@ -3078,6 +3150,16 @@ export interface TestToken extends BaseContract {
     version(overrides?: CallOverrides): Promise<BigNumber>;
 
     "version()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    withdrawBalance(
+      recepient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    "withdrawBalance(address)"(
+      recepient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -3108,6 +3190,10 @@ export interface TestToken extends BaseContract {
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
+
+    balance(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "balance()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     balanceOf(
       account: PromiseOrValue<string>,
@@ -3512,5 +3598,15 @@ export interface TestToken extends BaseContract {
     version(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "version()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    withdrawBalance(
+      recepient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "withdrawBalance(address)"(
+      recepient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
   };
 }

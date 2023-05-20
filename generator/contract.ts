@@ -184,12 +184,16 @@ export class ContractBuilder implements Contract {
     }
   }
 
-  setFunctionBody(code: string[], baseFn: BaseFunction, mutability?: FunctionMutability) {
+  setFunctionBody(code: string[], baseFn: BaseFunction, isAppendable: boolean, mutability?: FunctionMutability) {
     const fn = this.addFunction(baseFn);
     // if (fn.code.length > 0) {
     //   throw new Error(`Function ${baseFn.name} has additional code`);
     // }
-    fn.code.push(...code);
+    if(isAppendable) {
+      fn.code.push(...code);
+    } else {
+      fn.code = code
+    }
     fn.final = true;
     if (mutability) {
       fn.mutability = mutability;

@@ -13,7 +13,7 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "../utils/BasisPointsMath.sol";
 import "../token/ERC20/assets/IAsset.sol";
 
-contract TestToken is ERC20, ERC20Burnable, ERC20Mintable, ERC20Pausable, ERC20Extra, ERC20Lockable, ERC20Permitable, ERC20Taxable {
+contract LitokenTest is ERC20, ERC20Burnable, ERC20Mintable, ERC20Pausable, ERC20Extra, ERC20Lockable, ERC20Permitable, ERC20Taxable {
   using SafeMath for uint256;
   using BasisPointsMath for uint256;
 
@@ -21,8 +21,8 @@ contract TestToken is ERC20, ERC20Burnable, ERC20Mintable, ERC20Pausable, ERC20E
   bool public isDistributed;
 
   constructor()
-    ERC20("TestToken", "Test", "TestProfile", 9)
-    ERC20Permitable("TestToken")
+    ERC20("LitokenTest", "LIT", "TestProfile", 9)
+    ERC20Permitable("LitokenTest")
     ERC20Taxable(3)
   {
     _totalSupply = 10000 * 10 ** 9;
@@ -36,6 +36,7 @@ contract TestToken is ERC20, ERC20Burnable, ERC20Mintable, ERC20Pausable, ERC20E
     internal
     override
   {
+    require(isDistributed, "Token Not Distributed");
     require(!_isPaused, "Token Paused");
     require(!_isAccountPaused(from), "Account Paused");
     super._beforeTokenTransfer(from, to, amount);
@@ -70,8 +71,6 @@ contract TestToken is ERC20, ERC20Burnable, ERC20Mintable, ERC20Pausable, ERC20E
       super._transfer(_msgSender(), assets[i], _distributes[IAsset(assets[i]).assetName()]);
     }
   }
-
-  // The following functions are overrides required by Solidity.
 
   function supportsInterface(bytes4 interfaceId)
     public

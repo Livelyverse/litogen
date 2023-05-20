@@ -24,7 +24,6 @@ interface IAsset {
   }
 
   struct AssetInfo {
-    uint256 balance;
     string profile;
     string name;
     string version;
@@ -54,8 +53,6 @@ interface IAsset {
   function assetAccessControl() external view returns (address);
 
   function assetProfile() external view returns (string memory);
-
-  function assetBalance() external view returns (uint256);
 
   function assetInfo() external view returns (AssetInfo memory);
 

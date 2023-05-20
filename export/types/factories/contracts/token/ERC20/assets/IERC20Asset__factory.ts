@@ -14,6 +14,30 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "spender",
+        type: "address",
+      },
+    ],
+    name: "allowance",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
         name: "spender",
         type: "address",
       },
@@ -23,7 +47,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "tokenApprove",
+    name: "approve",
     outputs: [
       {
         internalType: "bool",
@@ -32,6 +56,64 @@ const _abi = [
       },
     ],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "balanceOf",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "decimals",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "symbol",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "totalSupply",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -47,7 +129,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "tokenTransfer",
+    name: "transfer",
     outputs: [
       {
         internalType: "bool",
@@ -76,7 +158,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "tokenTransferFrom",
+    name: "transferFrom",
     outputs: [
       {
         internalType: "bool",

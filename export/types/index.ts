@@ -18,8 +18,8 @@ export type { FundingTeam } from "./contracts/test/ERC20AssetFundingTeamTest.sol
 export { FundingTeam__factory } from "./factories/contracts/test/ERC20AssetFundingTeamTest.sol/FundingTeam__factory";
 export type { PublicSales } from "./contracts/test/ERC20AssetPublicSalesTest.sol/PublicSales";
 export { PublicSales__factory } from "./factories/contracts/test/ERC20AssetPublicSalesTest.sol/PublicSales__factory";
-export type { TestToken } from "./contracts/test/ERC20TokenTest.sol/TestToken";
-export { TestToken__factory } from "./factories/contracts/test/ERC20TokenTest.sol/TestToken__factory";
+export type { LitokenTest } from "./contracts/test/ERC20TokenTest.sol/LitokenTest";
+export { LitokenTest__factory } from "./factories/contracts/test/ERC20TokenTest.sol/LitokenTest__factory";
 export type { IACLTest } from "./contracts/test/IACLTest";
 export { IACLTest__factory } from "./factories/contracts/test/IACLTest__factory";
 export type { ERC20Asset } from "./contracts/token/ERC20/assets/ERC20Asset";

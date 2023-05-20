@@ -5,8 +5,8 @@ describe('Litogen Generator Tests', function() {
   it('Should generate ERC20 success', () => {
     console.log(ERC20API.print(
       {
-        name: "Test",
-        symbol: 'TTT',
+        name: "LitokenTest",
+        symbol: 'LIT',
         profileName: "TestProfile",
         burnable: true,
         pausable: true,
@@ -29,25 +29,25 @@ describe('Litogen Generator Tests', function() {
       }
     ))
 
-    // console.log(ERC20API.print(
-    //   {
-    //     name: "TestToken",
-    //     symbol: 'Test',
-    //     profileName: "TestProfile",
-    //     license: 'MIT',
-    //     burnable: true,
-    //     pausable: false,
-    //     mintable: true,
-    //     taxable: false,
-    //     lockable: false,
-    //     permitable: false,
-    //     extra: false,
-    //     taxRate: 3,
-    //     totalSupply: 10000,
-    //     decimal: 9,
-    //     distribute: null
-    //   }
-    // ))
+  //   console.log(ERC20API.print(
+  //     {
+  //       name: "TestToken",
+  //       symbol: 'Test',
+  //       profileName: "TestProfile",
+  //       license: 'MIT',
+  //       burnable: true,
+  //       pausable: false,
+  //       mintable: true,
+  //       taxable: false,
+  //       lockable: false,
+  //       permitable: false,
+  //       extra: false,
+  //       taxRate: 3,
+  //       totalSupply: 10000,
+  //       decimal: 9,
+  //       distribute: null
+  //     }
+  //   ))
   })
 
   it('Should generate ERC20 asset success', () => {
