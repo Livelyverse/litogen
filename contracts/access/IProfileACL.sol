@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Lively Guard Contracts (last updated v3.1.0)
+// Liguard Contracts (last updated v3.1.0)
 
 pragma solidity 0.8.19;
 

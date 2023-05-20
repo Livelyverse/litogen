@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
-// Litogen Contracts (last updated v1.0.2)
+// Litogen Contracts (last updated v2.1.0)
 
 pragma solidity 0.8.19;
 
 import "./IERC20Permitable.sol";
 import "../ERC20.sol";
-import "../../../utils/EIP712.sol";
-import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
+import "../../../utils/cryptography/EIP712.sol";
+import "../../../utils/cryptography/ECDSA.sol";
+import "../../../utils/Counters.sol";
 
 /**
  * @dev Implementation of the ERC20 Permit extension allowing approvals to be made via signatures, as defined in

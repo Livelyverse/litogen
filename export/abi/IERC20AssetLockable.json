@@ -59,7 +59,7 @@
         "type": "tuple[]"
       }
     ],
-    "name": "unlockToken",
+    "name": "tokenUnlock",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
