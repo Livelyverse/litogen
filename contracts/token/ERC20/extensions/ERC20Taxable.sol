@@ -1,13 +1,12 @@
 // SPDX-License-Identifier: MIT
-// Litogen Contracts (last updated v1.0.2)
+// Litogen Contracts (last updated v2.1.0)
 
 pragma solidity 0.8.19;
 
 import "./IERC20Taxable.sol";
 import "../ERC20.sol";
-import "../../../utils/BasisPointsMath.sol";
-import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "../../../utils/math/BasisPointsMath.sol";
+import "../../../utils/structs/EnumerableSet.sol";
 
 /**
  * @dev Extension of {ERC20} that allows get tax rate from each transfer token

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// LivelyVerse Contracts (last updated v1.0.2)
+// LivelyVerse Contracts (last updated v2.1.0)
 
 pragma solidity 0.8.19;
 
@@ -14,5 +14,5 @@ import "../extensions/IERC20Lockable.sol";
 interface IERC20AssetLockable {
   function tokenLock(IERC20Lockable.LockTokenRequest[] calldata lockRequests) external;
 
-  function unlockToken(IERC20Lockable.UnLockTokenRequest[] calldata unlockRequests) external;
+  function tokenUnlock(IERC20Lockable.UnLockTokenRequest[] calldata unlockRequests) external;
 }

@@ -3,6 +3,7 @@ import { defineFunctions } from './utils/defineFunctions';
 import { printContract } from './print';
 import {policyInterceptor, supportsInterface} from "./commonFunctions";
 
+export const LITOGEN_VERSION= '2.1.0'
 export type DistributeUnit = 'PERCENT' | 'NUMBER'
 
 export interface BaseOptions {
@@ -182,7 +183,7 @@ function addBase(c: ContractBuilder, name: string, symbol: string, profileName: 
   c.addParent(
     {
       name: 'ERC20',
-      path: '@livelyversenpm/litogen/contracts/token/ERC20/ERC20.sol',
+      path: `@livelyversenpm/litogen@${LITOGEN_VERSION}/contracts/token/ERC20/ERC20.sol`,
     },
     [name, symbol, profileName, decimal],
   );
@@ -201,7 +202,7 @@ function addBase(c: ContractBuilder, name: string, symbol: string, profileName: 
 function addBurnable(c: ContractBuilder) {
   c.addParent({
     name: 'ERC20Burnable',
-    path: '@livelyversenpm/litogen/contracts/token/ERC20/extensions/ERC20Burnable.sol',
+    path: `@livelyversenpm/litogen@${LITOGEN_VERSION}/contracts/token/ERC20/extensions/ERC20Burnable.sol`,
   });
 
   c.addOverride("ERC20Burnable", supportsInterface);
@@ -211,7 +212,7 @@ function addBurnable(c: ContractBuilder) {
 function addMintable(c: ContractBuilder) {
   c.addParent({
     name: 'ERC20Mintable',
-    path: '@livelyversenpm/litogen/contracts/token/ERC20/extensions/ERC20Mintable.sol',
+    path: `@livelyversenpm/litogen@${LITOGEN_VERSION}/contracts/token/ERC20/extensions/ERC20Mintable.sol`,
   });
 
   c.addOverride("ERC20Mintable", supportsInterface);
@@ -221,7 +222,7 @@ function addMintable(c: ContractBuilder) {
 function addPausable(c: ContractBuilder) {
   c.addParent({
     name: 'ERC20Pausable',
-    path: '@livelyversenpm/litogen/contracts/token/ERC20/extensions/ERC20Pausable.sol',
+    path: `@livelyversenpm/litogen@${LITOGEN_VERSION}/contracts/token/ERC20/extensions/ERC20Pausable.sol`,
   });
 
   c.addOverride("ERC20Pausable", supportsInterface);
@@ -237,7 +238,7 @@ function addPausable(c: ContractBuilder) {
 function addExtra(c: ContractBuilder) {
   c.addParent({
     name: 'ERC20Extra',
-    path: '@livelyversenpm/litogen/contracts/token/ERC20/extensions/ERC20Extra.sol',
+    path: `@livelyversenpm/litogen@${LITOGEN_VERSION}/contracts/token/ERC20/extensions/ERC20Extra.sol`,
   });
   c.addOverride("ERC20Extra", supportsInterface);
 }
@@ -245,7 +246,7 @@ function addExtra(c: ContractBuilder) {
 function addLockable(c: ContractBuilder) {
   c.addParent({
     name: 'ERC20Lockable',
-    path: '@livelyversenpm/litogen/contracts/token/ERC20/extensions/ERC20Lockable.sol',
+    path: `@livelyversenpm/litogen@${LITOGEN_VERSION}/contracts/token/ERC20/extensions/ERC20Lockable.sol`,
   });
   c.addOverride("ERC20Lockable", supportsInterface);
   c.addOverride("ERC20Lockable", policyInterceptor);
@@ -254,7 +255,7 @@ function addLockable(c: ContractBuilder) {
 function addPermitalble(c: ContractBuilder, name: string) {
   c.addParent({
     name: 'ERC20Permitable',
-    path: '@livelyversenpm/litogen/contracts/token/ERC20/extensions/ERC20Permitable.sol',
+    path: `@livelyversenpm/litogen@${LITOGEN_VERSION}/contracts/token/ERC20/extensions/ERC20Permitable.sol`,
   }, [name]);
   c.addOverride("ERC20Permitable", supportsInterface);
 }
@@ -263,7 +264,7 @@ function addPermitalble(c: ContractBuilder, name: string) {
 function addTaxable(c: ContractBuilder, taxRate: number) {
   c.addParent({
     name: 'ERC20Taxable',
-    path: '@livelyversenpm/litogen/contracts/token/ERC20/extensions/ERC20Taxable.sol',
+    path: `@livelyversenpm/litogen@${LITOGEN_VERSION}/contracts/token/ERC20/extensions/ERC20Taxable.sol`,
   }, [taxRate]);
 
   c.addOverride("ERC20Taxable", supportsInterface);
@@ -271,12 +272,12 @@ function addTaxable(c: ContractBuilder, taxRate: number) {
 
   c.addUsing({
     name: 'SafeMath',
-    path: '@openzeppelin/contracts/utils/math/SafeMath.sol'
+    path: `@livelyversenpm/litogen@${LITOGEN_VERSION}/contracts/utils/math/SafeMath.sol`
   }, 'uint256')
 
   c.addUsing({
     name: 'BasisPointsMath',
-    path: '@livelyversenpm/litogen/contracts/utils/BasisPointsMath.sol'
+    path: `@livelyversenpm/litogen@${LITOGEN_VERSION}/contracts/utils/math/BasisPointsMath.sol`
   }, 'uint256')
 
   c.setFunctionBody([
@@ -304,7 +305,7 @@ function addTotalSupply(c: ContractBuilder, amount: number, decimal: number) {
 function addDistribution(c: ContractBuilder, taxable: boolean, pausable: boolean, totalSupply: number, decimal: number, distribute: DistributeOptions) {
   let distributeFn: ContractFunction
 
-  c.addImportInterface('@livelyversenpm/litogen/contracts/token/ERC20/assets/IAsset.sol');
+  c.addImportInterface(`@livelyversenpm/litogen@${LITOGEN_VERSION}/contracts/token/ERC20/assets/IAsset.sol`);
   c.addVariable('mapping(string => uint256) internal _distributes;');
   c.addVariable('bool public isDistributed;');
   c.addConstructorCode('isDistributed = false;');
@@ -418,7 +419,7 @@ function assetAddBase(c: ContractBuilder, name: string, profileName: string) {
   c.addParent(
     {
       name: 'ERC20Asset',
-      path: '@livelyversenpm/litogen/contracts/token/ERC20/assets/ERC20Asset.sol',
+      path: `@livelyversenpm/litogen@${LITOGEN_VERSION}/contracts/token/ERC20/assets/ERC20Asset.sol`,
     },
     [name, profileName, { lit: 'erc20Token_' }],
   );
@@ -439,13 +440,13 @@ function assetAddBase(c: ContractBuilder, name: string, profileName: string) {
 function assetAddExtra(c: ContractBuilder) {
   c.addParent({
     name: 'ERC20AssetExtra',
-    path: '@livelyversenpm/litogen/contracts/token/ERC20/assets/ERC20AssetExtra.sol',
+    path: `@livelyversenpm/litogen@${LITOGEN_VERSION}/contracts/token/ERC20/assets/ERC20AssetExtra.sol`,
   });
 }
 
 function assetAddLockable(c: ContractBuilder) {
   c.addParent({
     name: 'ERC20AssetLockable',
-    path: '@livelyversenpm/litogen/contracts/token/ERC20/assets/ERC20AssetLockable.sol',
+    path: `@livelyversenpm/litogen@${LITOGEN_VERSION}/contracts/token/ERC20/assets/ERC20AssetLockable.sol`,
   });
 }

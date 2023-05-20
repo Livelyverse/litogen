@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Litogen Contracts (last updated v1.1.0)
+// Litogen Contracts (last updated v2.1.0)
 
 pragma solidity 0.8.19;
 

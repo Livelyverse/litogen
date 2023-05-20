@@ -9,8 +9,8 @@ import "../token/ERC20/extensions/ERC20Extra.sol";
 import "../token/ERC20/extensions/ERC20Lockable.sol";
 import "../token/ERC20/extensions/ERC20Permitable.sol";
 import "../token/ERC20/extensions/ERC20Taxable.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-import "../utils/BasisPointsMath.sol";
+import "../utils/math/SafeMath.sol";
+import "../utils/math/BasisPointsMath.sol";
 import "../token/ERC20/assets/IAsset.sol";
 
 contract LitokenTest is ERC20, ERC20Burnable, ERC20Mintable, ERC20Pausable, ERC20Extra, ERC20Lockable, ERC20Permitable, ERC20Taxable {

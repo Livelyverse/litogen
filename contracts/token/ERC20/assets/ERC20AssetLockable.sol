@@ -35,7 +35,7 @@ abstract contract ERC20AssetLockable is ERC20Asset, IERC20AssetLockable {
     IERC20Lockable(_erc20TokenId).lockToken(lockRequests);
   }
 
-  function unlockToken(IERC20Lockable.UnLockTokenRequest[] calldata unlockRequests) external {
+  function tokenUnlock(IERC20Lockable.UnLockTokenRequest[] calldata unlockRequests) external {
     require(_acl != address(0), "Unlock Not Supported");
     _policyInterceptor(this.tokenLock.selector);
     IERC20Lockable(_erc20TokenId).unlockToken(unlockRequests);

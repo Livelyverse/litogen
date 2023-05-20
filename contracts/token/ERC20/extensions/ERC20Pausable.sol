@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
-// Litogen Contracts (last updated v1.0.2)
+// Litogen Contracts (last updated v2.1.0)
 
 pragma solidity 0.8.19;
 
 import "./IERC20Pausable.sol";
-import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import "../ERC20.sol";
+import "../../../utils/structs/EnumerableSet.sol";
 
 /**
  * @dev ERC20 token with pausable token transfers, minting and burning.

@@ -544,6 +544,36 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "bytes32",
+            "name": "lockId",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "account",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "reason",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct IERC20Lockable.UnLockTokenRequest[]",
+        "name": "unlockRequests",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "tokenUnlock",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "totalSupply",
     "outputs": [
@@ -618,36 +648,6 @@
       }
     ],
     "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "components": [
-          {
-            "internalType": "bytes32",
-            "name": "lockId",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "address",
-            "name": "account",
-            "type": "address"
-          },
-          {
-            "internalType": "string",
-            "name": "reason",
-            "type": "string"
-          }
-        ],
-        "internalType": "struct IERC20Lockable.UnLockTokenRequest[]",
-        "name": "unlockRequests",
-        "type": "tuple[]"
-      }
-    ],
-    "name": "unlockToken",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
