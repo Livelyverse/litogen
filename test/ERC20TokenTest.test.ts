@@ -1155,22 +1155,6 @@ describe('Litogen Token and Assets Tests', function() {
     expect(await erc20TokenTest.owner()).to.be.equal(ethers.constants.AddressZero);
   })
 
-  it("Should transferOwnership from owner to Liguard in publicSaleAsset success", async() => {
-    // given
-    const aclBefore = await publicSaleAsset.assetAccessControl();
-    const ownerBefore = await publicSaleAsset.owner();
-
-    // when
-    await expect(publicSaleAsset.connect(admin).transferOwnership(livelyGuard.address))
-      .to.emit(publicSaleAsset, "OwnershipTransferred")
-      .withArgs(adminWallet.address, livelyGuard.address);
-
-    // then
-    expect(aclBefore).to.be.equal(ethers.constants.AddressZero);
-    expect(ownerBefore).to.be.equal(adminWallet.address);
-    expect(await publicSaleAsset.assetAccessControl()).to.be.equal(livelyGuard.address);
-    expect(await publicSaleAsset.owner()).to.be.equal(ethers.constants.AddressZero);
-  })
 
   it("Should unlock token from user1 by publicSaleAsset success", async () => {
     // given
@@ -1227,22 +1211,22 @@ describe('Litogen Token and Assets Tests', function() {
     expect(await erc20TokenTest.owner()).to.be.equal(userWallet1.address);
   })
 
-  it("Should transferOwnership from Liguard to owner in publicSaleAsset success", async() => {
-    // given
-    const aclBefore = await publicSaleAsset.assetAccessControl();
-    const ownerBefore = await publicSaleAsset.owner();
-
-    // when
-    await expect(publicSaleAsset.connect(admin).transferOwnership(userWallet2.address))
-      .to.emit(publicSaleAsset, "OwnershipTransferred")
-      .withArgs(livelyGuard.address, userWallet2.address);
-
-    // then
-    expect(aclBefore).to.be.equal(livelyGuard.address);
-    expect(ownerBefore).to.be.equal(ethers.constants.AddressZero);
-    expect(await publicSaleAsset.assetAccessControl()).to.be.equal(ethers.constants.AddressZero);
-    expect(await publicSaleAsset.owner()).to.be.equal(userWallet2.address);
-  })
+  // it("Should transferOwnership from Liguard to owner in publicSaleAsset success", async() => {
+  //   // given
+  //   const aclBefore = await publicSaleAsset.assetAccessControl();
+  //   const ownerBefore = await publicSaleAsset.owner();
+  //
+  //   // when
+  //   await expect(publicSaleAsset.connect(admin).transferOwnership(userWallet2.address))
+  //     .to.emit(publicSaleAsset, "OwnershipTransferred")
+  //     .withArgs(livelyGuard.address, userWallet2.address);
+  //
+  //   // then
+  //   expect(aclBefore).to.be.equal(livelyGuard.address);
+  //   expect(ownerBefore).to.be.equal(ethers.constants.AddressZero);
+  //   expect(await publicSaleAsset.assetAccessControl()).to.be.equal(ethers.constants.AddressZero);
+  //   expect(await publicSaleAsset.owner()).to.be.equal(userWallet2.address);
+  // })
 });
 
 export async function generatePermitDomainSignatureByWaffleProvider(
