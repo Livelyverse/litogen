@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: MIT
-// Litogen Contracts (last updated v1.1.3)
+// Litogen Contracts (last updated v2.0.0)
 
 pragma solidity 0.8.19;
 
 import "./IAsset.sol";
 import "./IERC20Asset.sol";
 import "../IERC20.sol";
+import "../extensions/IERC20Metadata.sol";
 import "../../../access/IProfileACL.sol";
 import "../../../access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
@@ -22,7 +23,7 @@ import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 contract ERC20Asset is Ownable, ERC165, IERC20Asset, IAsset {
   using Address for address;
 
-  string constant internal _LITOGEN_ASSET_VERSION = "1.1.3-Litogen";
+  string constant internal _LITOGEN_ASSET_VERSION = "v2.0.0-Litogen";
 
   address internal _acl;
   string internal _profileName;
@@ -33,7 +34,10 @@ contract ERC20Asset is Ownable, ERC165, IERC20Asset, IAsset {
   constructor(string memory assetName_, string memory profileName_, address erc20Token_) {
     require(bytes(assetName_).length >= 4, "Invalid Name");
     require(Address.isContract(erc20Token_), "Invalid ERC20Token");
-    if (!IERC165(erc20Token_).supportsInterface(type(IERC20).interfaceId)) revert("Illegal ERC20Token");
+    if (
+      !IERC165(erc20Token_).supportsInterface(type(IERC20).interfaceId) &&
+      !IERC165(erc20Token_).supportsInterface(type(IERC20Metadata).interfaceId)
+    ) revert("Illegal ERC20Token");
 
     _assetName = assetName_;
     _erc20TokenId = erc20Token_;
@@ -58,24 +62,83 @@ contract ERC20Asset is Ownable, ERC165, IERC20Asset, IAsset {
     _profileName = profileName;
   }
 
-
-  function tokenTransfer(address to, uint256 amount) external returns (bool) {
-    _policyInterceptor(this.tokenTransfer.selector);
+  /**
+   * @dev Moves `amount` tokens from the caller's account to `to`.
+   *
+   * Returns a boolean value indicating whether the operation succeeded.
+   *
+   */
+  function transfer(address to, uint256 amount) external returns (bool) {
+    _policyInterceptor(this.transfer.selector);
     return IERC20(_erc20TokenId).transfer(to, amount);
   }
 
-  function tokenTransferFrom(
+  /**
+   * @dev Moves `amount` tokens from `from` to `to` using the
+   * allowance mechanism. `amount` is then deducted from the caller's
+   * allowance.
+   *
+   * Returns a boolean value indicating whether the operation succeeded.
+   *
+   */
+  function transferFrom(
     address from,
     address to,
     uint256 amount
   ) external returns (bool) {
-    _policyInterceptor(this.tokenTransferFrom.selector);
+    _policyInterceptor(this.transferFrom.selector);
     return IERC20(_erc20TokenId).transferFrom(from, to, amount);
   }
 
-  function tokenApprove(address spender, uint256 amount) external returns (bool) {
-    _policyInterceptor(this.tokenApprove.selector);
+
+  /**
+   * @dev Sets `amount` as the allowance of `spender` over the caller's tokens.
+   *
+   * Returns a boolean value indicating whether the operation succeeded.
+   *
+   */
+  function approve(address spender, uint256 amount) external returns (bool) {
+    _policyInterceptor(this.approve.selector);
     return IERC20(_erc20TokenId).approve(spender, amount);
+  }
+
+  /**
+   * @dev Returns the amount of tokens in existence.
+   */
+  function totalSupply() external view returns (uint256) {
+    return IERC20(_erc20TokenId).totalSupply();
+  }
+
+  /**
+   * @dev Returns the amount of tokens owned by `account`.
+   */
+  function balanceOf(address account) external view returns (uint256) {
+    return IERC20(_erc20TokenId).balanceOf(account);
+  }
+
+  /**
+   * @dev Returns the remaining number of tokens that `spender` will be
+   * allowed to spend on behalf of `owner` through {transferFrom}. This is
+   * zero by default.
+   *
+   * This value changes when {approve} or {transferFrom} are called.
+   */
+  function allowance(address owner, address spender) external view returns (uint256) {
+    return IERC20(_erc20TokenId).allowance(owner, spender);
+  }
+
+  /**
+   * @dev Returns the symbol of the token.
+   */
+  function symbol() external view returns (string memory) {
+    return IERC20Metadata(_erc20TokenId).symbol();
+  }
+
+  /**
+   * @dev Returns the decimals places of the token.
+   */
+  function decimals() external view returns (uint8) {
+    return IERC20Metadata(_erc20TokenId).decimals();
   }
 
   function assetSetSafeMode(AssetSafeModeStatus status) public override returns (bool) {
@@ -89,11 +152,6 @@ contract ERC20Asset is Ownable, ERC165, IERC20Asset, IAsset {
     _assetSafeModeStatus = status;
     emit AssetSafeModeUpdated(_msgSender(), address(this), status);
     return true;
-  }
-
-  function withdrawBalance(address recepient) public {
-    _policyInterceptor(this.withdrawBalance.selector);
-    payable(recepient).transfer(address(this).balance);
   }
 
   function assetSafeMode() external view returns (AssetSafeModeStatus) {
@@ -124,14 +182,9 @@ contract ERC20Asset is Ownable, ERC165, IERC20Asset, IAsset {
     return _profileName;
   }
 
-  function assetBalance() external view returns (uint256) {
-    return IERC20(_erc20TokenId).balanceOf(address(this));
-  }
-
   function assetInfo() external view returns (AssetInfo memory) {
     return
       AssetInfo({
-        balance: IERC20(_erc20TokenId).balanceOf(address(this)),
         profile: _profileName,
         name: _assetName,
         version: _LITOGEN_ASSET_VERSION,
@@ -152,6 +205,12 @@ contract ERC20Asset is Ownable, ERC165, IERC20Asset, IAsset {
   function balance() public view returns (uint256) {
     return address(this).balance;
   }
+
+  function withdrawBalance(address recepient) public {
+    _policyInterceptor(this.withdrawBalance.selector);
+    payable(recepient).transfer(address(this).balance);
+  }
+
 
   /**
    * @dev Hook that is called before any transactional function of token.

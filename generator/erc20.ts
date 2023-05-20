@@ -172,7 +172,7 @@ export function buildERC20(opts: ERC20Options): Contract {
   }
 
   if(allOpts.distribute) {
-    addDistribution(c, allOpts.taxable, allOpts.totalSupply, allOpts.decimal, allOpts.distribute)
+    addDistribution(c, allOpts.taxable, allOpts.pausable, allOpts.totalSupply, allOpts.decimal, allOpts.distribute)
   }
 
   return c;
@@ -231,7 +231,7 @@ function addPausable(c: ContractBuilder) {
     'require(!_isPaused, "Token Paused");',
     'require(!_isAccountPaused(from), "Account Paused");',
     'super._beforeTokenTransfer(from, to, amount);'
-  ], functions._beforeTokenTransfer)
+  ], functions._beforeTokenTransfer, true)
 }
 
 function addExtra(c: ContractBuilder) {
@@ -288,7 +288,7 @@ function addTaxable(c: ContractBuilder, taxRate: number) {
     '} else {',
     '  super._transfer(from, to, amount);',
     '}'
-  ], functions._transfer)
+  ], functions._transfer, false)
 }
 
 function addTotalSupply(c: ContractBuilder, amount: number, decimal: number) {
@@ -297,10 +297,11 @@ function addTotalSupply(c: ContractBuilder, amount: number, decimal: number) {
   } else {
     c.addConstructorCode(`_totalSupply = ${amount};`);
   }
+
   c.addConstructorCode(`_balances[_msgSender()] = _totalSupply;`);
 }
 
-function addDistribution(c: ContractBuilder, taxable: boolean, totalSupply: number, decimal: number, distribute: DistributeOptions) {
+function addDistribution(c: ContractBuilder, taxable: boolean, pausable: boolean, totalSupply: number, decimal: number, distribute: DistributeOptions) {
   let distributeFn: ContractFunction
 
   c.addImportInterface('@livelyversenpm/litogen/contracts/token/ERC20/assets/IAsset.sol');
@@ -319,7 +320,7 @@ function addDistribution(c: ContractBuilder, taxable: boolean, totalSupply: numb
       '  if (!IERC165(assets[i]).supportsInterface(type(IAsset).interfaceId)) revert("Illegal IAsset");',
       '  super._transfer(_msgSender(), assets[i], _distributes[IAsset(assets[i]).assetName()]);',
       '}'
-    ], distributeFn);
+    ], distributeFn, false);
 
   } else {
     distributeFn = c.addFunction(functions.distributeToken);
@@ -331,8 +332,22 @@ function addDistribution(c: ContractBuilder, taxable: boolean, totalSupply: numb
       '  if (!IERC165(assets[i]).supportsInterface(type(IAsset).interfaceId)) revert("Illegal IAsset");',
       '  super._transfer(_msgSender(), assets[i], _distributes[IAsset(assets[i]).assetName()]);',
       '}'
-    ], distributeFn);
+    ], distributeFn, false);
+  }
 
+  if(pausable) {
+    c.setFunctionBody([
+      'require(isDistributed, "Token Not Distributed");',
+      'require(!_isPaused, "Token Paused");',
+      'require(!_isAccountPaused(from), "Account Paused");',
+      'super._beforeTokenTransfer(from, to, amount);'
+    ], functions._beforeTokenTransfer, false)
+
+  } else {
+    c.setFunctionBody([
+      'require(isDistributed, "Token Not Distributed");',
+      'super._beforeTokenTransfer(from, to, amount);'
+    ], functions._beforeTokenTransfer, false)
   }
 
   let totalDistribute = 0;
@@ -359,7 +374,7 @@ function addDistribution(c: ContractBuilder, taxable: boolean, totalSupply: numb
   c.setFunctionBody([
     'super._policyInterceptor(funcSelector);',
     'if(funcSelector == this.distributeToken.selector) { _checkOwner(); }',
-  ], policyInterceptor)
+  ], policyInterceptor, true)
 }
 
 const functions = defineFunctions({

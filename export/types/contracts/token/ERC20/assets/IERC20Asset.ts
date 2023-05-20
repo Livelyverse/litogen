@@ -25,39 +25,85 @@ import type {
 
 export interface IERC20AssetInterface extends utils.Interface {
   functions: {
-    "tokenApprove(address,uint256)": FunctionFragment;
-    "tokenTransfer(address,uint256)": FunctionFragment;
-    "tokenTransferFrom(address,address,uint256)": FunctionFragment;
+    "allowance(address,address)": FunctionFragment;
+    "approve(address,uint256)": FunctionFragment;
+    "balanceOf(address)": FunctionFragment;
+    "decimals()": FunctionFragment;
+    "symbol()": FunctionFragment;
+    "totalSupply()": FunctionFragment;
+    "transfer(address,uint256)": FunctionFragment;
+    "transferFrom(address,address,uint256)": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
-      | "tokenApprove"
-      | "tokenApprove(address,uint256)"
-      | "tokenTransfer"
-      | "tokenTransfer(address,uint256)"
-      | "tokenTransferFrom"
-      | "tokenTransferFrom(address,address,uint256)"
+      | "allowance"
+      | "allowance(address,address)"
+      | "approve"
+      | "approve(address,uint256)"
+      | "balanceOf"
+      | "balanceOf(address)"
+      | "decimals"
+      | "decimals()"
+      | "symbol"
+      | "symbol()"
+      | "totalSupply"
+      | "totalSupply()"
+      | "transfer"
+      | "transfer(address,uint256)"
+      | "transferFrom"
+      | "transferFrom(address,address,uint256)"
   ): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: "tokenApprove",
+    functionFragment: "allowance",
+    values: [PromiseOrValue<string>, PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "allowance(address,address)",
+    values: [PromiseOrValue<string>, PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "approve",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "tokenApprove(address,uint256)",
+    functionFragment: "approve(address,uint256)",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "tokenTransfer",
+    functionFragment: "balanceOf",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "balanceOf(address)",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "decimals()",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
+  encodeFunctionData(functionFragment: "symbol()", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "totalSupply",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "totalSupply()",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transfer",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "tokenTransfer(address,uint256)",
+    functionFragment: "transfer(address,uint256)",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "tokenTransferFrom",
+    functionFragment: "transferFrom",
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<string>,
@@ -65,7 +111,7 @@ export interface IERC20AssetInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "tokenTransferFrom(address,address,uint256)",
+    functionFragment: "transferFrom(address,address,uint256)",
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<string>,
@@ -73,28 +119,44 @@ export interface IERC20AssetInterface extends utils.Interface {
     ]
   ): string;
 
+  decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "tokenApprove",
+    functionFragment: "allowance(address,address)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "approve(address,uint256)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "balanceOf(address)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "decimals()", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "symbol()", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "totalSupply",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "tokenApprove(address,uint256)",
+    functionFragment: "totalSupply()",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "transfer", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "transfer(address,uint256)",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "tokenTransfer",
+    functionFragment: "transferFrom",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "tokenTransfer(address,uint256)",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "tokenTransferFrom",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "tokenTransferFrom(address,address,uint256)",
+    functionFragment: "transferFrom(address,address,uint256)",
     data: BytesLike
   ): Result;
 
@@ -128,38 +190,72 @@ export interface IERC20Asset extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    tokenApprove(
+    allowance(
+      owner: PromiseOrValue<string>,
+      spender: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    "allowance(address,address)"(
+      owner: PromiseOrValue<string>,
+      spender: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    approve(
       spender: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    "tokenApprove(address,uint256)"(
+    "approve(address,uint256)"(
       spender: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    tokenTransfer(
+    balanceOf(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    "balanceOf(address)"(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    decimals(overrides?: CallOverrides): Promise<[number]>;
+
+    "decimals()"(overrides?: CallOverrides): Promise<[number]>;
+
+    symbol(overrides?: CallOverrides): Promise<[string]>;
+
+    "symbol()"(overrides?: CallOverrides): Promise<[string]>;
+
+    totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    "totalSupply()"(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    transfer(
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    "tokenTransfer(address,uint256)"(
+    "transfer(address,uint256)"(
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    tokenTransferFrom(
+    transferFrom(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    "tokenTransferFrom(address,address,uint256)"(
+    "transferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
@@ -167,38 +263,72 @@ export interface IERC20Asset extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
-  tokenApprove(
+  allowance(
+    owner: PromiseOrValue<string>,
+    spender: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  "allowance(address,address)"(
+    owner: PromiseOrValue<string>,
+    spender: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  approve(
     spender: PromiseOrValue<string>,
     amount: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  "tokenApprove(address,uint256)"(
+  "approve(address,uint256)"(
     spender: PromiseOrValue<string>,
     amount: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  tokenTransfer(
+  balanceOf(
+    account: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  "balanceOf(address)"(
+    account: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  decimals(overrides?: CallOverrides): Promise<number>;
+
+  "decimals()"(overrides?: CallOverrides): Promise<number>;
+
+  symbol(overrides?: CallOverrides): Promise<string>;
+
+  "symbol()"(overrides?: CallOverrides): Promise<string>;
+
+  totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
+  "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+  transfer(
     to: PromiseOrValue<string>,
     amount: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  "tokenTransfer(address,uint256)"(
+  "transfer(address,uint256)"(
     to: PromiseOrValue<string>,
     amount: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  tokenTransferFrom(
+  transferFrom(
     from: PromiseOrValue<string>,
     to: PromiseOrValue<string>,
     amount: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  "tokenTransferFrom(address,address,uint256)"(
+  "transferFrom(address,address,uint256)"(
     from: PromiseOrValue<string>,
     to: PromiseOrValue<string>,
     amount: PromiseOrValue<BigNumberish>,
@@ -206,38 +336,72 @@ export interface IERC20Asset extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    tokenApprove(
+    allowance(
+      owner: PromiseOrValue<string>,
+      spender: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "allowance(address,address)"(
+      owner: PromiseOrValue<string>,
+      spender: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    approve(
       spender: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    "tokenApprove(address,uint256)"(
+    "approve(address,uint256)"(
       spender: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    tokenTransfer(
+    balanceOf(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "balanceOf(address)"(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    decimals(overrides?: CallOverrides): Promise<number>;
+
+    "decimals()"(overrides?: CallOverrides): Promise<number>;
+
+    symbol(overrides?: CallOverrides): Promise<string>;
+
+    "symbol()"(overrides?: CallOverrides): Promise<string>;
+
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    transfer(
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    "tokenTransfer(address,uint256)"(
+    "transfer(address,uint256)"(
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    tokenTransferFrom(
+    transferFrom(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    "tokenTransferFrom(address,address,uint256)"(
+    "transferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
@@ -248,38 +412,72 @@ export interface IERC20Asset extends BaseContract {
   filters: {};
 
   estimateGas: {
-    tokenApprove(
+    allowance(
+      owner: PromiseOrValue<string>,
+      spender: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "allowance(address,address)"(
+      owner: PromiseOrValue<string>,
+      spender: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    approve(
       spender: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    "tokenApprove(address,uint256)"(
+    "approve(address,uint256)"(
       spender: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    tokenTransfer(
+    balanceOf(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "balanceOf(address)"(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    decimals(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "decimals()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    symbol(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "symbol()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    transfer(
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    "tokenTransfer(address,uint256)"(
+    "transfer(address,uint256)"(
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    tokenTransferFrom(
+    transferFrom(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    "tokenTransferFrom(address,address,uint256)"(
+    "transferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
@@ -288,38 +486,72 @@ export interface IERC20Asset extends BaseContract {
   };
 
   populateTransaction: {
-    tokenApprove(
+    allowance(
+      owner: PromiseOrValue<string>,
+      spender: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "allowance(address,address)"(
+      owner: PromiseOrValue<string>,
+      spender: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    approve(
       spender: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    "tokenApprove(address,uint256)"(
+    "approve(address,uint256)"(
       spender: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    tokenTransfer(
+    balanceOf(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "balanceOf(address)"(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "decimals()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "symbol()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "totalSupply()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    transfer(
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    "tokenTransfer(address,uint256)"(
+    "transfer(address,uint256)"(
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    tokenTransferFrom(
+    transferFrom(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    "tokenTransferFrom(address,address,uint256)"(
+    "transferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,

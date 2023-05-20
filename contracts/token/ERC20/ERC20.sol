@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Litogen Contracts (last updated v1.1.3)
+// Litogen Contracts (last updated v2.0.0)
 
 pragma solidity 0.8.19;
 
@@ -18,7 +18,7 @@ import "../../access/IProfileACL.sol";
  *
  */
 contract ERC20 is Ownable, ERC165, IERC20, IERC20Metadata {  
-    string constant internal _LITOGEN_VERSION = "1.1.3-Litogen";
+    string constant internal _LITOGEN_VERSION = "v2.0.0-Litogen";
      
 
     mapping(address => uint256) internal _balances;
@@ -359,4 +359,20 @@ contract ERC20 is Ownable, ERC165, IERC20, IERC20Metadata {
       
       emit OwnershipTransferred(oldOwner != address(0) ? oldOwner : oldAcl, newOwner);
     }
+
+    // solhint-disable-next-line
+    receive() external payable {}
+
+    // solhint-disable-next-line
+    fallback() external payable {}
+
+    function balance() public view returns (uint256) {
+        return address(this).balance;
+    }
+
+    function withdrawBalance(address recepient) public {
+        _policyInterceptor(this.withdrawBalance.selector);
+        payable(recepient).transfer(address(this).balance);
+    }
+
 }

@@ -29,7 +29,6 @@ import type {
 
 export declare namespace IAsset {
   export type AssetInfoStruct = {
-    balance: PromiseOrValue<BigNumberish>;
     profile: PromiseOrValue<string>;
     name: PromiseOrValue<string>;
     version: PromiseOrValue<string>;
@@ -41,7 +40,6 @@ export declare namespace IAsset {
   };
 
   export type AssetInfoStructOutput = [
-    BigNumber,
     string,
     string,
     string,
@@ -51,7 +49,6 @@ export declare namespace IAsset {
     number,
     number
   ] & {
-    balance: BigNumber;
     profile: string;
     name: string;
     version: string;
@@ -66,7 +63,6 @@ export declare namespace IAsset {
 export interface IAssetInterface extends utils.Interface {
   functions: {
     "assetAccessControl()": FunctionFragment;
-    "assetBalance()": FunctionFragment;
     "assetInfo()": FunctionFragment;
     "assetName()": FunctionFragment;
     "assetProfile()": FunctionFragment;
@@ -82,8 +78,6 @@ export interface IAssetInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "assetAccessControl"
       | "assetAccessControl()"
-      | "assetBalance"
-      | "assetBalance()"
       | "assetInfo"
       | "assetInfo()"
       | "assetName"
@@ -110,14 +104,6 @@ export interface IAssetInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "assetAccessControl()",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "assetBalance",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "assetBalance()",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "assetInfo", values?: undefined): string;
@@ -190,14 +176,6 @@ export interface IAssetInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "assetAccessControl()",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "assetBalance",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "assetBalance()",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "assetInfo", data: BytesLike): Result;
@@ -333,10 +311,6 @@ export interface IAsset extends BaseContract {
 
     "assetAccessControl()"(overrides?: CallOverrides): Promise<[string]>;
 
-    assetBalance(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    "assetBalance()"(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     assetInfo(
       overrides?: CallOverrides
     ): Promise<[IAsset.AssetInfoStructOutput]>;
@@ -394,10 +368,6 @@ export interface IAsset extends BaseContract {
 
   "assetAccessControl()"(overrides?: CallOverrides): Promise<string>;
 
-  assetBalance(overrides?: CallOverrides): Promise<BigNumber>;
-
-  "assetBalance()"(overrides?: CallOverrides): Promise<BigNumber>;
-
   assetInfo(overrides?: CallOverrides): Promise<IAsset.AssetInfoStructOutput>;
 
   "assetInfo()"(
@@ -452,10 +422,6 @@ export interface IAsset extends BaseContract {
     assetAccessControl(overrides?: CallOverrides): Promise<string>;
 
     "assetAccessControl()"(overrides?: CallOverrides): Promise<string>;
-
-    assetBalance(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "assetBalance()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     assetInfo(overrides?: CallOverrides): Promise<IAsset.AssetInfoStructOutput>;
 
@@ -537,10 +503,6 @@ export interface IAsset extends BaseContract {
 
     "assetAccessControl()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    assetBalance(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "assetBalance()"(overrides?: CallOverrides): Promise<BigNumber>;
-
     assetInfo(overrides?: CallOverrides): Promise<BigNumber>;
 
     "assetInfo()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -598,10 +560,6 @@ export interface IAsset extends BaseContract {
     "assetAccessControl()"(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
-
-    assetBalance(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "assetBalance()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     assetInfo(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

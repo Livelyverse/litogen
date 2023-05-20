@@ -29,7 +29,6 @@ import type {
 
 export declare namespace IAsset {
   export type AssetInfoStruct = {
-    balance: PromiseOrValue<BigNumberish>;
     profile: PromiseOrValue<string>;
     name: PromiseOrValue<string>;
     version: PromiseOrValue<string>;
@@ -41,7 +40,6 @@ export declare namespace IAsset {
   };
 
   export type AssetInfoStructOutput = [
-    BigNumber,
     string,
     string,
     string,
@@ -51,7 +49,6 @@ export declare namespace IAsset {
     number,
     number
   ] & {
-    balance: BigNumber;
     profile: string;
     name: string;
     version: string;
@@ -117,8 +114,9 @@ export declare namespace IERC20Lockable {
 
 export interface PublicSalesInterface extends utils.Interface {
   functions: {
+    "allowance(address,address)": FunctionFragment;
+    "approve(address,uint256)": FunctionFragment;
     "assetAccessControl()": FunctionFragment;
-    "assetBalance()": FunctionFragment;
     "assetInfo()": FunctionFragment;
     "assetName()": FunctionFragment;
     "assetProfile()": FunctionFragment;
@@ -129,17 +127,20 @@ export interface PublicSalesInterface extends utils.Interface {
     "assetType()": FunctionFragment;
     "assetVersion()": FunctionFragment;
     "balance()": FunctionFragment;
+    "balanceOf(address)": FunctionFragment;
+    "decimals()": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
-    "tokenApprove(address,uint256)": FunctionFragment;
+    "symbol()": FunctionFragment;
     "tokenBatchTransfer((address,uint256)[])": FunctionFragment;
     "tokenBatchTransferFrom((address,address,uint256)[])": FunctionFragment;
     "tokenDecreaseAllowance(address,uint256)": FunctionFragment;
     "tokenIncreaseAllowance(address,uint256)": FunctionFragment;
     "tokenLock((address,address,uint256,uint256)[])": FunctionFragment;
-    "tokenTransfer(address,uint256)": FunctionFragment;
-    "tokenTransferFrom(address,address,uint256)": FunctionFragment;
+    "totalSupply()": FunctionFragment;
+    "transfer(address,uint256)": FunctionFragment;
+    "transferFrom(address,address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "unlockToken((bytes32,address,string)[])": FunctionFragment;
     "withdrawBalance(address)": FunctionFragment;
@@ -147,10 +148,12 @@ export interface PublicSalesInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "allowance"
+      | "allowance(address,address)"
+      | "approve"
+      | "approve(address,uint256)"
       | "assetAccessControl"
       | "assetAccessControl()"
-      | "assetBalance"
-      | "assetBalance()"
       | "assetInfo"
       | "assetInfo()"
       | "assetName"
@@ -171,14 +174,18 @@ export interface PublicSalesInterface extends utils.Interface {
       | "assetVersion()"
       | "balance"
       | "balance()"
+      | "balanceOf"
+      | "balanceOf(address)"
+      | "decimals"
+      | "decimals()"
       | "owner"
       | "owner()"
       | "renounceOwnership"
       | "renounceOwnership()"
       | "supportsInterface"
       | "supportsInterface(bytes4)"
-      | "tokenApprove"
-      | "tokenApprove(address,uint256)"
+      | "symbol"
+      | "symbol()"
       | "tokenBatchTransfer"
       | "tokenBatchTransfer((address,uint256)[])"
       | "tokenBatchTransferFrom"
@@ -189,10 +196,12 @@ export interface PublicSalesInterface extends utils.Interface {
       | "tokenIncreaseAllowance(address,uint256)"
       | "tokenLock"
       | "tokenLock((address,address,uint256,uint256)[])"
-      | "tokenTransfer"
-      | "tokenTransfer(address,uint256)"
-      | "tokenTransferFrom"
-      | "tokenTransferFrom(address,address,uint256)"
+      | "totalSupply"
+      | "totalSupply()"
+      | "transfer"
+      | "transfer(address,uint256)"
+      | "transferFrom"
+      | "transferFrom(address,address,uint256)"
       | "transferOwnership"
       | "transferOwnership(address)"
       | "unlockToken"
@@ -202,19 +211,27 @@ export interface PublicSalesInterface extends utils.Interface {
   ): FunctionFragment;
 
   encodeFunctionData(
+    functionFragment: "allowance",
+    values: [PromiseOrValue<string>, PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "allowance(address,address)",
+    values: [PromiseOrValue<string>, PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "approve",
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "approve(address,uint256)",
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "assetAccessControl",
     values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "assetAccessControl()",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "assetBalance",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "assetBalance()",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "assetInfo", values?: undefined): string;
@@ -282,6 +299,19 @@ export interface PublicSalesInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "balance", values?: undefined): string;
   encodeFunctionData(functionFragment: "balance()", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "balanceOf",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "balanceOf(address)",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "decimals()",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner()", values?: undefined): string;
   encodeFunctionData(
@@ -300,14 +330,8 @@ export interface PublicSalesInterface extends utils.Interface {
     functionFragment: "supportsInterface(bytes4)",
     values: [PromiseOrValue<BytesLike>]
   ): string;
-  encodeFunctionData(
-    functionFragment: "tokenApprove",
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "tokenApprove(address,uint256)",
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
+  encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
+  encodeFunctionData(functionFragment: "symbol()", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "tokenBatchTransfer",
     values: [IERC20Extra.BatchTransferRequestStruct[]]
@@ -349,15 +373,23 @@ export interface PublicSalesInterface extends utils.Interface {
     values: [IERC20Lockable.LockTokenRequestStruct[]]
   ): string;
   encodeFunctionData(
-    functionFragment: "tokenTransfer",
+    functionFragment: "totalSupply",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "totalSupply()",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transfer",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "tokenTransfer(address,uint256)",
+    functionFragment: "transfer(address,uint256)",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "tokenTransferFrom",
+    functionFragment: "transferFrom",
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<string>,
@@ -365,7 +397,7 @@ export interface PublicSalesInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "tokenTransferFrom(address,address,uint256)",
+    functionFragment: "transferFrom(address,address,uint256)",
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<string>,
@@ -397,20 +429,22 @@ export interface PublicSalesInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
 
+  decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "allowance(address,address)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "approve(address,uint256)",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "assetAccessControl",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "assetAccessControl()",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "assetBalance",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "assetBalance()",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "assetInfo", data: BytesLike): Result;
@@ -475,6 +509,13 @@ export interface PublicSalesInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "balance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balance()", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "balanceOf(address)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "decimals()", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner()", data: BytesLike): Result;
   decodeFunctionResult(
@@ -493,14 +534,8 @@ export interface PublicSalesInterface extends utils.Interface {
     functionFragment: "supportsInterface(bytes4)",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "tokenApprove",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "tokenApprove(address,uint256)",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "symbol()", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "tokenBatchTransfer",
     data: BytesLike
@@ -539,19 +574,24 @@ export interface PublicSalesInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "tokenTransfer",
+    functionFragment: "totalSupply",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "tokenTransfer(address,uint256)",
+    functionFragment: "totalSupply()",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "transfer", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "transfer(address,uint256)",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "tokenTransferFrom",
+    functionFragment: "transferFrom",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "tokenTransferFrom(address,address,uint256)",
+    functionFragment: "transferFrom(address,address,uint256)",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -664,13 +704,33 @@ export interface PublicSales extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    allowance(
+      owner: PromiseOrValue<string>,
+      spender: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    "allowance(address,address)"(
+      owner: PromiseOrValue<string>,
+      spender: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    approve(
+      spender: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    "approve(address,uint256)"(
+      spender: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     assetAccessControl(overrides?: CallOverrides): Promise<[string]>;
 
     "assetAccessControl()"(overrides?: CallOverrides): Promise<[string]>;
-
-    assetBalance(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    "assetBalance()"(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     assetInfo(
       overrides?: CallOverrides
@@ -728,6 +788,20 @@ export interface PublicSales extends BaseContract {
 
     "balance()"(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    balanceOf(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    "balanceOf(address)"(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    decimals(overrides?: CallOverrides): Promise<[number]>;
+
+    "decimals()"(overrides?: CallOverrides): Promise<[number]>;
+
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     "owner()"(overrides?: CallOverrides): Promise<[string]>;
@@ -750,17 +824,9 @@ export interface PublicSales extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    tokenApprove(
-      spender: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+    symbol(overrides?: CallOverrides): Promise<[string]>;
 
-    "tokenApprove(address,uint256)"(
-      spender: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+    "symbol()"(overrides?: CallOverrides): Promise<[string]>;
 
     tokenBatchTransfer(
       request: IERC20Extra.BatchTransferRequestStruct[],
@@ -816,26 +882,30 @@ export interface PublicSales extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    tokenTransfer(
+    totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    "totalSupply()"(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    transfer(
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    "tokenTransfer(address,uint256)"(
+    "transfer(address,uint256)"(
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    tokenTransferFrom(
+    transferFrom(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    "tokenTransferFrom(address,address,uint256)"(
+    "transferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
@@ -873,13 +943,33 @@ export interface PublicSales extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
+  allowance(
+    owner: PromiseOrValue<string>,
+    spender: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  "allowance(address,address)"(
+    owner: PromiseOrValue<string>,
+    spender: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  approve(
+    spender: PromiseOrValue<string>,
+    amount: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  "approve(address,uint256)"(
+    spender: PromiseOrValue<string>,
+    amount: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   assetAccessControl(overrides?: CallOverrides): Promise<string>;
 
   "assetAccessControl()"(overrides?: CallOverrides): Promise<string>;
-
-  assetBalance(overrides?: CallOverrides): Promise<BigNumber>;
-
-  "assetBalance()"(overrides?: CallOverrides): Promise<BigNumber>;
 
   assetInfo(overrides?: CallOverrides): Promise<IAsset.AssetInfoStructOutput>;
 
@@ -935,6 +1025,20 @@ export interface PublicSales extends BaseContract {
 
   "balance()"(overrides?: CallOverrides): Promise<BigNumber>;
 
+  balanceOf(
+    account: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  "balanceOf(address)"(
+    account: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  decimals(overrides?: CallOverrides): Promise<number>;
+
+  "decimals()"(overrides?: CallOverrides): Promise<number>;
+
   owner(overrides?: CallOverrides): Promise<string>;
 
   "owner()"(overrides?: CallOverrides): Promise<string>;
@@ -957,17 +1061,9 @@ export interface PublicSales extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  tokenApprove(
-    spender: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+  symbol(overrides?: CallOverrides): Promise<string>;
 
-  "tokenApprove(address,uint256)"(
-    spender: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+  "symbol()"(overrides?: CallOverrides): Promise<string>;
 
   tokenBatchTransfer(
     request: IERC20Extra.BatchTransferRequestStruct[],
@@ -1023,26 +1119,30 @@ export interface PublicSales extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  tokenTransfer(
+  totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
+  "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+  transfer(
     to: PromiseOrValue<string>,
     amount: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  "tokenTransfer(address,uint256)"(
+  "transfer(address,uint256)"(
     to: PromiseOrValue<string>,
     amount: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  tokenTransferFrom(
+  transferFrom(
     from: PromiseOrValue<string>,
     to: PromiseOrValue<string>,
     amount: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  "tokenTransferFrom(address,address,uint256)"(
+  "transferFrom(address,address,uint256)"(
     from: PromiseOrValue<string>,
     to: PromiseOrValue<string>,
     amount: PromiseOrValue<BigNumberish>,
@@ -1080,13 +1180,33 @@ export interface PublicSales extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    allowance(
+      owner: PromiseOrValue<string>,
+      spender: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "allowance(address,address)"(
+      owner: PromiseOrValue<string>,
+      spender: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    approve(
+      spender: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    "approve(address,uint256)"(
+      spender: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
     assetAccessControl(overrides?: CallOverrides): Promise<string>;
 
     "assetAccessControl()"(overrides?: CallOverrides): Promise<string>;
-
-    assetBalance(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "assetBalance()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     assetInfo(overrides?: CallOverrides): Promise<IAsset.AssetInfoStructOutput>;
 
@@ -1142,6 +1262,20 @@ export interface PublicSales extends BaseContract {
 
     "balance()"(overrides?: CallOverrides): Promise<BigNumber>;
 
+    balanceOf(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "balanceOf(address)"(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    decimals(overrides?: CallOverrides): Promise<number>;
+
+    "decimals()"(overrides?: CallOverrides): Promise<number>;
+
     owner(overrides?: CallOverrides): Promise<string>;
 
     "owner()"(overrides?: CallOverrides): Promise<string>;
@@ -1160,17 +1294,9 @@ export interface PublicSales extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    tokenApprove(
-      spender: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
+    symbol(overrides?: CallOverrides): Promise<string>;
 
-    "tokenApprove(address,uint256)"(
-      spender: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
+    "symbol()"(overrides?: CallOverrides): Promise<string>;
 
     tokenBatchTransfer(
       request: IERC20Extra.BatchTransferRequestStruct[],
@@ -1226,26 +1352,30 @@ export interface PublicSales extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    tokenTransfer(
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    transfer(
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    "tokenTransfer(address,uint256)"(
+    "transfer(address,uint256)"(
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    tokenTransferFrom(
+    transferFrom(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    "tokenTransferFrom(address,address,uint256)"(
+    "transferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
@@ -1317,13 +1447,33 @@ export interface PublicSales extends BaseContract {
   };
 
   estimateGas: {
+    allowance(
+      owner: PromiseOrValue<string>,
+      spender: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "allowance(address,address)"(
+      owner: PromiseOrValue<string>,
+      spender: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    approve(
+      spender: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    "approve(address,uint256)"(
+      spender: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     assetAccessControl(overrides?: CallOverrides): Promise<BigNumber>;
 
     "assetAccessControl()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    assetBalance(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "assetBalance()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     assetInfo(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1377,6 +1527,20 @@ export interface PublicSales extends BaseContract {
 
     "balance()"(overrides?: CallOverrides): Promise<BigNumber>;
 
+    balanceOf(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "balanceOf(address)"(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    decimals(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "decimals()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     "owner()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1399,17 +1563,9 @@ export interface PublicSales extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    tokenApprove(
-      spender: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
+    symbol(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "tokenApprove(address,uint256)"(
-      spender: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
+    "symbol()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     tokenBatchTransfer(
       request: IERC20Extra.BatchTransferRequestStruct[],
@@ -1465,26 +1621,30 @@ export interface PublicSales extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    tokenTransfer(
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    transfer(
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    "tokenTransfer(address,uint256)"(
+    "transfer(address,uint256)"(
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    tokenTransferFrom(
+    transferFrom(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    "tokenTransferFrom(address,address,uint256)"(
+    "transferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
@@ -1523,6 +1683,30 @@ export interface PublicSales extends BaseContract {
   };
 
   populateTransaction: {
+    allowance(
+      owner: PromiseOrValue<string>,
+      spender: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "allowance(address,address)"(
+      owner: PromiseOrValue<string>,
+      spender: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    approve(
+      spender: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "approve(address,uint256)"(
+      spender: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     assetAccessControl(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -1530,10 +1714,6 @@ export interface PublicSales extends BaseContract {
     "assetAccessControl()"(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
-
-    assetBalance(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "assetBalance()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     assetInfo(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1587,6 +1767,20 @@ export interface PublicSales extends BaseContract {
 
     "balance()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    balanceOf(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "balanceOf(address)"(
+      account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "decimals()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "owner()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1609,17 +1803,9 @@ export interface PublicSales extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    tokenApprove(
-      spender: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
+    symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "tokenApprove(address,uint256)"(
-      spender: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
+    "symbol()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     tokenBatchTransfer(
       request: IERC20Extra.BatchTransferRequestStruct[],
@@ -1675,26 +1861,30 @@ export interface PublicSales extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    tokenTransfer(
+    totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "totalSupply()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    transfer(
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    "tokenTransfer(address,uint256)"(
+    "transfer(address,uint256)"(
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    tokenTransferFrom(
+    transferFrom(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    "tokenTransferFrom(address,address,uint256)"(
+    "transferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,

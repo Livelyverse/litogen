@@ -75,28 +75,10 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "assetBalance",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
     name: "assetInfo",
     outputs: [
       {
         components: [
-          {
-            internalType: "uint256",
-            name: "balance",
-            type: "uint256",
-          },
           {
             internalType: "string",
             name: "profile",
