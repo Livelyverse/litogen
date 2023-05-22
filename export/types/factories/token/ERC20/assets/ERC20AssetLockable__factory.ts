@@ -95,54 +95,6 @@ const _abi = [
     type: "fallback",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "spender",
-        type: "address",
-      },
-    ],
-    name: "allowance",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "spender",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-    ],
-    name: "approve",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "assetAccessControl",
     outputs: [
@@ -334,38 +286,6 @@ const _abi = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "balanceOf",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "decimals",
-    outputs: [
-      {
-        internalType: "uint8",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "owner",
     outputs: [
@@ -405,13 +325,37 @@ const _abi = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "symbol",
+    inputs: [
+      {
+        internalType: "address",
+        name: "spender",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "tokenApprove",
     outputs: [
       {
-        internalType: "string",
+        internalType: "bool",
         name: "",
-        type: "string",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "tokenBalance",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -455,49 +399,6 @@ const _abi = [
   {
     inputs: [
       {
-        components: [
-          {
-            internalType: "bytes32",
-            name: "lockId",
-            type: "bytes32",
-          },
-          {
-            internalType: "address",
-            name: "account",
-            type: "address",
-          },
-          {
-            internalType: "string",
-            name: "reason",
-            type: "string",
-          },
-        ],
-        internalType: "struct IERC20Lockable.UnLockTokenRequest[]",
-        name: "unlockRequests",
-        type: "tuple[]",
-      },
-    ],
-    name: "tokenUnlock",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "totalSupply",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "address",
         name: "to",
         type: "address",
@@ -508,7 +409,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "transfer",
+    name: "tokenTransfer",
     outputs: [
       {
         internalType: "bool",
@@ -537,7 +438,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "transferFrom",
+    name: "tokenTransferFrom",
     outputs: [
       {
         internalType: "bool",
@@ -545,6 +446,36 @@ const _abi = [
         type: "bool",
       },
     ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: "bytes32",
+            name: "lockId",
+            type: "bytes32",
+          },
+          {
+            internalType: "address",
+            name: "account",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "reason",
+            type: "string",
+          },
+        ],
+        internalType: "struct IERC20Lockable.UnLockTokenRequest[]",
+        name: "unlockRequests",
+        type: "tuple[]",
+      },
+    ],
+    name: "tokenUnlock",
+    outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
