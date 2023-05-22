@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Litogen Contracts (last updated v2.1.0)
+// Litogen Contracts (last updated v2.2.0)
 
 pragma solidity 0.8.19;
 
@@ -22,7 +22,7 @@ import "../../../utils/ERC165.sol";
 contract ERC20Asset is Ownable, ERC165, IERC20Asset, IAsset {
   using Address for address;
 
-  string constant internal _LITOGEN_ASSET_VERSION = "v2.1.0-Litogen";
+  string constant internal _LITOGEN_ASSET_VERSION = "v2.2.0-Litogen";
 
   address internal _acl;
   string internal _profileName;
@@ -67,8 +67,8 @@ contract ERC20Asset is Ownable, ERC165, IERC20Asset, IAsset {
    * Returns a boolean value indicating whether the operation succeeded.
    *
    */
-  function transfer(address to, uint256 amount) external returns (bool) {
-    _policyInterceptor(this.transfer.selector);
+  function tokenTransfer(address to, uint256 amount) external returns (bool) {
+    _policyInterceptor(this.tokenTransfer.selector);
     return IERC20(_erc20TokenId).transfer(to, amount);
   }
 
@@ -80,12 +80,12 @@ contract ERC20Asset is Ownable, ERC165, IERC20Asset, IAsset {
    * Returns a boolean value indicating whether the operation succeeded.
    *
    */
-  function transferFrom(
+  function tokenTransferFrom(
     address from,
     address to,
     uint256 amount
   ) external returns (bool) {
-    _policyInterceptor(this.transferFrom.selector);
+    _policyInterceptor(this.tokenTransferFrom.selector);
     return IERC20(_erc20TokenId).transferFrom(from, to, amount);
   }
 
@@ -96,48 +96,16 @@ contract ERC20Asset is Ownable, ERC165, IERC20Asset, IAsset {
    * Returns a boolean value indicating whether the operation succeeded.
    *
    */
-  function approve(address spender, uint256 amount) external returns (bool) {
-    _policyInterceptor(this.approve.selector);
+  function tokenApprove(address spender, uint256 amount) external returns (bool) {
+    _policyInterceptor(this.tokenApprove.selector);
     return IERC20(_erc20TokenId).approve(spender, amount);
-  }
-
-  /**
-   * @dev Returns the amount of tokens in existence.
-   */
-  function totalSupply() external view returns (uint256) {
-    return IERC20(_erc20TokenId).totalSupply();
   }
 
   /**
    * @dev Returns the amount of tokens owned by `account`.
    */
-  function balanceOf(address account) external view returns (uint256) {
-    return IERC20(_erc20TokenId).balanceOf(account);
-  }
-
-  /**
-   * @dev Returns the remaining number of tokens that `spender` will be
-   * allowed to spend on behalf of `owner` through {transferFrom}. This is
-   * zero by default.
-   *
-   * This value changes when {approve} or {transferFrom} are called.
-   */
-  function allowance(address owner, address spender) external view returns (uint256) {
-    return IERC20(_erc20TokenId).allowance(owner, spender);
-  }
-
-  /**
-   * @dev Returns the symbol of the token.
-   */
-  function symbol() external view returns (string memory) {
-    return IERC20Metadata(_erc20TokenId).symbol();
-  }
-
-  /**
-   * @dev Returns the decimals places of the token.
-   */
-  function decimals() external view returns (uint8) {
-    return IERC20Metadata(_erc20TokenId).decimals();
+  function tokenBalance() external view returns (uint256) {
+    return IERC20(_erc20TokenId).balanceOf(address(this));
   }
 
   function assetSetSafeMode(AssetSafeModeStatus status) public override returns (bool) {

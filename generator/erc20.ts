@@ -3,7 +3,7 @@ import { defineFunctions } from './utils/defineFunctions';
 import { printContract } from './print';
 import {policyInterceptor, supportsInterface} from "./commonFunctions";
 
-export const LITOGEN_VERSION= '2.1.0'
+export const LITOGEN_VERSION= '2.2.0'
 export type DistributeUnit = 'PERCENT' | 'NUMBER'
 
 export interface BaseOptions {

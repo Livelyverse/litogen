@@ -83,7 +83,7 @@ describe('Litogen Token and Assets Tests', function() {
     // then
     expect(await erc20TokenTest.name()).to.be.equal("LitokenTest");
     expect(await erc20TokenTest.symbol()).to.be.equal("LIT");
-    expect(await erc20TokenTest.version()).to.be.equal("v2.1.0-Litogen");
+    expect(await erc20TokenTest.version()).to.be.equal("v2.2.0-Litogen");
     expect(await erc20TokenTest.decimals()).to.be.equal(9);
     expect(await erc20TokenTest.totalSupply()).to.be.equal(totalSupply);
     expect(await erc20TokenTest.profile()).to.be.equal("TestProfile");
@@ -105,7 +105,7 @@ describe('Litogen Token and Assets Tests', function() {
     // then
     expect(await publicSaleAsset.assetName()).to.be.equal("publicSales");
     expect(await publicSaleAsset.assetType()).to.be.equal(AssetType.ERC20);
-    expect(await publicSaleAsset.assetVersion()).to.be.equal("v2.1.0-Litogen");
+    expect(await publicSaleAsset.assetVersion()).to.be.equal("v2.2.0-Litogen");
     expect(await publicSaleAsset.assetProfile()).to.be.equal("TestProfile");
     expect(await publicSaleAsset.assetToken()).to.be.equal(erc20TokenTest.address);
     expect(await publicSaleAsset.assetAccessControl()).to.be.equal(ethers.constants.AddressZero);
@@ -113,16 +113,13 @@ describe('Litogen Token and Assets Tests', function() {
     expect(await publicSaleAsset.assetSafeMode()).to.be.equal(AssetSafeModeStatus.DISABLED);
 
     // and
-    expect(await publicSaleAsset.symbol()).to.be.equal("LIT");
-    expect(await publicSaleAsset.decimals()).to.be.equal(9);
-    expect(await publicSaleAsset.totalSupply()).to.be.equal(totalSupply);
-    expect(await publicSaleAsset.allowance(publicSaleAsset.address, adminWallet.address)).to.be.equal(0);
     expect(await publicSaleAsset.balance()).to.be.equal(0);
+    expect(await publicSaleAsset.tokenBalance()).to.be.equal(0);
 
     // and
     const assetInfo: IAsset.AssetInfoStruct = await publicSaleAsset.assetInfo();
     expect(assetInfo.name).to.be.equal("publicSales");
-    expect(assetInfo.version).to.be.equal("v2.1.0-Litogen");
+    expect(assetInfo.version).to.be.equal("v2.2.0-Litogen");
     expect(assetInfo.atype).to.be.equal(AssetType.ERC20);
     expect(assetInfo.accessControl).to.be.equal(ethers.constants.AddressZero);
     expect(assetInfo.owner).to.be.equal(adminWallet.address);
@@ -141,7 +138,7 @@ describe('Litogen Token and Assets Tests', function() {
     // then
     expect(await fundingTeamAsset.assetName()).to.be.equal("fundingTeam");
     expect(await fundingTeamAsset.assetType()).to.be.equal(AssetType.ERC20);
-    expect(await fundingTeamAsset.assetVersion()).to.be.equal("v2.1.0-Litogen");
+    expect(await fundingTeamAsset.assetVersion()).to.be.equal("v2.2.0-Litogen");
     expect(await fundingTeamAsset.assetProfile()).to.be.equal("TestProfile");
     expect(await fundingTeamAsset.assetToken()).to.be.equal(erc20TokenTest.address);
     expect(await fundingTeamAsset.assetAccessControl()).to.be.equal(ethers.constants.AddressZero);
@@ -149,16 +146,13 @@ describe('Litogen Token and Assets Tests', function() {
     expect(await fundingTeamAsset.assetSafeMode()).to.be.equal(AssetSafeModeStatus.DISABLED);
 
     // and
-    expect(await fundingTeamAsset.symbol()).to.be.equal("LIT");
-    expect(await fundingTeamAsset.decimals()).to.be.equal(9);
-    expect(await fundingTeamAsset.totalSupply()).to.be.equal(totalSupply);
-    expect(await fundingTeamAsset.allowance(fundingTeamAsset.address, adminWallet.address)).to.be.equal(0);
     expect(await fundingTeamAsset.balance()).to.be.equal(0);
+    expect(await fundingTeamAsset.tokenBalance()).to.be.equal(0);
 
     // and
     const assetInfo: IAsset.AssetInfoStruct = await fundingTeamAsset.assetInfo();
     expect(assetInfo.name).to.be.equal("fundingTeam");
-    expect(assetInfo.version).to.be.equal("v2.1.0-Litogen");
+    expect(assetInfo.version).to.be.equal("v2.2.0-Litogen");
     expect(assetInfo.atype).to.be.equal(AssetType.ERC20);
     expect(assetInfo.accessControl).to.be.equal(ethers.constants.AddressZero);
     expect(assetInfo.owner).to.be.equal(adminWallet.address);
@@ -174,7 +168,7 @@ describe('Litogen Token and Assets Tests', function() {
 
     // when
     await expect(
-      publicSaleAsset.connect(admin).transfer(userWallet1.address, dummyAmount)
+      publicSaleAsset.connect(admin).tokenTransfer(userWallet1.address, dummyAmount)
     )
       .to.revertedWith("Token Not Distributed")
 
@@ -195,10 +189,10 @@ describe('Litogen Token and Assets Tests', function() {
       .withArgs(adminWallet.address, fundingTeamAsset.address, assetBalance)
 
     // then
-    expect(await publicSaleAsset.balanceOf(publicSaleAsset.address)).to.be.equal(assetBalance);
+    expect(await publicSaleAsset.tokenBalance()).to.be.equal(assetBalance);
 
     // and
-    expect(await fundingTeamAsset.balanceOf(publicSaleAsset.address)).to.be.equal(assetBalance);
+    expect(await fundingTeamAsset.tokenBalance()).to.be.equal(assetBalance);
 
   })
 
@@ -227,7 +221,7 @@ describe('Litogen Token and Assets Tests', function() {
 
     // when
     await expect(
-      publicSaleAsset.connect(admin).transfer(userWallet1.address, dummyAmount)
+      publicSaleAsset.connect(admin).tokenTransfer(userWallet1.address, dummyAmount)
     )
       .to.emit(erc20TokenTest, "Transfer")
       .withArgs(publicSaleAsset.address, userWallet1.address, dummyAmount);
@@ -272,13 +266,13 @@ describe('Litogen Token and Assets Tests', function() {
 
     // when
     await expect(
-      publicSaleAsset.connect(admin).approve(userWallet2.address, dummyAmount)
+      publicSaleAsset.connect(admin).tokenApprove(userWallet2.address, dummyAmount)
     )
       .to.emit(erc20TokenTest, "Approval")
       .withArgs(publicSaleAsset.address, userWallet2.address, user2AllowanceBefore.add(dummyAmount));
 
     await expect(
-      publicSaleAsset.connect(admin).approve(userWallet1.address, dummyAmount)
+      publicSaleAsset.connect(admin).tokenApprove(userWallet1.address, dummyAmount)
     )
       .to.emit(erc20TokenTest, "Approval")
       .withArgs(publicSaleAsset.address, userWallet1.address, user1AllowanceBefore.add(dummyAmount));
